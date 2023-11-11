@@ -36,7 +36,7 @@ async function create(user){
 
 async function update(user){
   const result = await db.query(
-    `UPDATE your_table_name
+    `UPDATE users
     SET
         role = ?,
         username = ?,
@@ -61,7 +61,7 @@ async function update(user){
 
 async function remove(user){
   const result = await db.query(
-    `DELETE FROM users WHERE id= ?`,
+    `DELETE FROM users WHERE user_id= ?`,
     [user.id]
   );
 
