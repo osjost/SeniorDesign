@@ -22,4 +22,15 @@ router.post('/', async function(req, res, next) {
   }
 });
 
+
+/* PUT programming language */
+router.put('/:id', async function(req, res, next) {
+  try {
+    res.json(await users.update(req.params.id, req.body));
+  } catch (err) {
+    console.error(`Error while updating user`, err.message);
+    next(err);
+  }
+});
+
 module.exports = router;

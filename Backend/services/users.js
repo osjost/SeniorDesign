@@ -36,13 +36,21 @@ async function create(user){
 
 async function update(id, user){
   const result = await db.query(
-    `UPDATE users
-    SET name="${programmingLanguage.name}", released_year=${programmingLanguage.released_year}, githut_rank=${programmingLanguage.githut_rank}, 
-    pypl_rank=${programmingLanguage.pypl_rank}, tiobe_rank=${programmingLanguage.tiobe_rank} 
-    WHERE id=${id}` 
+    `UPDATE your_table_name
+    SET
+        role = ?,
+        username = ?,
+        first_name = ?,
+        last_name = ?,
+        date_of_birth = ?,
+        email = ?,
+        phone_number = ?,
+        num_measures = ?
+    WHERE user_id = ?;`,
+    [user.role, user.username, user.first_name, user.last_name, user.date_of_birth, user.email, user.phone_number, user.num_measures, user.id]
   );
 
-  let message = 'Error in updating user;
+  let message = 'Error in updating user';
 
   if (result.affectedRows) {
     message = 'User updated successfully';
