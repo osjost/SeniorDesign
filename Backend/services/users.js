@@ -34,7 +34,7 @@ async function create(user){
   return {message};
 }
 
-async function update(id, user){
+async function update(user){
   const result = await db.query(
     `UPDATE your_table_name
     SET
@@ -59,10 +59,26 @@ async function update(id, user){
   return {message};
 }
 
+async function remove(user){
+  const result = await db.query(
+    `DELETE FROM users WHERE id= ?`,
+    [user.id]
+  );
+
+  let message = 'Error in deleting user';
+
+  if (result.affectedRows) {
+    message = 'User deleted successfully';
+  }
+
+  return {message};
+}
+
 
 module.exports = {
   getMultiple,
   create,
-  update
+  update,
+  remove
 }
 
