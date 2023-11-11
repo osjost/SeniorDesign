@@ -12,7 +12,7 @@ router.get('/', async function(req, res, next) {
   }
 });
 
-/* POST programming language */
+/* POST user */
 router.post('/', async function(req, res, next) {
   try {
     res.json(await users.create(req.body));
@@ -23,12 +23,22 @@ router.post('/', async function(req, res, next) {
 });
 
 
-/* PUT programming language */
+/* PUT user */
 router.put('/:id', async function(req, res, next) {
   try {
-    res.json(await users.update(req.params.id, req.body));
+    res.json(await users.update(req.body));
   } catch (err) {
     console.error(`Error while updating user`, err.message);
+    next(err);
+  }
+});
+
+/* DELETE user */
+router.delete('/:id', async function(req, res, next) {
+  try {
+    res.json(await programmingLanguages.remove(req.body));
+  } catch (err) {
+    console.error(`Error while deleting programming language`, err.message);
     next(err);
   }
 });
