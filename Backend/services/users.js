@@ -16,6 +16,16 @@ async function getMultiple(page = 1){
   }
 }
 
+async function getSingle(id){
+  const row = await db.query(
+    `SELECT * FROM users WHERE user_id = ?;`,
+    [id]
+  );
+  return {
+    row
+  }
+}
+
 async function create(user){
   const result = await db.query(
     `INSERT INTO users 
@@ -47,7 +57,7 @@ async function update(user){
         phone_number = ?,
         num_measures = ?
     WHERE user_id = ?;`,
-    [user.role, user.username, user.first_name, user.last_name, user.date_of_birth, user.email, user.phone_number, user.num_measures, user.id]
+    [user.role, user.username, user.first_name, user.last_name, user.date_of_birth, user.email, user.phone_number, user.num_measures, user.user_id]
   );
 
   let message = 'Error in updating user';
@@ -62,7 +72,7 @@ async function update(user){
 async function remove(user){
   const result = await db.query(
     `DELETE FROM users WHERE user_id= ?`,
-    [user.id]
+    [user.user_id]
   );
 
   let message = 'Error in deleting user';
@@ -77,6 +87,7 @@ async function remove(user){
 
 module.exports = {
   getMultiple,
+  getSingle,
   create,
   update,
   remove

@@ -3,9 +3,9 @@ const router = express.Router();
 const users = require('../services/users');
 
 /* GET users */
-router.get('/', async function(req, res, next) {
+router.get('/:id', async function(req, res, next) {
   try {
-    res.json(await users.getMultiple(req.query.page));
+    res.json(await users.getSingle(req.params.id));
   } catch (err) {
     console.error(`Error while getting user`, err.message);
     next(err);
@@ -15,7 +15,9 @@ router.get('/', async function(req, res, next) {
 /* POST user */
 router.post('/', async function(req, res, next) {
   try {
+    console.log(req.body)
     res.json(await users.create(req.body));
+    
   } catch (err) {
     console.error(`Error while creating user`, err.message);
     next(err);
@@ -24,7 +26,9 @@ router.post('/', async function(req, res, next) {
 
 
 /* PUT user */
-router.put('/:id', async function(req, res, next) {
+router.put('/', async function(req, res, next) {
+
+  console.log(await req.body)
   try {
     res.json(await users.update(req.body));
   } catch (err) {
@@ -34,11 +38,11 @@ router.put('/:id', async function(req, res, next) {
 });
 
 /* DELETE user */
-router.delete('/:id', async function(req, res, next) {
+router.delete('/', async function(req, res, next) {
   try {
-    res.json(await programmingLanguages.remove(req.body));
+    res.json(await users.remove(req.body));
   } catch (err) {
-    console.error(`Error while deleting programming language`, err.message);
+    console.error(`Error while deleting user`, err.message);
     next(err);
   }
 });

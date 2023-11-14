@@ -4,6 +4,12 @@ const db = require('./services/db');
 // userOperations.js - Contains your 'create' function
 const userOperations = require('./services/users');
 
+// test post
+// curl -k -X POST https://localhost:443/users -H "Content-Type: application/json" -d "{\"role\":\"Patient\", \"username\":\"poo\", \"first_name\":\"poo2\", \"last_name\":\"poo3\", \"date_of_birth\":\"1991-02-02\", \"email\":\"poo@gmail.com\", \"phone_number\":\"12345678\", \"num_measures\":\"twelve\"}"
+
+// test put
+// curl -k -X PUT https://localhost:443/users -H "Content-Type: application/json" -d "{\"role\":\"Patient\", \"username\":\"poo\", \"first_name\":\"poo2\", \"last_name\":\"poo3\", \"date_of_birth\":\"1991-02-02\", \"email\":\"poo@gmail.com\", \"phone_number\":\"12345678\", \"num_measures\":\"twelve\", \"user_id\":\"1\"}"
+
 // testData.js or your_test_file.js - File where you test the 'create' function
 const sampleCreateUser = {
   role: 'Patient',
@@ -17,9 +23,9 @@ const sampleCreateUser = {
 };
 
 // commented out for testing purposes
-// userOperations.create(sampleCreateUser)
-//   .then(result => console.log(result.message))
-//   .catch(error => console.error(error));
+userOperations.create(sampleCreateUser)
+  .then(result => console.log(result.message))
+  .catch(error => console.error(error));
 
 
 
@@ -52,9 +58,9 @@ const sampleDeleteUser = {
   id: 2
 };
 // test delete
-userOperations.remove(sampleDeleteUser)
-  .then(result => console.log(result.message))
-  .catch(error => console.error(error));
+// userOperations.remove(sampleDeleteUser)
+//   .then(result => console.log(result.message))
+//   .catch(error => console.error(error));
 
 
 
