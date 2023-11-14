@@ -7,11 +7,9 @@ import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLSession;
 
-import java.net.URL;
 import org.json.JSONObject;
-import java.io.BufferedWriter;
+
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 
 
 import android.util.Log;
@@ -44,7 +42,7 @@ public class api {
     };
 
 
-    public void sendGetRequest(String httpsAddress, ResponseHandler handler) {
+    public void sendGetRequest(String httpsAddress, HandlerResponse handler) {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {

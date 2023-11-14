@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const users = require('../services/data');
 
-/* GET users */
+/* GET data */
 router.get('/:id', async function(req, res, next) {
   try {
     res.json(await users.getSingle(req.params.id));
@@ -12,7 +12,7 @@ router.get('/:id', async function(req, res, next) {
   }
 });
 
-/* POST user */
+/* POST data */
 router.post('/', async function(req, res, next) {
   try {
     console.log(req.body)
@@ -25,7 +25,7 @@ router.post('/', async function(req, res, next) {
 });
 
 
-/* PUT user */
+/* PUT data */
 router.put('/', async function(req, res, next) {
 
   console.log(await req.body)
@@ -37,7 +37,7 @@ router.put('/', async function(req, res, next) {
   }
 });
 
-/* DELETE user */
+/* DELETE data */
 router.delete('/', async function(req, res, next) {
   try {
     res.json(await users.remove(req.body));

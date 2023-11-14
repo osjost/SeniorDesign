@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
 //                } catch (JSONException e) {
 //                    e.printStackTrace();
 //                }
-                global.sendGetRequest("https://10.0.2.2:443/users/4", new ResponseHandler() {
+                global.sendGetRequest("https://10.0.2.2:443/users/4", new HandlerResponse() {
                     @Override
                     public void handleResponse(String response) {
                         Log.d("response", response);

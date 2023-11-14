@@ -1,5 +1,6 @@
 package api;
 
-public interface ResponseHandler {
+public interface HandlerResponse {
     void handleResponse(String response);
 }
+
