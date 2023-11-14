@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import android.util.Log;
 
 //Import API stuff
 import org.json.JSONObject;
@@ -47,7 +48,15 @@ public class MainActivity extends AppCompatActivity {
 //                } catch (JSONException e) {
 //                    e.printStackTrace();
 //                }
-                global.sendGetRequest("https://10.0.2.2:443/users/4");
+                global.sendGetRequest("https://10.0.2.2:443/users/4", new ResponseHandler() {
+                    @Override
+                    public void handleResponse(String response) {
+                        Log.d("response", response);
+                    }
+                });
+
+
+
 
 
 //                global.sendDeleteRequest("https://10.0.2.2:443/users", jsonInput);

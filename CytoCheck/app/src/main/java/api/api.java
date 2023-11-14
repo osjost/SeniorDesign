@@ -17,9 +17,6 @@ import java.io.OutputStreamWriter;
 import android.util.Log;
 
 
-interface ResponseHandler {
-    void handleResponse(String response);
-}
 
 //API CALLS:
 //USERS:
@@ -47,7 +44,7 @@ public class api {
     };
 
 
-    public void sendGetRequest(String httpsAddress){ //ResponseHandler handler) {
+    public void sendGetRequest(String httpsAddress, ResponseHandler handler) {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -55,7 +52,6 @@ public class api {
                     URL obj = new URL(httpsAddress);
                     HttpsURLConnection connection = (HttpsURLConnection) obj.openConnection();
                     connection.setRequestMethod("GET");
-//                    connection.setRequestProperty("User-Agent", USER_AGENT);
                     //REMOVE THIS LATER WHEN DEPLOYED, USED HERE FOR TESTING PURPOSES
                     connection.setHostnameVerifier(hostnameVerifier);
                     int responseCode = connection.getResponseCode();
@@ -71,9 +67,9 @@ public class api {
                         in.close();
 
                         // print result
-                        System.out.println(response.toString());
+                        handler.handleResponse(response.toString());
                     } else {
-                        System.out.println("GET request did not work.");
+                        Log.d("failure", "Get request did not work :(");
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
