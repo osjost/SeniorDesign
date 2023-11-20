@@ -16,6 +16,8 @@ const credentials = { key: privateKey, cert: certificate };
 
 
 const usersRouter = require("./routes/users");
+const loginRouter = require("./routes/login");
+const registerRouter = require("./routes/register");
 
 app.use(express.json());
 app.use(
@@ -29,6 +31,8 @@ app.get("/", (req, res) => {
 });
 
 app.use("/users", usersRouter);
+app.use("/login", loginRouter);
+app.use("/register", registerRouter);
 
 /* Error handler middleware */
 app.use((err, req, res, next) => {

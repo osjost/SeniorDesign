@@ -3,7 +3,6 @@ CREATE DATABASE cytocheck;
 CREATE TABLE Users (
     user_id INT AUTO_INCREMENT PRIMARY KEY,
     role ENUM('Provider', 'Patient'),
-    username VARCHAR(255),
     first_name VARCHAR(255),
     last_name VARCHAR(255),
     date_of_birth DATE,
@@ -31,13 +30,11 @@ CREATE TABLE Readings (
     FOREIGN KEY (user_id) REFERENCES Users(user_id)
 );
 
-CREATE TABLE Authentication (
-    user_id INT PRIMARY KEY,
+CREATE TABLE Login (
+    username  VARCHAR(255),
     password_hash VARCHAR(255),
-    password_salt VARCHAR(255),
     last_login TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    failed_login_attempts INT DEFAULT 0,
-    FOREIGN KEY (user_id) REFERENCES Users(user_id)
+    failed_login_attempts INT DEFAULT 0
 );
 
 CREATE TABLE Qualatative_Data (

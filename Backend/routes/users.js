@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const users = require('../services/users');
 
+
 /* GET users */
 router.get('/:id', async function(req, res, next) {
   try {
@@ -23,7 +24,6 @@ router.post('/', async function(req, res, next) {
     next(err);
   }
 });
-
 
 /* PUT user */
 router.put('/', async function(req, res, next) {
