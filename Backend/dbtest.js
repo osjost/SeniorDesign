@@ -4,6 +4,11 @@ const db = require('./services/db');
 // userOperations.js - Contains your 'create' function
 const userOperations = require('./services/users');
 
+// testing for readings:
+// curl -k -X POST https://localhost:443/readings -H "Content-Type: application/json" -d "{\"reading\":\"11.1\", \"sensor_id\":\"1\", \"user_id\":\"2\"}"
+
+// curl -k "https://localhost:443/readings?userId=2&sensorId=1"
+
 
 
 

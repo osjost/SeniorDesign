@@ -17,10 +17,10 @@ async function create(user){
 
   const result = await db.query(
     `INSERT INTO users 
-    (role, username, first_name, last_name, date_of_birth, email, phone_number, num_measures) 
+    (role, username, first_name, last_name, middle_name, ssn, date_of_birth, email, phone_number, num_measures) 
     VALUES 
     (?, ?, ?, ?, ?, ?, ?, ?)`,
-    [user.role, user.username, user.first_name, user.last_name, user.date_of_birth, user.email, user.phone_number, user.num_measures]
+    [user.role, user.username, user.first_name, user.last_name, user.middle_name, user.ssn, user.date_of_birth, user.email, user.phone_number, user.num_measures]
   );
 
   let message = 'Error in creating user';
@@ -40,12 +40,14 @@ async function update(user){
         username = ?,
         first_name = ?,
         last_name = ?,
+        middle_name = ?,
+        ssn = ?,
         date_of_birth = ?,
         email = ?,
         phone_number = ?,
         num_measures = ?
     WHERE user_id = ?;`,
-    [user.role, user.username, user.first_name, user.last_name, user.date_of_birth, user.email, user.phone_number, user.num_measures, user.user_id]
+    [user.role, user.username, user.first_name, user.last_name, user.middle_name, user.ssn, user.date_of_birth, user.email, user.phone_number, user.num_measures]
   );
 
   let message = 'Error in updating user';

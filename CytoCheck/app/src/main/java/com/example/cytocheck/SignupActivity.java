@@ -206,6 +206,9 @@ public class SignupActivity extends AppCompatActivity {
 
                     if (passGood && confirmGood && emailGood) {
                         if (phoneGood && dobGood && referGood) {
+                            //add api calls here
+
+
                             //send user data to server for creation
                             Intent intent = new Intent(SignupActivity.this, MainActivity.class);
                             startActivity(intent);

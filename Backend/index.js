@@ -1,8 +1,5 @@
 //main entry point. Start the server with node index.js
 // on windows, to verify mysql is running, go windows button -> services -> scroll to find mySQL
-
-
-
 const express = require("express");
 const https = require("https");
 const fs = require("fs");
@@ -18,6 +15,7 @@ const credentials = { key: privateKey, cert: certificate };
 const usersRouter = require("./routes/users");
 const loginRouter = require("./routes/login");
 const registerRouter = require("./routes/register");
+const readingsRouter = require("./routes/readings");
 
 app.use(express.json());
 app.use(
@@ -33,6 +31,7 @@ app.get("/", (req, res) => {
 app.use("/users", usersRouter);
 app.use("/login", loginRouter);
 app.use("/register", registerRouter);
+app.use("/readings", readingsRouter);
 
 /* Error handler middleware */
 app.use((err, req, res, next) => {
