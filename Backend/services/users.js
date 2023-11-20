@@ -2,6 +2,7 @@ const db = require('./db');
 const helper = require('../helper');
 const config = require('../config');
 
+
 async function getSingle(id){
   const row = await db.query(
     `SELECT * FROM users WHERE user_id = ?;`,
@@ -13,6 +14,7 @@ async function getSingle(id){
 }
 
 async function create(user){
+
   const result = await db.query(
     `INSERT INTO users 
     (role, username, first_name, last_name, date_of_birth, email, phone_number, num_measures) 

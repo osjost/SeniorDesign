@@ -4,6 +4,19 @@ const db = require('./services/db');
 // userOperations.js - Contains your 'create' function
 const userOperations = require('./services/users');
 
+
+
+
+// testing for login
+// curl -k -X POST https://localhost:443/login -H "Content-Type: application/json" -d "{\"password\":\"blah\", \"username\":\"user\"}"
+
+// testing for register
+// curl -k -X POST https://localhost:443/register -H "Content-Type: application/json" -d "{\"password\":\"blah\", \"username\":\"user\"}"
+
+
+
+
+// testing for users
 // test post
 // curl -k -X POST https://localhost:443/users -H "Content-Type: application/json" -d "{\"role\":\"Patient\", \"username\":\"poo\", \"first_name\":\"poo2\", \"last_name\":\"poo3\", \"date_of_birth\":\"1991-02-02\", \"email\":\"poo@gmail.com\", \"phone_number\":\"12345678\", \"num_measures\":\"twelve\"}"
 
