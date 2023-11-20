@@ -6,6 +6,112 @@
     android:layout_height="match_parent">
 
     <TextView
+        android:id="@+id/userFeelingQuery3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Nausea"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.048"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/userScoreField2"
+        app:layout_constraintVertical_bias="0.042" />
+
+    <SeekBar
+        android:id="@+id/healthSlider3"
+        style="@style/Widget.AppCompat.SeekBar.Discrete"
+        android:layout_width="223dp"
+        android:layout_height="54dp"
+        android:max="10"
+        android:progress="0"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.085"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/userFeelingQuery"
+        app:layout_constraintVertical_bias="0.669" />
+
+    <Button
+        android:id="@+id/surveySubmit3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Submit"
+        app:layout_constraintBottom_toTopOf="@+id/symptomExtra"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.064"
+        app:layout_constraintStart_toEndOf="@+id/userScoreField"
+        app:layout_constraintTop_toBottomOf="@+id/userFeelingQuery3"
+        app:layout_constraintVertical_bias="0.846" />
+
+    <TextView
+        android:id="@+id/userScoreField3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="136dp"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.247"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/userFeelingQuery3"
+        app:layout_constraintVertical_bias="0.988"
+        tools:text="0/10" />
+
+    <Button
+        android:id="@+id/surveySubmit2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Submit"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.064"
+        app:layout_constraintStart_toEndOf="@+id/userScoreField"
+        app:layout_constraintTop_toBottomOf="@+id/userFeelingQuery2"
+        app:layout_constraintVertical_bias="0.194" />
+
+    <TextView
+        android:id="@+id/userScoreField2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="292dp"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.296"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/userFeelingQuery2"
+        app:layout_constraintVertical_bias="0.841"
+        tools:text="0/10" />
+
+    <TextView
+        android:id="@+id/userFeelingQuery2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Pain"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.052"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/userScoreField"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <SeekBar
+        android:id="@+id/healthSlider2"
+        style="@style/Widget.AppCompat.SeekBar.Discrete"
+        android:layout_width="223dp"
+        android:layout_height="54dp"
+        android:max="10"
+        android:progress="0"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.101"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/userFeelingQuery2"
+        app:layout_constraintVertical_bias="0.04" />
+
+    <TextView
         android:id="@+id/welcomeLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -21,25 +127,27 @@
         style="@style/Widget.AppCompat.SeekBar.Discrete"
         android:layout_width="223dp"
         android:layout_height="54dp"
-        android:layout_marginTop="72dp"
         android:max="10"
         android:progress="0"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.085"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/welcomeLabel"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/userFeelingQuery"
+        app:layout_constraintVertical_bias="0.021" />
 
     <TextView
         android:id="@+id/userScoreField"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="452dp"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.296"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/userFeelingQuery"
-        app:layout_constraintVertical_bias="0.173"
+        app:layout_constraintVertical_bias="1.0"
         tools:text="0/10" />
 
     <TextView
@@ -48,12 +156,14 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="601dp"
-        android:text="How are you feeling today?"
+        android:text="Fatigue"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.089"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/welcomeLabel" />
+        app:layout_constraintTop_toBottomOf="@+id/welcomeLabel"
+        app:layout_constraintVertical_bias="0.533" />
 
     <Button
         android:id="@+id/logOut"
@@ -73,14 +183,68 @@
         android:id="@+id/surveySubmit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="216dp"
-        android:layout_marginBottom="467dp"
         android:text="Submit"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.527"
+        app:layout_constraintHorizontal_bias="0.153"
         app:layout_constraintStart_toEndOf="@+id/userScoreField"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/likert"
         app:layout_constraintVertical_bias="0.0" />
+
+    <ImageView
+        android:id="@+id/likert"
+        android:layout_width="226dp"
+        android:layout_height="42dp"
+        app:layout_constraintBottom_toTopOf="@+id/userScoreField"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.086"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/healthSlider"
+        app:layout_constraintVertical_bias="0.523"
+        tools:srcCompat="@drawable/likert"
+        tools:visibility="visible" />
+
+    <Button
+        android:id="@+id/warningButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:text="Send Warning"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/sensorButton"
+        app:layout_constraintHorizontal_bias="0.376"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/sensorButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:text="Connect Sensor"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/logOut"
+        app:layout_constraintVertical_bias="0.973" />
+
+    <Button
+        android:id="@+id/rashButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="44dp"
+        android:text="Rash Survey"
+        app:layout_constraintBottom_toTopOf="@+id/warningButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/userScoreField3" />
+
+    <Button
+        android:id="@+id/symptomExtra"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Additional Symptoms"
+        app:layout_constraintBottom_toTopOf="@+id/sensorButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/rashButton"
+        app:layout_constraintTop_toBottomOf="@+id/logOut"
+        app:layout_constraintVertical_bias="0.979" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

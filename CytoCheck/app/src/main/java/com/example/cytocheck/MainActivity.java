@@ -19,6 +19,7 @@ import api.*;
 
 public class MainActivity extends AppCompatActivity {
     private EditText userTextField, passTextField;
+    private String usernameResponse = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,47 +34,31 @@ public class MainActivity extends AppCompatActivity {
 //                grab the shared api class
                 api global = api.getInstance();
 
-//                //make our JSON object we want to pass in
-//                JSONObject jsonInput = new JSONObject();
-//                try {
-////                    jsonInput.put("role", "Patient");
-////                    jsonInput.put("username", "poo69");
-////                    jsonInput.put("first_name", "poo2");
-////                    jsonInput.put("last_name", "poo3");
-////                    jsonInput.put("date_of_birth", "1991-02-02");
-////                    jsonInput.put("email", "poo@gmail.com");
-////                    jsonInput.put("phone_number", "12345678");
-////                    jsonInput.put("num_measures", "twelve");
-//                    jsonInput.put("user_id", "1");
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-                global.sendGetRequest("https://10.0.2.2:443/users/4", new HandlerResponse() {
-                    @Override
-                    public void handleResponse(String response) {
-                        Log.d("response", response);
-                    }
-                });
 
 
+                String username = userTextField.getText().toString();
+//                global.sendGetRequest(username, new HandlerResponse() {
+//                    @Override
+//                    public void handleResponse(String response) {
+//                        Log.d("response", response);
+//                        usernameResponse = response;
+//
+//                    }
+//                });
+//                Toast.makeText(MainActivity.this, usernameResponse, Toast.LENGTH_SHORT).show();
 
-
-
-//                global.sendDeleteRequest("https://10.0.2.2:443/users", jsonInput);
-
-//                String username = userTextField.getText().toString();
-//                String password = passTextField.getText().toString();
-//                if (username.equals("user") && password.equals("pass")) {
-//                    Intent intent = new Intent(MainActivity.this, HomeActivity.class);
-//                    startActivity(intent);
-//                }
-//                else if (username.equals("prov") && password.equals("pass")) {
-//                    Intent intent2 = new Intent(MainActivity.this, ProviderActivity.class);
-//                    startActivity(intent2);
-//                }
-//                else {
-//                    Toast.makeText(MainActivity.this, "Login Failed. Invalid credentials.", Toast.LENGTH_SHORT).show();
-//                }
+                String password = passTextField.getText().toString();
+                if (username.equals("user") && password.equals("pass")) { // server login functionality to be implemented later
+                    Intent intent = new Intent(MainActivity.this, HomeActivity.class);
+                    startActivity(intent);
+                }
+                else if (username.equals("prov") && password.equals("pass")) {
+                    Intent intent2 = new Intent(MainActivity.this, ProviderActivity.class);
+                    startActivity(intent2);
+                }
+                else {
+                    Toast.makeText(MainActivity.this, "Login Failed. Invalid credentials.", Toast.LENGTH_SHORT).show();
+                }
 
             }
         });
@@ -90,3 +75,39 @@ public class MainActivity extends AppCompatActivity {
 
 
 }
+
+
+//make our JSON object we want to pass in
+//                JSONObject jsonInput = new JSONObject();
+//                try {
+//                    jsonInput.put("role", "Patient");
+//                    jsonInput.put("username", "user2");
+//                    jsonInput.put("first_name", "first");
+//                    jsonInput.put("last_name", "last");
+//                    jsonInput.put("date_of_birth", "1991-02-02");
+//                    jsonInput.put("email", "a@gmail.com");
+//                    jsonInput.put("phone_number", "12345678");
+//                    jsonInput.put("num_measures", "twelve");
+////                    jsonInput.put("user_id", "1");
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//                JSONObject user = new JSONObject();
+//                try {
+//                    user.put("user_id", "4");
+//                } catch (JSONException e) {
+//                }
+//                global.sendDeleteRequest("https://10.0.2.2:443/users", user);
+//                global.sendPostRequest("https://10.0.2.2:443/users", jsonInput);
+//                global.sendGetRequest("https://10.0.2.2:443/users/5", new HandlerResponse() {
+//                    @Override
+//                    public void handleResponse(String response) {
+//                        Log.d("response", response);
+//                    }
+//                });
+
+
+
+
+
+//                global.sendDeleteRequest("https://10.0.2.2:443/users", jsonInput);
