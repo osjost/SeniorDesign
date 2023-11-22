@@ -2,12 +2,12 @@ CREATE DATABASE cytocheck;
 
 CREATE TABLE Users (
     user_id INT AUTO_INCREMENT PRIMARY KEY,
-    role ENUM('Provider', 'Patient'),
+    role VARCHAR(255),
     first_name VARCHAR(255),
     last_name VARCHAR(255),
     middle_name VARCHAR(255),
-    ssn VARCHAR(15),
-    date_of_birth DATE,
+    ssn VARCHAR(255),
+    date_of_birth VARCHAR(255),
     email VARCHAR(255),
     phone_number VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

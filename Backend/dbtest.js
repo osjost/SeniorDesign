@@ -23,10 +23,13 @@ const userOperations = require('./services/users');
 
 // testing for users
 // test post
-// curl -k -X POST https://localhost:443/users -H "Content-Type: application/json" -d "{\"role\":\"Patient\", \"username\":\"poo\", \"first_name\":\"poo2\", \"last_name\":\"poo3\", \"date_of_birth\":\"1991-02-02\", \"email\":\"poo@gmail.com\", \"phone_number\":\"12345678\", \"num_measures\":\"twelve\"}"
+// curl -k -X POST https://localhost:443/users -H "Content-Type: application/json" -d "{\"role\":\"Patient\", \"first_name\":\"test\", \"last_name\":\"test\", \"date_of_birth\":\"1991-02-02\", \"email\":\"test@gmail.com\", \"phone_number\":\"12345678\", \"num_measures\":\"twelve\",\"middle_name\":\"test5\",\"ssn\":\"123-45-6789\"}"
 
 // test put
-// curl -k -X PUT https://localhost:443/users -H "Content-Type: application/json" -d "{\"role\":\"Patient\", \"username\":\"poo\", \"first_name\":\"poo2\", \"last_name\":\"poo3\", \"date_of_birth\":\"1991-02-02\", \"email\":\"poo@gmail.com\", \"phone_number\":\"12345678\", \"num_measures\":\"twelve\", \"user_id\":\"1\"}"
+// curl -k -X PUT https://localhost:443/users -H "Content-Type: application/json" -d "{\"role\":\"NEWROLEHAHA\", \"first_name\":\"test\", \"last_name\":\"test\", \"date_of_birth\":\"1991-02-02\", \"email\":\"test@gmail.com\", \"phone_number\":\"12345678\", \"num_measures\":\"twelve\",\"middle_name\":\"test5\",\"ssn\":\"123-45-6789\", \"user_id\":\"1\"}"
+
+//test get
+// curl -k https://localhost:443/users/1
 
 // testData.js or your_test_file.js - File where you test the 'create' function
 const sampleCreateUser = {
