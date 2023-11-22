@@ -17,21 +17,31 @@ const loginRouter = require("./routes/login");
 const registerRouter = require("./routes/register");
 const readingsRouter = require("./routes/readings");
 
+const verifyJWT = require("./services/jwtverifier");
+
 app.use(express.json());
 app.use(
   express.urlencoded({
     extended: true,
   })
 );
+//app.use(verifyJWT); //commented out for now to not interfere with testing
 
 app.get("/", (req, res) => {
   res.json({ message: "ok" });
 });
 
+
+// COMMENTED OUT FOR TESTING!
+// app.use("/users", verifyJWT, usersRouter);
+// app.use("/readings", verifyJWT, readingsRouter);
+
 app.use("/users", usersRouter);
 app.use("/login", loginRouter);
 app.use("/register", registerRouter);
 app.use("/readings", readingsRouter);
+
+
 
 /* Error handler middleware */
 app.use((err, req, res, next) => {
