@@ -18,17 +18,17 @@ async function create(reading){
     return {message};
   }
 
-async function getAll(userId, sensorId){
-    const row = await db.query(
-      `SELECT * FROM users WHERE user_id = ? AND sensor_id = ?;`,
-      [userId, sensorId]
+  async function getAll(userId, sensorId) {
+    const rows = await db.query(
+        `SELECT * FROM readings WHERE user_id = ? AND sensor_id = ?;`,
+        [userId, sensorId]
     );
 
-    console.log(row)
+    console.log(rows);
     return {
-      row
-    }
-  }
+        rows
+    };
+}
   
   module.exports = {
     getAll,

@@ -56,3 +56,9 @@ CREATE TABLE Sensors_Per_Patient (
     patient_id INT,
     sensor_id INT
 );
+
+CREATE TABLE Provider_Inbox (
+    provider_id INT,
+    message VARCHAR(255),
+    time_stamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
