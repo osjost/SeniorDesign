@@ -55,7 +55,12 @@ public class MainActivity extends AppCompatActivity {
                 catch (JSONException e){
                     e.printStackTrace();
                 }
-                global.sendPostRequest("https://10.0.2.2:443/login", loginSend);
+                global.sendPostRequestWithHandler("https://10.0.2.2:443/login", loginSend, new HandlerResponse() {
+                    @Override
+                    public void handleResponse(String response) {
+                        System.out.print(response);
+                    }
+                });
 
 
 

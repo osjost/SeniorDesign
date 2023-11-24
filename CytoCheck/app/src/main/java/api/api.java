@@ -130,7 +130,7 @@ public class api {
         thread.start();
     }
 
-    public void sendPostRequestWithHandler(String httpsAddress, JSONObject jsonInput, ResponseHandler handler) {
+    public void sendPostRequestWithHandler(String httpsAddress, JSONObject jsonInput, HandlerResponse handler) {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -165,15 +165,12 @@ public class api {
 
                     // Invoke the handler
                     if (handler != null) {
-                        handler.handleResponse(responseCode, responseMessage);
+                        handler.handleResponse(responseMessage);
                     }
 
                 } catch (Exception e) {
                     e.printStackTrace();
-                    // Handle exceptions
-                    if (handler != null) {
-                        handler.handleResponse(-1, e.getMessage()); // -1 or another code to indicate error
-                    }
+
                 }
             }
         });
