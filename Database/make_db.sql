@@ -31,6 +31,7 @@ CREATE TABLE Readings (
 );
 
 CREATE TABLE Login (
+    user_id INT AUTO_INCREMENT PRIMARY KEY,
     username  VARCHAR(255),
     password_hash VARCHAR(255),
     last_login TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
