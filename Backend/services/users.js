@@ -13,9 +13,9 @@ async function getSingle(id){
   );
   
   row = decryptUser(row[0])
-  return {
-    row
-  }
+  console.log(row)
+  return row
+
 }
 
 async function create(user){
