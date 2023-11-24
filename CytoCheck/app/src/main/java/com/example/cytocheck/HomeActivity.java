@@ -33,8 +33,9 @@ public class HomeActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String token = intent.getStringExtra("token");
         String userID = intent.getStringExtra("userID");
+        String firstName = intent.getStringExtra("firstName");
         welcomeLabel = findViewById(R.id.welcomeLabel);
-        welcomeLabel.setText("Welcome, " + userID);
+        welcomeLabel.setText("Welcome, " + firstName);
         userScore = findViewById(R.id.userScoreField);
         healthSlideBar = findViewById(R.id.healthSlider);
         likertImage = findViewById(R.id.likert);

@@ -324,16 +324,19 @@ public class SignupActivity extends AppCompatActivity {
         });
     }
     private boolean checkAll() {
-        if (!(String.valueOf(referralText.getText()).equals(""))) {
-            referralText.setBackgroundResource(android.R.drawable.edit_text);
-            referGood = true;
+        if (!referGood){
+            if (!(String.valueOf(referralText.getText()).equals(""))) {
+                referralText.setBackgroundResource(android.R.drawable.edit_text);
+                referGood = true;
+            }
+            else {
+                //Toast.makeText(SignupActivity.this, "Must enter referral code", Toast.LENGTH_SHORT).show();
+                Drawable customDrawable = getResources().getDrawable(R.drawable.edittext_border);
+                referralText.setBackground(customDrawable);
+                referGood = false;
+            }
         }
-        else {
-            //Toast.makeText(SignupActivity.this, "Must enter referral code", Toast.LENGTH_SHORT).show();
-            Drawable customDrawable = getResources().getDrawable(R.drawable.edittext_border);
-            referralText.setBackground(customDrawable);
-            referGood = false;
-        }
+
         updateBirthday(String.valueOf((dobField.getText())));
 
         if (String.valueOf(phoneField.getText()).length() == 12 && !(String.valueOf(phoneField.getText()).equals(""))) {

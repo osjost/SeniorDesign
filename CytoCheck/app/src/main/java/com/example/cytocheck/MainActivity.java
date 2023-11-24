@@ -20,6 +20,8 @@ import api.*;
 public class MainActivity extends AppCompatActivity {
     private EditText userTextField, passTextField;
     private String usernameResponse = "";
+    private String token = "";
+    private String userID = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,8 +60,7 @@ public class MainActivity extends AppCompatActivity {
                 global.sendPostRequestWithHandler("https://10.0.2.2:443/login", loginSend, new HandlerResponse() {
                     @Override
                     public void handleResponse(String response) {
-                        String token = "";
-                        String userID = "";
+
                         try {
                             JSONObject jsonObject = new JSONObject(response);
                             token = jsonObject.getString("jwt");
@@ -68,7 +69,30 @@ public class MainActivity extends AppCompatActivity {
                             global.sendGetRequestWithHandlerWithToken(httpsAddress, token, new HandlerResponse() {
                                 @Override
                                 public void handleResponse(String response) {
-                                    Log.d("response", response);
+                                    String firstName = "";
+                                    String role = "";
+                                    try {
+                                        JSONObject userProfile = new JSONObject(response);
+                                        firstName = userProfile.getString("first_name");
+                                        role = userProfile.getString("role");
+                                        if (role.equals("patient")) {
+                                            Intent intent = new Intent(MainActivity.this, HomeActivity.class);
+                                            intent.putExtra("token", token);
+                                            intent.putExtra("userID", userID);
+                                            intent.putExtra("firstName", firstName);
+                                            startActivity(intent);
+                                        }
+                                        else if (role.equals("provider")) {
+                                            Intent intent = new Intent(MainActivity.this, ProviderActivity.class);
+                                            intent.putExtra("token", token);
+                                            intent.putExtra("userID", userID);
+
+                                            startActivity(intent);
+                                        }
+                                    }
+                                    catch (JSONException e) {
+
+                                    }
                                 }
                             });
                         }
@@ -78,10 +102,10 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-//                        Intent intent = new Intent(MainActivity.this, HomeActivity.class);
-//                        intent.putExtra("token", token);
-//                        intent.putExtra("userID", userID);
-//                        startActivity(intent);
+                        Intent intent = new Intent(MainActivity.this, HomeActivity.class);
+                        intent.putExtra("token", token);
+                        intent.putExtra("userID", userID);
+                        startActivity(intent);
 //                        System.out.print(response);
 //                        Log.d("response", response);
                     }
