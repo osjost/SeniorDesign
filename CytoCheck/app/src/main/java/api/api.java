@@ -94,7 +94,6 @@ public class api {
 //});
 
 
-
     public void sendPostRequest(String httpsAddress, JSONObject jsonInput) {
         Thread thread = new Thread(new Runnable() {
             @Override
@@ -121,6 +120,94 @@ public class api {
                         Log.d("success", jsonInput.toString());
                     } else {
                         Log.d("fail", jsonInput.toString());
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    // Handle exceptions
+                }
+            }
+        });
+        thread.start();
+    }
+
+    public void sendPostRequestWithHandler(String httpsAddress, JSONObject jsonInput, ResponseHandler handler) {
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    URL url = new URL(httpsAddress); // Replace with your URL
+                    HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
+                    connection.setRequestMethod("POST");
+                    connection.setRequestProperty("Content-Type", "application/json");
+                    connection.setRequestProperty("Accept", "application/json");
+                    //REMOVE THIS LATER WHEN DEPLOYED, USED HERE FOR TESTING PURPOSES
+                    connection.setHostnameVerifier(hostnameVerifier);
+                    connection.setDoOutput(true);
+
+                    try(OutputStream os = connection.getOutputStream()) {
+                        byte[] input = jsonInput.toString().getBytes("utf-8");
+                        os.write(input, 0, input.length);
+                    }
+
+                    int responseCode = connection.getResponseCode();
+                    String responseMessage = ""; // Initialize response message
+
+                    // Read the response message if needed
+                    try (BufferedReader br = new BufferedReader(
+                            new InputStreamReader(connection.getInputStream(), "utf-8"))) {
+                        StringBuilder response = new StringBuilder();
+                        String responseLine = null;
+                        while ((responseLine = br.readLine()) != null) {
+                            response.append(responseLine.trim());
+                        }
+                        responseMessage = response.toString();
+                    }
+
+                    // Invoke the handler
+                    if (handler != null) {
+                        handler.handleResponse(responseCode, responseMessage);
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    // Handle exceptions
+                    if (handler != null) {
+                        handler.handleResponse(-1, e.getMessage()); // -1 or another code to indicate error
+                    }
+                }
+            }
+        });
+        thread.start();
+    }
+
+
+
+    public void sendPostRequestHandler(String httpsAddress, HandlerResponse handler) {
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    URL obj = new URL(httpsAddress);
+                    HttpsURLConnection connection = (HttpsURLConnection) obj.openConnection();
+                    connection.setRequestMethod("GET");
+                    //REMOVE THIS LATER WHEN DEPLOYED, USED HERE FOR TESTING PURPOSES
+                    connection.setHostnameVerifier(hostnameVerifier);
+                    int responseCode = connection.getResponseCode();
+                    System.out.println("GET Response Code :: " + responseCode);
+                    if (responseCode == HttpsURLConnection.HTTP_OK) { // success
+                        BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                        String inputLine;
+                        StringBuffer response = new StringBuffer();
+
+                        while ((inputLine = in.readLine()) != null) {
+                            response.append(inputLine);
+                        }
+                        in.close();
+
+                        // print result
+                        handler.handleResponse(response.toString());
+                    } else {
+                        Log.d("failure", "Get request did not work :(");
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
