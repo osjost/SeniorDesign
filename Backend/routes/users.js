@@ -6,6 +6,8 @@ const users = require('../services/users');
 /* GET users */
 router.get('/:id', async function(req, res, next) {
   try {
+    console.log("here");
+    console.log(req.params.id)
     res.json(await users.getSingle(req.params.id));
   } catch (err) {
     console.error(`Error while getting user`, err.message);

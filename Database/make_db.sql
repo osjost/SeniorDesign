@@ -2,10 +2,12 @@ CREATE DATABASE cytocheck;
 
 CREATE TABLE Users (
     user_id INT AUTO_INCREMENT PRIMARY KEY,
-    role ENUM('Provider', 'Patient'),
+    role VARCHAR(255),
     first_name VARCHAR(255),
     last_name VARCHAR(255),
-    date_of_birth DATE,
+    middle_name VARCHAR(255),
+    ssn VARCHAR(255),
+    date_of_birth VARCHAR(255),
     email VARCHAR(255),
     phone_number VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -25,9 +27,7 @@ CREATE TABLE Readings (
     reading FLOAT,
     sensor_id INT,
     user_id INT,
-    time_stamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (sensor_id) REFERENCES Sensor_Metadata(sensor_id),
-    FOREIGN KEY (user_id) REFERENCES Users(user_id)
+    time_stamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE Login (
@@ -44,22 +44,21 @@ CREATE TABLE Qualatative_Data (
     pain INT,
     rash BOOL,
     other VARCHAR(255),
-    time_stamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES Users(user_id)
+    time_stamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE Provider_Patient_Associations (
     provider_id INT,
-    patient_id INT,
-    PRIMARY KEY (provider_id, patient_id),
-    FOREIGN KEY (provider_id) REFERENCES Users(user_id),
-    FOREIGN KEY (patient_id) REFERENCES Users(user_id)
+    patient_id INT
 );
 
 CREATE TABLE Sensors_Per_Patient (
     patient_id INT,
-    sensor_id INT,
-    PRIMARY KEY (patient_id, sensor_id),
-    FOREIGN KEY (patient_id) REFERENCES Users(user_id),
-    FOREIGN KEY (sensor_id) REFERENCES Sensor_Metadata(sensor_id)
+    sensor_id INT
+);
+
+CREATE TABLE Provider_Inbox (
+    provider_id INT,
+    message VARCHAR(255),
+    time_stamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

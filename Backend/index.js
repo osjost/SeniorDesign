@@ -1,8 +1,5 @@
 //main entry point. Start the server with node index.js
 // on windows, to verify mysql is running, go windows button -> services -> scroll to find mySQL
-
-
-
 const express = require("express");
 const https = require("https");
 const fs = require("fs");
@@ -13,11 +10,14 @@ const certificate = fs.readFileSync('cert.pem', 'utf8');
 
 const credentials = { key: privateKey, cert: certificate };
 
-
-
 const usersRouter = require("./routes/users");
 const loginRouter = require("./routes/login");
 const registerRouter = require("./routes/register");
+const readingsRouter = require("./routes/readings");
+const qualatativeRouter = require("./routes/qualatative");
+const inboxRouter = require("./routes/inbox")
+
+const verifyJWT = require("./services/jwtverifier");
 
 app.use(express.json());
 app.use(
@@ -30,9 +30,23 @@ app.get("/", (req, res) => {
   res.json({ message: "ok" });
 });
 
-app.use("/users", usersRouter);
+
+// COMMENTED OUT FOR TESTING!
+app.use("/users", verifyJWT, usersRouter);
+app.use("/readings", verifyJWT, readingsRouter);
+app.use("/qualatative", verifyJWT, qualatativeRouter);
+app.use("/inbox", verifyJWT, inboxRouter);
+
+// app.use("/users", usersRouter);
+// app.use("/readings", readingsRouter);
+// app.use("/qualatative", qualatativeRouter);
+// app.use("/inbox", inboxRouter)
+
 app.use("/login", loginRouter);
 app.use("/register", registerRouter);
+
+
+
 
 /* Error handler middleware */
 app.use((err, req, res, next) => {
