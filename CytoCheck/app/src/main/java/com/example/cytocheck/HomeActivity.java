@@ -165,7 +165,10 @@ public class HomeActivity extends AppCompatActivity {
         Button sensorButton = findViewById(R.id.sensorButton);
         sensorButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {}
+            public void onClick(View view) {
+                Intent intent = new Intent(HomeActivity.this, SensorActivity.class);
+                startActivity(intent);
+            }
 
         });
 

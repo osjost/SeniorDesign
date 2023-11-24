@@ -32,6 +32,15 @@
         <activity android:name=".ProviderActivity">
         </activity>
 
+        <activity android:name=".SensorActivity"/>
+
+        <activity
+            android:name=".Activity_HeartRateDisplayBase"
+            android:exported="false" />
+        <activity
+            android:name=".Activity_AsyncScanHeartRateSampler"
+            android:exported="false" />
+
     </application>
 
 </manifest>
