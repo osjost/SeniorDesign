@@ -7,7 +7,7 @@ const secret = "1z98AJf901JZAa"
 
 // only expects the username and password to add it to the login/authentication table
 async function register(user){
-
+        
         const passwordHash = await  bcrypt.hash(user.password, saltRounds);
 
         // confirm username is not already being used

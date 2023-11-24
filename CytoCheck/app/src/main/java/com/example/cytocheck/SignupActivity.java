@@ -1,11 +1,14 @@
 package com.example.cytocheck;
 
+
+
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
@@ -16,10 +19,15 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import api.HandlerResponse;
+import api.*;
 import fragments.DatePickerFragment;
 
 
@@ -47,6 +55,7 @@ public class SignupActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
+        api global = api.getInstance();
 
         passText = findViewById(R.id.passwordCreate);
         passText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -209,8 +218,28 @@ public class SignupActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 if (checkAll()) {
-                    Intent intent = new Intent(SignupActivity.this, MainActivity.class);
-                    startActivity(intent);
+                    JSONObject jsonInput = new JSONObject();
+                    try {
+                        jsonInput.put("role", "Patient");
+                        jsonInput.put("username", "user2");
+                        jsonInput.put("first_name", "first");
+                        jsonInput.put("last_name", "last");
+                        jsonInput.put("date_of_birth", "1991-02-02");
+                        jsonInput.put("email", "a@gmail.com");
+                        jsonInput.put("phone_number", "12345678");
+                        jsonInput.put("num_measures", "twelve");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    global.sendPostRequestWithHandler("https://10.0.2.2:443/register", jsonInput, new HandlerResponse() {
+                        @Override
+                        public void handleResponse(String response) {
+                            System.out.print(response);
+                            Log.d("signupres", response);
+                        }
+                    });
+//                    Intent intent = new Intent(SignupActivity.this, MainActivity.class);
+//                    startActivity(intent);
                 }
                 else {
                     Toast.makeText(SignupActivity.this, "Check Red-Highlighted Input Fields", Toast.LENGTH_SHORT).show();
