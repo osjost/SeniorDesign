@@ -139,7 +139,7 @@ public class HomeActivity extends AppCompatActivity {
                     userNausea.setText("Score Submitted: 0/10");
                 }
                 else {
-                    userNausea.setText("Score Submitted: " + userPain.getText());
+                    userNausea.setText("Score Submitted: " + userNausea.getText());
                 }
 
             }

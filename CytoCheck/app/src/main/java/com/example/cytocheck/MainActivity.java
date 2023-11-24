@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
 
 
                 String username = userTextField.getText().toString();
+                String password = passTextField.getText().toString();
 //                global.sendGetRequest(username, new HandlerResponse() {
 //                    @Override
 //                    public void handleResponse(String response) {
@@ -46,19 +47,18 @@ public class MainActivity extends AppCompatActivity {
 //                    }
 //                });
 //                Toast.makeText(MainActivity.this, usernameResponse, Toast.LENGTH_SHORT).show();
+                JSONObject loginSend = new JSONObject();
+                try {
+                    loginSend.put("username", username);
+                    loginSend.put("password", password);
+                }
+                catch (JSONException e){
+                    e.printStackTrace();
+                }
+                global.sendPostRequest("https://10.0.2.2:443/login", loginSend);
 
-                String password = passTextField.getText().toString();
-                if (username.equals("user") && password.equals("pass")) { // server login functionality to be implemented later
-                    Intent intent = new Intent(MainActivity.this, HomeActivity.class);
-                    startActivity(intent);
-                }
-                else if (username.equals("prov") && password.equals("pass")) {
-                    Intent intent2 = new Intent(MainActivity.this, ProviderActivity.class);
-                    startActivity(intent2);
-                }
-                else {
-                    Toast.makeText(MainActivity.this, "Login Failed. Invalid credentials.", Toast.LENGTH_SHORT).show();
-                }
+
+
 
             }
         });

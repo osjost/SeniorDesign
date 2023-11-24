@@ -28,6 +28,12 @@ public class SignupActivity extends AppCompatActivity {
     private EditText phoneField;
     private EditText dobField;
     private EditText passText;
+    private EditText firstName;
+    private EditText lastName;
+    private EditText usernameText;
+    private EditText confirmText;
+    private EditText emailText;
+    private TextView referralText;
     private boolean userGood = false;
     private boolean passGood = false;
     private boolean confirmGood = false;
@@ -63,7 +69,7 @@ public class SignupActivity extends AppCompatActivity {
                 }
             }
         });
-        EditText usernameText = findViewById(R.id.createUsername);
+        usernameText = findViewById(R.id.createUsername);
         usernameText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -84,7 +90,7 @@ public class SignupActivity extends AppCompatActivity {
                 }
             }
         });
-        EditText firstName = findViewById(R.id.firstInput);
+        firstName = findViewById(R.id.firstInput);
         firstName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -105,7 +111,7 @@ public class SignupActivity extends AppCompatActivity {
                 }
             }
         });
-        EditText lastName = findViewById(R.id.lastInput);
+        lastName = findViewById(R.id.lastInput);
         lastName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -129,7 +135,7 @@ public class SignupActivity extends AppCompatActivity {
 
 
 
-        EditText confirmText = findViewById(R.id.passwordConfirm);
+        confirmText = findViewById(R.id.passwordConfirm);
         confirmText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -151,7 +157,7 @@ public class SignupActivity extends AppCompatActivity {
                 }
             }
         });
-        EditText emailText = findViewById(R.id.enterEmailField);
+        emailText = findViewById(R.id.enterEmailField);
         emailText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -201,26 +207,13 @@ public class SignupActivity extends AppCompatActivity {
         createButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                updateBirthday(String.valueOf((dobField.getText())));
-                if (userGood && firstGood && lastGood) {
 
-                    if (passGood && confirmGood && emailGood) {
-                        if (phoneGood && dobGood && referGood) {
-                            //send user data to server for creation
-                            Intent intent = new Intent(SignupActivity.this, MainActivity.class);
-                            startActivity(intent);
-                        }
-                        else {
-                            Toast.makeText(SignupActivity.this, "last 3", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                    else {
-                        Toast.makeText(SignupActivity.this, "secod3", Toast.LENGTH_SHORT).show();
-                    }
-
+                if (checkAll()) {
+                    Intent intent = new Intent(SignupActivity.this, MainActivity.class);
+                    startActivity(intent);
                 }
                 else {
-                    Toast.makeText(SignupActivity.this, "first 3", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SignupActivity.this, "Check Red-Highlighted Input Fields", Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -228,7 +221,7 @@ public class SignupActivity extends AppCompatActivity {
 
         RadioGroup radioHolder = findViewById(R.id.radioGroup);
         TextView referralLabel = findViewById(R.id.referralCodeLabel);
-        TextView referralText = findViewById(R.id.referralCodeText);
+        referralText = findViewById(R.id.referralCodeText);
 
         radioHolder.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -260,7 +253,7 @@ public class SignupActivity extends AppCompatActivity {
                     }
                     else {
 
-                        Toast.makeText(SignupActivity.this, "Must enter referral code", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(SignupActivity.this, "Must enter referral code", Toast.LENGTH_SHORT).show();
                         Drawable customDrawable = getResources().getDrawable(R.drawable.edittext_border);
                         referralText.setBackground(customDrawable);
                         referGood = false;
@@ -294,6 +287,97 @@ public class SignupActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+    private boolean checkAll() {
+        if (!(String.valueOf(referralText.getText()).equals(""))) {
+            referralText.setBackgroundResource(android.R.drawable.edit_text);
+            referGood = true;
+        }
+        else {
+            //Toast.makeText(SignupActivity.this, "Must enter referral code", Toast.LENGTH_SHORT).show();
+            Drawable customDrawable = getResources().getDrawable(R.drawable.edittext_border);
+            referralText.setBackground(customDrawable);
+            referGood = false;
+        }
+        updateBirthday(String.valueOf((dobField.getText())));
+
+        if (String.valueOf(phoneField.getText()).length() == 12 && !(String.valueOf(phoneField.getText()).equals(""))) {
+            phoneField.setBackgroundResource(android.R.drawable.edit_text);
+            phoneGood = true;
+        }
+        else {
+            //Toast.makeText(SignupActivity.this, "Phone number is formatted incorrectly", Toast.LENGTH_SHORT).show();
+            Drawable customDrawable = getResources().getDrawable(R.drawable.edittext_border);
+            phoneField.setBackground(customDrawable);
+            phoneGood = false;
+        }
+        if (android.util.Patterns.EMAIL_ADDRESS.matcher(emailText.getText().toString()).matches()) {
+            emailText.setBackgroundResource(android.R.drawable.edit_text);
+            emailGood = true;
+        }
+        else {
+            //Toast.makeText(SignupActivity.this, "Must enter valid email", Toast.LENGTH_SHORT).show();
+            Drawable customDrawable = getResources().getDrawable(R.drawable.edittext_border);
+            emailText.setBackground(customDrawable);
+            emailGood = false;
+        }
+        if (String.valueOf(passText.getText()).equals("")) {
+            //Toast.makeText(SignupActivity.this, "Must enter a password", Toast.LENGTH_SHORT).show();
+            Drawable customDrawable = getResources().getDrawable(R.drawable.edittext_border);
+            passText.setBackground(customDrawable);
+            passGood = false;
+        }
+        else {
+            passGood = true;
+            passText.setBackgroundResource(android.R.drawable.edit_text);
+        }
+        if (String.valueOf(usernameText.getText()).equals("")) { //Also need to check if username is same as any in database
+            //Toast.makeText(SignupActivity.this, "Must enter a username", Toast.LENGTH_SHORT).show();
+            Drawable customDrawable = getResources().getDrawable(R.drawable.edittext_border);
+            usernameText.setBackground(customDrawable);
+            userGood = false;
+        }
+        else {
+            userGood = true;
+            usernameText.setBackgroundResource(android.R.drawable.edit_text);
+        }
+        if (String.valueOf(firstName.getText()).equals("")) {
+           // Toast.makeText(SignupActivity.this, "Must enter a First name", Toast.LENGTH_SHORT).show();
+            Drawable customDrawable = getResources().getDrawable(R.drawable.edittext_border);
+            firstName.setBackground(customDrawable);
+            firstGood = false;
+        }
+        else {
+            firstGood = true;
+            firstName.setBackgroundResource(android.R.drawable.edit_text);
+        }
+        if (String.valueOf(lastName.getText()).equals("")) {
+            //Toast.makeText(SignupActivity.this, "Must enter a Last name", Toast.LENGTH_SHORT).show();
+            Drawable customDrawable = getResources().getDrawable(R.drawable.edittext_border);
+            lastName.setBackground(customDrawable);
+            lastGood = false;
+        }
+        else {
+            lastGood = true;
+            lastName.setBackgroundResource(android.R.drawable.edit_text);
+        }
+        if (String.valueOf(confirmText.getText()).equals(String.valueOf(passText.getText()))) {
+            confirmText.setBackgroundResource(android.R.drawable.edit_text);
+            confirmGood = true;
+        }
+        else {
+            //Toast.makeText(SignupActivity.this, "Passwords must match", Toast.LENGTH_SHORT).show();
+            Drawable customDrawable = getResources().getDrawable(R.drawable.edittext_border);
+            confirmText.setBackground(customDrawable);
+            confirmGood = false;
+        }
+        if (userGood && firstGood && lastGood && passGood && confirmGood && emailGood && phoneGood && dobGood && referGood) {
+            return true;
+        }
+        else {
+            return false;
+        }
+
     }
 
     private void showDatePickerDialog() {
