@@ -218,28 +218,29 @@ public class SignupActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 if (checkAll()) {
-                    JSONObject jsonInput = new JSONObject();
+                    JSONObject userInput = new JSONObject();
                     try {
-                        jsonInput.put("role", "Patient");
-                        jsonInput.put("username", "user2");
-                        jsonInput.put("first_name", "first");
-                        jsonInput.put("last_name", "last");
-                        jsonInput.put("date_of_birth", "1991-02-02");
-                        jsonInput.put("email", "a@gmail.com");
-                        jsonInput.put("phone_number", "12345678");
-                        jsonInput.put("num_measures", "twelve");
-                    } catch (JSONException e) {
+                        userInput.put("username", String.valueOf(usernameText.getText()));
+                        userInput.put("password", String.valueOf(passText.getText()));
+                        userInput.put("first_name", String.valueOf(firstName.getText()));
+                        userInput.put("last_name", String.valueOf(lastName.getText()));
+                        userInput.put("date_of_birth", String.valueOf(dobField.getText()));
+                        userInput.put("email", String.valueOf(emailText.getText()));
+                        userInput.put("phone_number", String.valueOf(phoneField.getText()));
+                        userInput.put("middle_name", "");
+                        userInput.put("ssn", "");
+                    }
+                    catch (JSONException e) {
                         e.printStackTrace();
                     }
-                    global.sendPostRequestWithHandler("https://10.0.2.2:443/register", jsonInput, new HandlerResponse() {
+                    global.sendPostRequestWithHandler("https://10.0.2.2:443/register", userInput, new HandlerResponse() {
                         @Override
                         public void handleResponse(String response) {
-                            System.out.print(response);
-                            Log.d("signupres", response);
+                            Intent intent = new Intent(SignupActivity.this, MainActivity.class);
+                            startActivity(intent);
                         }
                     });
-//                    Intent intent = new Intent(SignupActivity.this, MainActivity.class);
-//                    startActivity(intent);
+
                 }
                 else {
                     Toast.makeText(SignupActivity.this, "Check Red-Highlighted Input Fields", Toast.LENGTH_SHORT).show();

@@ -55,13 +55,16 @@ public class MainActivity extends AppCompatActivity {
                 catch (JSONException e){
                     e.printStackTrace();
                 }
-//                global.sendPostRequestWithHandler("https://10.0.2.2:443/login", loginSend, new HandlerResponse() {
-//                    @Override
-//                    public void handleResponse(String response) {
-//                        System.out.print(response);
-//                        Log.d("response", response);
-//                    }
-//                });
+                global.sendPostRequestWithHandler("https://10.0.2.2:443/login", loginSend, new HandlerResponse() {
+                    @Override
+                    public void handleResponse(String response) {
+                        Intent intent = new Intent(MainActivity.this, HomeActivity.class);
+                        intent.putExtra("token", "");
+                        startActivity(intent);
+                        System.out.print(response);
+                        Log.d("response", response);
+                    }
+                });
 
 
 
@@ -74,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, SignupActivity.class);
+
                 startActivity(intent);
             }
         });
