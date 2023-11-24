@@ -78,7 +78,7 @@ public class api {
         thread.start();
     }
 
-    public void sendGetRequestWithHandlerWithToken(String httpsAddress, HandlerResponse handler, String token) {
+    public void sendGetRequestWithHandlerWithToken(String httpsAddress, String token, HandlerResponse handler) {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {

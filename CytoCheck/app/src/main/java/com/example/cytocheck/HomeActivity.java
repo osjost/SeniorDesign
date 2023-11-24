@@ -24,12 +24,17 @@ public class HomeActivity extends AppCompatActivity {
     private TextView userPain;
     private SeekBar nauseaSlideBar;
     private TextView userNausea;
+    private TextView welcomeLabel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home); // Create a new XML layout for this activity if needed
-
+        Intent intent = getIntent();
+        String token = intent.getStringExtra("token");
+        String userID = intent.getStringExtra("userID");
+        welcomeLabel = findViewById(R.id.welcomeLabel);
+        welcomeLabel.setText("Welcome, " + userID);
         userScore = findViewById(R.id.userScoreField);
         healthSlideBar = findViewById(R.id.healthSlider);
         likertImage = findViewById(R.id.likert);

@@ -38,6 +38,7 @@ public class SignupActivity extends AppCompatActivity {
     private EditText passText;
     private EditText firstName;
     private EditText lastName;
+    private String userRole;
     private EditText usernameText;
     private EditText confirmText;
     private EditText emailText;
@@ -227,8 +228,10 @@ public class SignupActivity extends AppCompatActivity {
                         userInput.put("date_of_birth", String.valueOf(dobField.getText()));
                         userInput.put("email", String.valueOf(emailText.getText()));
                         userInput.put("phone_number", String.valueOf(phoneField.getText()));
-                        userInput.put("middle_name", "");
-                        userInput.put("ssn", "");
+                        userInput.put("role", userRole);
+                        userInput.put("middle_name", "Middle Name");
+                        userInput.put("ssn", "hehe");
+                        userInput.put("num_measures", "s");
                     }
                     catch (JSONException e) {
                         e.printStackTrace();
@@ -261,11 +264,13 @@ public class SignupActivity extends AppCompatActivity {
                     // If the specific radio button is selected, hide the TextView
                     referralLabel.setVisibility(View.GONE);
                     referralText.setVisibility(View.GONE);
+                    userRole = "provider";
                     referGood = true;
                 } else {
                     // If other radio buttons are selected, make the TextView visible
                     referralLabel.setVisibility(View.VISIBLE);
                     referralText.setVisibility(View.VISIBLE);
+                    userRole = "patient";
                 }
             }
         });

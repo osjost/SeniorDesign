@@ -58,11 +58,32 @@ public class MainActivity extends AppCompatActivity {
                 global.sendPostRequestWithHandler("https://10.0.2.2:443/login", loginSend, new HandlerResponse() {
                     @Override
                     public void handleResponse(String response) {
-                        Intent intent = new Intent(MainActivity.this, HomeActivity.class);
-                        intent.putExtra("token", "");
-                        startActivity(intent);
-                        System.out.print(response);
-                        Log.d("response", response);
+                        String token = "";
+                        String userID = "";
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            token = jsonObject.getString("jwt");
+                            userID = jsonObject.getString("user_id");
+                            String httpsAddress = "https://10.0.2.2:443/users/" + userID;
+                            global.sendGetRequestWithHandlerWithToken(httpsAddress, token, new HandlerResponse() {
+                                @Override
+                                public void handleResponse(String response) {
+                                    Log.d("response", response);
+                                }
+                            });
+                        }
+                        catch (JSONException e) {
+
+                        }
+
+
+
+//                        Intent intent = new Intent(MainActivity.this, HomeActivity.class);
+//                        intent.putExtra("token", token);
+//                        intent.putExtra("userID", userID);
+//                        startActivity(intent);
+//                        System.out.print(response);
+//                        Log.d("response", response);
                     }
                 });
 
