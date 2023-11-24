@@ -10,6 +10,7 @@ function verifyJWT(req, res, next) {
   }
 
   try {
+    console.log(token)
     const decoded = jwt.decode(token, secret);
     req.user = decoded;
     next();

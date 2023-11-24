@@ -22,10 +22,17 @@ const userOperations = require('./services/users');
 
 // curl -k https://localhost:443/readings/2/1
 
+// readings test with JWT:
+// curl -k -H "Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InVzZXIifQ.9b6LUDKCeDq14atPhQLgtpXKUUEHgVLXx-Nkrcb_pnI" https://localhost:443/readings/2/1
+
 
 
 // testing for login
 // curl -k -X POST https://localhost:443/login -H "Content-Type: application/json" -d "{\"password\":\"blah\", \"username\":\"user\"}"
+
+// testing for login this time with JWT.
+
+
 
 
 // testing for register
