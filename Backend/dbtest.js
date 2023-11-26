@@ -6,6 +6,10 @@ const userOperations = require('./services/users');
 
 
 
+// testing for associations
+// NOTE: YOU PASS THE PROVIDER ID IN HERE!
+// curl -k https://localhost:443/associations/1
+
 // testing for inbox
 // curl -k -X POST https://localhost:443/inbox -H "Content-Type: application/json" -d "{\"provider_id\":\"1\", \"message\":\"this is a test message\"}"
 // curl -k https://localhost:443/inbox/1
@@ -35,8 +39,9 @@ const userOperations = require('./services/users');
 
 
 
+
 // testing for register
-// curl -k -X POST https://localhost:443/register -H "Content-Type: application/json" -d "{\"password\":\"blah\", \"username\":\"user\",\"role\":\"Patient\", \"first_name\":\"test\", \"last_name\":\"test\", \"date_of_birth\":\"1991-02-02\", \"email\":\"test@gmail.com\", \"phone_number\":\"12345678\", \"num_measures\":\"twelve\",\"middle_name\":\"test5\",\"ssn\":\"123-45-6789\"}"
+// curl -k -X POST https://localhost:443/register -H "Content-Type: application/json" -d "{\"password\":\"blah\", \"username\":\"zzaxa12cbdf\",\"role\":\"patient\", \"first_name\":\"test\", \"last_name\":\"test\", \"date_of_birth\":\"1991-02-02\", \"email\":\"test@gmail.com\", \"phone_number\":\"12345678\", \"num_measures\":\"twelve\",\"middle_name\":\"test5\",\"ssn\":\"123-45-6789\", \"signup_code\":\"1\"}"
 
 
 

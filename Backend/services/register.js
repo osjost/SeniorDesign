@@ -9,7 +9,6 @@ const secret = "1z98AJf901JZAa"
 // only expects the username and password to add it to the login/authentication table
 async function register(user){
         
-        console.log(user);
         const passwordHash = await  bcrypt.hash(user.password, saltRounds);
 
         // confirm username is not already being used
@@ -26,6 +25,13 @@ async function register(user){
             `INSERT INTO login (username, password_hash) VALUES (?, ?)`,
             [user.username, passwordHash]
         );
+
+        if (user.role == "patient") {
+            if (!("signup_code" in user)) {
+                throw new Error('Patient requires signup code');
+            }
+        }
+
 
         const resultUserInsert = await db.query(
             `INSERT INTO users 
@@ -45,13 +51,33 @@ async function register(user){
             ]
         );
         
+        console.log(resultUserInsert)
         let message = 'Error in creating user';
         
         if (result.affectedRows) {
             message = 'User created succesfully';
         }
+
+        if (user.role == "patient") {
+            const resultAssociation = await db.query(
+            `INSERT INTO provider_patient_associations 
+            (provider_id, patient_id) 
+            VALUES 
+            (?, ?)`,
+            [
+            user.signup_code,
+            resultUserInsert.insertId
+            ]
+        );
+        }
+
+
         
         return {message};
+
+
+
+        
         }
 
 

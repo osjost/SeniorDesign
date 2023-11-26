@@ -29,9 +29,7 @@ async function create(messageIn){
     );
 
     console.log(rows);
-    return {
-        rows
-    };
+    return rows;
 }
   
   module.exports = {

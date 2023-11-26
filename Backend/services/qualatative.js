@@ -39,9 +39,7 @@ async function create(qualatative){
     );
 
     console.log(rows);
-    return {
-        rows
-    };
+    return rows;
 }
   
   module.exports = {
