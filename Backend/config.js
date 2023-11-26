@@ -3,7 +3,7 @@ const config = {
       /* don't expose password or any sensitive info, done only for demo */
       host: "localhost",
       user: "root",
-      password: "3G3ct9mh",
+      password: "X4eeqle35/",
       database: "cytocheck",
       port: '3306'
     },

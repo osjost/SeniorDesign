@@ -193,6 +193,7 @@ public abstract class Activity_HeartRateDisplayBase extends Activity {
                         tv_heartBeatEventTime.setText(textHeartBeatEventTime);
 
                         tv_dataStatus.setText(dataState.toString());
+                        //TODO count to like 40 and send post
                     }
                 });
             }
