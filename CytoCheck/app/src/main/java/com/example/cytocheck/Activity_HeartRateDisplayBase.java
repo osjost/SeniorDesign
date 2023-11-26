@@ -39,8 +39,13 @@ import com.dsi.ant.plugins.antplus.pccbase.AntPlusLegacyCommonPcc.ICumulativeOpe
 import com.dsi.ant.plugins.antplus.pccbase.AntPlusLegacyCommonPcc.IManufacturerAndSerialReceiver;
 import com.dsi.ant.plugins.antplus.pccbase.AntPlusLegacyCommonPcc.IVersionAndModelReceiver;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.math.BigDecimal;
 import java.util.EnumSet;
+
+import api.*;
 
 /**
  * Base class to connects to Heart Rate Plugin and display all the event data.
@@ -50,6 +55,9 @@ public abstract class Activity_HeartRateDisplayBase extends Activity {
 
     AntPlusHeartRatePcc hrPcc = null;
     protected PccReleaseHandle<AntPlusHeartRatePcc> releaseHandle = null;
+    private int dataCount = 0;
+    private double avgData = 0;
+    private int dataSum = 0;
 
     TextView tv_status;
 
@@ -77,11 +85,16 @@ public abstract class Activity_HeartRateDisplayBase extends Activity {
 
     TextView tv_dataStatus;
     TextView tv_rrFlag;
+    protected String token;
+    protected String userID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        Intent intent = getIntent();
+        token = intent.getStringExtra("token");
+        userID = intent.getStringExtra("userID");
 
         handleReset();
     }
@@ -171,6 +184,7 @@ public abstract class Activity_HeartRateDisplayBase extends Activity {
                                            final int computedHeartRate, final long heartBeatCount,
                                            final BigDecimal heartBeatEventTime, final DataState dataState)
             {
+                api global = api.getInstance();
                 // Mark heart rate with asterisk if zero detected
                 final String textHeartRate = String.valueOf(computedHeartRate)
                         + ((DataState.ZERO_DETECTED.equals(dataState)) ? "*" : "");
@@ -180,6 +194,37 @@ public abstract class Activity_HeartRateDisplayBase extends Activity {
                         + ((DataState.INITIAL_VALUE.equals(dataState)) ? "*" : "");
                 final String textHeartBeatEventTime = String.valueOf(heartBeatEventTime)
                         + ((DataState.INITIAL_VALUE.equals(dataState)) ? "*" : "");
+
+                if (textHeartRate.equals("*")) {
+
+                }
+                else {
+                    dataCount += 1; //increment data count to say that our app has recieved one more data point
+                    dataSum += computedHeartRate;
+                    avgData = dataSum / dataCount;
+                    if (dataCount >= 20) { //userDefined number of how many cycles to send data after
+                        dataCount = 0;
+                        dataSum = 0;
+                        //Send post with average data
+                        JSONObject sensorData = new JSONObject();
+                        try {
+                            sensorData.put("reading", String.format("%.5f", avgData));
+                            sensorData.put("sensor_id", "1");
+                            sensorData.put("user_id", userID);
+                        }
+                        catch (JSONException e) {
+
+                        }
+                        global.sendPostRequestWithHandlerWithToken("https://10.0.2.2:443/readings",sensorData,token, new HandlerResponse() {
+                            @Override
+                            public void handleResponse(String response) {
+
+                            }
+
+                        });
+
+                    }
+                }
 
                 runOnUiThread(new Runnable()
                 {
@@ -193,7 +238,7 @@ public abstract class Activity_HeartRateDisplayBase extends Activity {
                         tv_heartBeatEventTime.setText(textHeartBeatEventTime);
 
                         tv_dataStatus.setText(dataState.toString());
-                        //TODO count to like 40 and send post
+
                     }
                 });
             }

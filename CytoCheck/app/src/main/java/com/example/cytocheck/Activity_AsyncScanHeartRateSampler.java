@@ -1,5 +1,6 @@
 package com.example.cytocheck;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -34,10 +35,12 @@ public class Activity_AsyncScanHeartRateSampler extends Activity_HeartRateDispla
 
     AsyncScanController<AntPlusHeartRatePcc> hrScanCtrl;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         initScanDisplay();
+
         super.onCreate(savedInstanceState);
     }
 

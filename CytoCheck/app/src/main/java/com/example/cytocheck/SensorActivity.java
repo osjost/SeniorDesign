@@ -15,7 +15,9 @@ public class SensorActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sensor);
-
+        Intent intent = getIntent();
+        String token = intent.getStringExtra("token");
+        String userID = intent.getStringExtra("userID");
         // Text Initialization
         TextView devicePairing = (TextView)findViewById(R.id.textView);
         devicePairing.setText("Pair Wireless Sensor");
@@ -29,7 +31,11 @@ public class SensorActivity extends AppCompatActivity{
             public void onClick(View view) {
                 // Begin Pairing Mode
                 Toast.makeText(SensorActivity.this, "Pairing", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(SensorActivity.this, Activity_AsyncScanHeartRateSampler.class));
+                Intent intent = new Intent(SensorActivity.this, Activity_AsyncScanHeartRateSampler.class);
+                intent.putExtra("token", token);
+                intent.putExtra("userID", userID);
+                startActivity(intent);
+                //startActivity(new Intent(SensorActivity.this, Activity_AsyncScanHeartRateSampler.class));
             }
         });
     }
