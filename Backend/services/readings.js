@@ -25,9 +25,7 @@ async function create(reading){
     );
 
     console.log(rows);
-    return {
-        rows
-    };
+    return rows;
 }
   
   module.exports = {
