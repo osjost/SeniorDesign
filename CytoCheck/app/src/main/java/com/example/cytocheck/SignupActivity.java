@@ -229,6 +229,9 @@ public class SignupActivity extends AppCompatActivity {
                         userInput.put("email", String.valueOf(emailText.getText()));
                         userInput.put("phone_number", String.valueOf(phoneField.getText()));
                         userInput.put("role", userRole);
+                        if (userRole.equals("patient")) {
+                            userInput.put("signup_code", String.valueOf(referralText.getText()));
+                        }
                         userInput.put("middle_name", "Middle Name");
                         userInput.put("ssn", "hehe");
                         userInput.put("num_measures", "s");

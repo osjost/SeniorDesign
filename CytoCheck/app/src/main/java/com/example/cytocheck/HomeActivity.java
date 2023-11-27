@@ -16,6 +16,11 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import api.*;
+
 public class HomeActivity extends AppCompatActivity {
     private SeekBar healthSlideBar;
     private ImageView likertImage;
@@ -25,14 +30,26 @@ public class HomeActivity extends AppCompatActivity {
     private SeekBar nauseaSlideBar;
     private TextView userNausea;
     private TextView welcomeLabel;
+    private String token;
+    private String userID;
+    private boolean fatigueReady = false;
+    private String fatigueFinal = "10";
+    private String painFinal = "10";
+    private String nauseaFinal = "10";
+    private String rashFinal = "N/A";
+    private String extraFinal= "N/A";
+    private boolean painReady = false;
+    private boolean nauseaReady = false;
+    private boolean rashReady = false;
+    private boolean extraReady = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home); // Create a new XML layout for this activity if needed
         Intent intent = getIntent();
-        String token = intent.getStringExtra("token");
-        String userID = intent.getStringExtra("userID");
+        token = intent.getStringExtra("token");
+        userID = intent.getStringExtra("userID");
         String firstName = intent.getStringExtra("firstName");
         welcomeLabel = findViewById(R.id.welcomeLabel);
         welcomeLabel.setText("Welcome, " + firstName);
@@ -50,7 +67,8 @@ public class HomeActivity extends AppCompatActivity {
             public void onProgressChanged(SeekBar healthSlideBar, int progress, boolean fromUser) {
                 // 'progress' contains the new value of the SeekBar
                 // 'fromUser' is true if the change was initiated by the user, false if it was programmatically set
-                userScore.setText(progress + "/10");
+                userScore.setText((10-progress) + "/10");
+                fatigueFinal = String.valueOf(progress);
             }
             @Override
             public void onStartTrackingTouch(SeekBar healthSlideBar) { //Called when user Starts touch
@@ -64,7 +82,8 @@ public class HomeActivity extends AppCompatActivity {
             public void onProgressChanged(SeekBar painSlideBar, int progress, boolean fromUser) {
                 // 'progress' contains the new value of the SeekBar
                 // 'fromUser' is true if the change was initiated by the user, false if it was programmatically set
-                userPain.setText(progress + "/10");
+                userPain.setText((10-progress) + "/10");
+                painFinal = String.valueOf(progress);
             }
             @Override
             public void onStartTrackingTouch(SeekBar painSlideBar) { //Called when user Starts touch
@@ -78,7 +97,8 @@ public class HomeActivity extends AppCompatActivity {
             public void onProgressChanged(SeekBar nauseaSlideBar, int progress, boolean fromUser) {
                 // 'progress' contains the new value of the SeekBar
                 // 'fromUser' is true if the change was initiated by the user, false if it was programmatically set
-                userNausea.setText(progress + "/10");
+                userNausea.setText((10-progress) + "/10");
+                nauseaFinal = String.valueOf(progress);
             }
             @Override
             public void onStartTrackingTouch(SeekBar nauseaSlideBar) { //Called when user Starts touch
@@ -89,6 +109,8 @@ public class HomeActivity extends AppCompatActivity {
         });
 
         ImageView myImageView = findViewById(R.id.likert);
+        ImageView myImageView2 = findViewById(R.id.likert2);
+        ImageView myImageView3 = findViewById(R.id.likert3);
 
         // Set the image resource programmatically (optional if you've set it in XML)
          myImageView.setImageResource(R.drawable.likert);
@@ -114,7 +136,8 @@ public class HomeActivity extends AppCompatActivity {
                 else {
                     userScore.setText("Score Submitted: " + userScore.getText());
                 }
-
+                fatigueReady = true;
+                checkAll();
             }
         });
 
@@ -124,14 +147,15 @@ public class HomeActivity extends AppCompatActivity {
             public void onClick(View view) {
                 painSlideBar.setVisibility(View.GONE);
                 painProcess.setVisibility(View.GONE);
-
+                myImageView2.setVisibility(View.GONE);
                 if (userPain.getText().equals("")) {
                     userPain.setText("Score Submitted: 0/10");
                 }
                 else {
                     userPain.setText("Score Submitted: " + userPain.getText());
                 }
-
+                painReady = true;
+                checkAll();
             }
         });
         Button nauseaProcess = findViewById(R.id.surveySubmit3); //Signup functionality
@@ -140,28 +164,25 @@ public class HomeActivity extends AppCompatActivity {
             public void onClick(View view) {
                 nauseaSlideBar.setVisibility(View.GONE);
                 nauseaProcess.setVisibility(View.GONE);
-
+                myImageView3.setVisibility(View.GONE);
                 if (userNausea.getText().equals("")) {
                     userNausea.setText("Score Submitted: 0/10");
                 }
                 else {
                     userNausea.setText("Score Submitted: " + userNausea.getText());
                 }
+                nauseaReady = true;
+                checkAll();
 
             }
         });
-        Button extraSymptoms = findViewById(R.id.symptomExtra);
-        extraSymptoms.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {}
-
-        });
-        Button sendWarning = findViewById(R.id.warningButton);
-        sendWarning.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {}
-
-        });
+        //MVP2 Warning
+//        Button sendWarning = findViewById(R.id.warningButton);
+//        sendWarning.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {}
+//
+//        });
         Button sensorButton = findViewById(R.id.sensorButton);
         sensorButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -178,9 +199,36 @@ public class HomeActivity extends AppCompatActivity {
         Button rashButton = findViewById(R.id.rashButton);
         rashButton.setOnClickListener(v -> showCustomDialog());
 
+        Button otherButton = findViewById(R.id.symptomExtra);
+        otherButton.setOnClickListener(v -> showCustomOtherDialog());
+
 
     }
+    public void checkAll() {
+        if (fatigueReady && painReady && nauseaReady && rashReady && extraReady) {
+            api global = api.getInstance();
+            JSONObject qualData = new JSONObject();
+            try {
+                qualData.put("fatigue", fatigueFinal);
+                qualData.put("user_id", userID);
+                qualData.put("pain", painFinal);
+                qualData.put("nausea", nauseaFinal);
+                qualData.put("rash", rashFinal);
+                qualData.put("other", extraFinal);
+            }
+            catch (JSONException e) {
 
+            }
+            global.sendPostRequestWithHandlerWithToken("https://10.0.2.2:443/qualatative", qualData, token, new HandlerResponse() {
+                @Override
+                public void handleResponse(String response) {
+
+                }
+            });
+        }
+
+
+    }
     public void showCustomDialog() {
         // Create a LayoutInflater instance
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -193,18 +241,62 @@ public class HomeActivity extends AppCompatActivity {
         // Create the AlertDialog
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setView(dialogView)
-                .setTitle("Custom Dialog")
-                .setPositiveButton("OK", (dialog, which) -> {
+                .setTitle("Rash Survey")
+                .setPositiveButton("Submit", (dialog, which) -> {
                     // Handle the OK button click
+                    rashReady = true;
                     String userInput = editText.getText().toString();
                     int selectedRadioButtonId = radioGroup.getCheckedRadioButtonId();
                     RadioButton selectedRadioButton = dialogView.findViewById(selectedRadioButtonId);
 
                     if (selectedRadioButton != null) {
                         String radioButtonValue = selectedRadioButton.getText().toString();
-                        // Handle the user input and radio button selection
-                        // ...
+                        if (radioButtonValue.equals("Yes")) {
+                            rashFinal = "Yes: " + userInput;
+                        }
+                        else {
+                            rashFinal = "No: " + userInput;
+                        }
                     }
+                    checkAll();
+                })
+                .setNegativeButton("Cancel", (dialog, which) -> {
+                    // Handle the Cancel button click
+                });
+
+        // Show the AlertDialog
+        builder.create().show();
+    }
+    public void showCustomOtherDialog() {
+        // Create a LayoutInflater instance
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View dialogView = inflater.inflate(R.layout.custom_dialog, null);
+
+        // Get references to views in the custom dialog layout
+        EditText editText = dialogView.findViewById(R.id.editText);
+        RadioGroup radioGroup = dialogView.findViewById(R.id.radioGroup);
+        //editText.setHint("Symptom Description");
+        // Create the AlertDialog
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setView(dialogView)
+                .setTitle("Other Symptoms Survey")
+                .setPositiveButton("Submit", (dialog, which) -> {
+                    // Handle the OK button click
+                    extraReady = true;
+                    String userInput = editText.getText().toString();
+                    int selectedRadioButtonId = radioGroup.getCheckedRadioButtonId();
+                    RadioButton selectedRadioButton = dialogView.findViewById(selectedRadioButtonId);
+
+                    if (selectedRadioButton != null) {
+                        String radioButtonValue = selectedRadioButton.getText().toString();
+                        if (radioButtonValue.equals("Yes")) {
+                            extraFinal = "Yes: " + userInput;
+                        }
+                        else {
+                            extraFinal = "No: " + userInput;
+                        }
+                    }
+                    checkAll();
                 })
                 .setNegativeButton("Cancel", (dialog, which) -> {
                     // Handle the Cancel button click

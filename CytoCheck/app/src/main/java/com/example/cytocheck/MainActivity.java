@@ -100,14 +100,6 @@ public class MainActivity extends AppCompatActivity {
 
                         }
 
-
-
-                        Intent intent = new Intent(MainActivity.this, HomeActivity.class);
-                        intent.putExtra("token", token);
-                        intent.putExtra("userID", userID);
-                        startActivity(intent);
-//                        System.out.print(response);
-//                        Log.d("response", response);
                     }
                 });
 

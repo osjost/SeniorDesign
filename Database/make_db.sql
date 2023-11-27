@@ -43,7 +43,7 @@ CREATE TABLE Qualatative_Data (
     nausea INT,
     fatigue INT,
     pain INT,
-    rash BOOL,
+    rash VARCHAR(255),
     other VARCHAR(255),
     time_stamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
