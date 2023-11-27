@@ -68,7 +68,7 @@ public class HomeActivity extends AppCompatActivity {
                 // 'progress' contains the new value of the SeekBar
                 // 'fromUser' is true if the change was initiated by the user, false if it was programmatically set
                 userScore.setText((10-progress) + "/10");
-                fatigueFinal = String.valueOf(progress);
+                fatigueFinal = String.valueOf(10-progress);
             }
             @Override
             public void onStartTrackingTouch(SeekBar healthSlideBar) { //Called when user Starts touch
@@ -83,7 +83,7 @@ public class HomeActivity extends AppCompatActivity {
                 // 'progress' contains the new value of the SeekBar
                 // 'fromUser' is true if the change was initiated by the user, false if it was programmatically set
                 userPain.setText((10-progress) + "/10");
-                painFinal = String.valueOf(progress);
+                painFinal = String.valueOf(10-progress);
             }
             @Override
             public void onStartTrackingTouch(SeekBar painSlideBar) { //Called when user Starts touch
@@ -98,7 +98,7 @@ public class HomeActivity extends AppCompatActivity {
                 // 'progress' contains the new value of the SeekBar
                 // 'fromUser' is true if the change was initiated by the user, false if it was programmatically set
                 userNausea.setText((10-progress) + "/10");
-                nauseaFinal = String.valueOf(progress);
+                nauseaFinal = String.valueOf(10-progress);
             }
             @Override
             public void onStartTrackingTouch(SeekBar nauseaSlideBar) { //Called when user Starts touch

@@ -39,6 +39,8 @@ public class ProviderActivity extends AppCompatActivity {
     private String token;
     private List<Integer> patientIds = new ArrayList<>();
     private List<String> patientNames = new ArrayList<>();
+    private List<PatientInfo> patientList = new ArrayList<>();
+    private int index;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,6 +104,7 @@ public class ProviderActivity extends AppCompatActivity {
         // Second set of asynchronous requests for patient details
         for (int i = 0; i < patientIds.size(); i++) {
             String httpsAddress = "https://10.0.2.2:443/users/" + patientIds.get(i);
+
             api global = api.getInstance();
             global.sendGetRequestWithHandlerWithToken(httpsAddress, token, new HandlerResponse() {
                 @Override
@@ -109,7 +112,7 @@ public class ProviderActivity extends AppCompatActivity {
                     try {
                         JSONObject userProfile = new JSONObject(response);
                         patientNames.add(userProfile.getString("first_name"));
-
+                        patientList.add(new PatientInfo(userProfile.getInt("user_id"), userProfile.getString("first_name")));
                         // Check if all responses have been received
                         if (patientNames.size() == patientIds.size()) {
                             // All responses received, set up the UI
@@ -124,14 +127,14 @@ public class ProviderActivity extends AppCompatActivity {
     }
 
     private void setupUI() {
-        List<PatientInfo> patientList = new ArrayList<>();
+
 
         // Populate patientList with PatientInfo objects (ID and Name)
-        for (int i = 0; i < patientIds.size(); i++) {
-            String patientName = patientNames.get(i);
-            int patientId = patientIds.get(i);
-            patientList.add(new PatientInfo(patientId, patientName));
-        }
+//        for (int i = 0; i < patientIds.size(); i++) {
+//            String patientName = patientNames.get(i);
+//            int patientId = patientIds.get(i);
+//            patientList.add(new PatientInfo(patientId, patientName));
+//        }
 
         // Create the adapter and set it to the ListView
         PatientAdapter adapter = new PatientAdapter(this, patientList);
