@@ -33,6 +33,7 @@ import fragments.DatePickerFragment;
 
 
 public class SignupActivity extends AppCompatActivity {
+    private String linkString;
     private EditText phoneField;
     private EditText dobField;
     private EditText passText;
@@ -55,6 +56,8 @@ public class SignupActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Intent intent = getIntent();
+        linkString = intent.getStringExtra("linkString");
         setContentView(R.layout.activity_signup);
         api global = api.getInstance();
 
@@ -239,7 +242,8 @@ public class SignupActivity extends AppCompatActivity {
                     catch (JSONException e) {
                         e.printStackTrace();
                     }
-                    global.sendPostRequestWithHandler("https://10.0.2.2:443/register", userInput, new HandlerResponse() {
+                    String registerString = linkString + "register";
+                    global.sendPostRequestWithHandler(registerString, userInput, new HandlerResponse() {
                         @Override
                         public void handleResponse(String response) {
                             Intent intent = new Intent(SignupActivity.this, MainActivity.class);

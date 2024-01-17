@@ -14,7 +14,7 @@ const usersRouter = require("./routes/users");
 const loginRouter = require("./routes/login");
 const registerRouter = require("./routes/register");
 const readingsRouter = require("./routes/readings");
-const qualatativeRouter = require("./routes/qualatative");
+const qualitativeRouter = require("./routes/qualitative");
 const inboxRouter = require("./routes/inbox");
 const associationRouter = require("./routes/associations");
 
@@ -35,13 +35,13 @@ app.get("/", (req, res) => {
 // COMMENTED OUT FOR TESTING!
 // app.use("/users", verifyJWT, usersRouter);
 // app.use("/readings", verifyJWT, readingsRouter);
-// app.use("/qualatative", verifyJWT, qualatativeRouter);
+// app.use("/qualitative", verifyJWT, qualitativeRouter);
 // app.use("/inbox", verifyJWT, inboxRouter);
 // app.use("/inbox", verifyJWT, associationRouter);
 
 app.use("/users", usersRouter);
 app.use("/readings", readingsRouter);
-app.use("/qualatative", qualatativeRouter);
+app.use("/qualitative", qualitativeRouter);
 app.use("/inbox", inboxRouter);
 app.use("/associations", associationRouter);
 

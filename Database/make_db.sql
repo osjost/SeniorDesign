@@ -38,7 +38,7 @@ CREATE TABLE Login (
     failed_login_attempts INT DEFAULT 0
 );
 
-CREATE TABLE Qualatative_Data (
+CREATE TABLE qualitative_Data (
     user_id INT,
     nausea INT,
     fatigue INT,

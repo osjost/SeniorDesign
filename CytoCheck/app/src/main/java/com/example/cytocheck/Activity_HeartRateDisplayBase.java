@@ -51,6 +51,7 @@ import api.*;
  * Base class to connects to Heart Rate Plugin and display all the event data.
  */
 public abstract class Activity_HeartRateDisplayBase extends Activity {
+    String linkString;
     protected abstract void requestAccessToPcc();
 
     AntPlusHeartRatePcc hrPcc = null;
@@ -93,6 +94,7 @@ public abstract class Activity_HeartRateDisplayBase extends Activity {
     {
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
+        linkString = intent.getStringExtra("linkString");
         token = intent.getStringExtra("token");
         userID = intent.getStringExtra("userID");
 
@@ -215,7 +217,8 @@ public abstract class Activity_HeartRateDisplayBase extends Activity {
                         catch (JSONException e) {
 
                         }
-                        global.sendPostRequestWithHandlerWithToken("https://10.0.2.2:443/readings",sensorData,token, new HandlerResponse() {
+                        String sendDataString = linkString + "readings";
+                        global.sendPostRequestWithHandlerWithToken(sendDataString,sensorData,token, new HandlerResponse() {
                             @Override
                             public void handleResponse(String response) {
 

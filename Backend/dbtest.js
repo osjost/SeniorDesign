@@ -15,9 +15,9 @@ const userOperations = require('./services/users');
 // curl -k https://localhost:443/inbox/1
 
 
-// testing for qualatative
-// curl -k -X POST https://localhost:443/qualatative -H "Content-Type: application/json" -d "{\"user_id\":\"1\", \"nausea\":\"1\", \"fatigue\":\"1\",\"pain\":\"1\",\"rash\":\"1\",\"other\":\"test\"}"
-// curl -k https://localhost:443/qualatative/1
+// testing for qualitative
+// curl -k -X POST https://localhost:443/qualitative -H "Content-Type: application/json" -d "{\"user_id\":\"1\", \"nausea\":\"1\", \"fatigue\":\"1\",\"pain\":\"1\",\"rash\":\"1\",\"other\":\"test\"}"
+// curl -k https://localhost:443/qualitative/1
 
 
 

@@ -30,7 +30,7 @@ import org.json.JSONObject;
 import api.*;
 
 public class ProviderActivity extends AppCompatActivity {
-
+    private String linkString;
     private Handler inactivityHandler;
     private PopupWindow currentPopup;
     private Runnable inactivityRunnable;
@@ -46,12 +46,13 @@ public class ProviderActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
+        linkString = intent.getStringExtra("linkString");
         token = intent.getStringExtra("token");
         String userID = intent.getStringExtra("userID");
         setContentView(R.layout.activity_provider);
 
         api global = api.getInstance();
-        String associationAddress = "https://10.0.2.2:443/associations/" + userID;
+        String associationAddress = linkString + "associations/" + userID;
         global.sendGetRequestWithHandlerWithToken(associationAddress, token, new HandlerResponse() {
             @Override
             public void handleResponse(String response) {
@@ -79,9 +80,7 @@ public class ProviderActivity extends AppCompatActivity {
         inactivityRunnable = new Runnable() {
             @Override
             public void run() {
-                // Log out the user or perform any other action on inactivity timeout
-                // For example, you can navigate to the login screen or finish the activity
-                // For now, let's simply finish the activity
+                // Log out the user on inactivity timeout
                 Intent intent = new Intent(ProviderActivity.this, MainActivity.class);
                 startActivity(intent);
             }
@@ -103,7 +102,7 @@ public class ProviderActivity extends AppCompatActivity {
     private void fetchPatientDetails(String token) {
         // Second set of asynchronous requests for patient details
         for (int i = 0; i < patientIds.size(); i++) {
-            String httpsAddress = "https://10.0.2.2:443/users/" + patientIds.get(i);
+            String httpsAddress = linkString + "users/" + patientIds.get(i);
 
             api global = api.getInstance();
             global.sendGetRequestWithHandlerWithToken(httpsAddress, token, new HandlerResponse() {
@@ -128,13 +127,6 @@ public class ProviderActivity extends AppCompatActivity {
 
     private void setupUI() {
 
-
-        // Populate patientList with PatientInfo objects (ID and Name)
-//        for (int i = 0; i < patientIds.size(); i++) {
-//            String patientName = patientNames.get(i);
-//            int patientId = patientIds.get(i);
-//            patientList.add(new PatientInfo(patientId, patientName));
-//        }
 
         // Create the adapter and set it to the ListView
         PatientAdapter adapter = new PatientAdapter(this, patientList);
@@ -175,8 +167,8 @@ public class ProviderActivity extends AppCompatActivity {
         Button closeButton = popupView.findViewById(R.id.closeButton);
 
         api global = api.getInstance();
-
-        global.sendGetRequestWithHandlerWithToken("https://10.0.2.2:443/qualatative/" + patientId, token, new HandlerResponse() {
+        String patientAddress = linkString + "qualitative/" + patientId;
+        global.sendGetRequestWithHandlerWithToken(patientAddress, token, new HandlerResponse() {
             @Override
             public void handleResponse(String response) {
 

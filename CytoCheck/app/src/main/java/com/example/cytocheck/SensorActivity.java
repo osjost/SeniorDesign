@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 public class SensorActivity extends AppCompatActivity{
+    String linkString;
     private Button connectButton;
 
     @Override
@@ -16,6 +17,7 @@ public class SensorActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sensor);
         Intent intent = getIntent();
+        linkString = intent.getStringExtra("linkString");
         String token = intent.getStringExtra("token");
         String userID = intent.getStringExtra("userID");
         // Text Initialization
@@ -32,6 +34,7 @@ public class SensorActivity extends AppCompatActivity{
                 // Begin Pairing Mode
                 Toast.makeText(SensorActivity.this, "Pairing", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(SensorActivity.this, Activity_AsyncScanHeartRateSampler.class);
+                intent.putExtra("linkString", linkString);
                 intent.putExtra("token", token);
                 intent.putExtra("userID", userID);
                 startActivity(intent);

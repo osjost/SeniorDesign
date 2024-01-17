@@ -22,6 +22,7 @@ import org.json.JSONObject;
 import api.*;
 
 public class HomeActivity extends AppCompatActivity {
+    private String linkString;
     private SeekBar healthSlideBar;
     private ImageView likertImage;
     private TextView userScore;
@@ -48,6 +49,7 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home); // Create a new XML layout for this activity if needed
         Intent intent = getIntent();
+        linkString = intent.getStringExtra("linkString");
         token = intent.getStringExtra("token");
         userID = intent.getStringExtra("userID");
         String firstName = intent.getStringExtra("firstName");
@@ -188,7 +190,7 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(HomeActivity.this, SensorActivity.class);
-
+                intent.putExtra("linkString", linkString);
                 intent.putExtra("token", token);
                 intent.putExtra("userID", userID);
                 startActivity(intent);
@@ -219,7 +221,8 @@ public class HomeActivity extends AppCompatActivity {
             catch (JSONException e) {
 
             }
-            global.sendPostRequestWithHandlerWithToken("https://10.0.2.2:443/qualatative", qualData, token, new HandlerResponse() {
+            String qualDataString = linkString + "qualitative";
+            global.sendPostRequestWithHandlerWithToken(qualDataString, qualData, token, new HandlerResponse() {
                 @Override
                 public void handleResponse(String response) {
 
