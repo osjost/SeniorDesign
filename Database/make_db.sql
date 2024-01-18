@@ -3,7 +3,7 @@ CREATE DATABASE cytocheck;
 -- then paste in and run all of these commands
 USE cytocheck;
 
-CREATE TABLE Users (
+CREATE TABLE users (
     user_id INT AUTO_INCREMENT PRIMARY KEY,
     role VARCHAR(255),
     first_name VARCHAR(255),
@@ -18,14 +18,14 @@ CREATE TABLE Users (
     num_measures VARCHAR(255)
 );
 
-CREATE TABLE Sensor_Metadata (
+CREATE TABLE sensor_metadata (
     sensor_id INT AUTO_INCREMENT PRIMARY KEY,
     sensor_brand VARCHAR(255),
     units VARCHAR(255),
     sensor_type VARCHAR(255)
 );
 
-CREATE TABLE Readings (
+CREATE TABLE readings (
     reading_id INT AUTO_INCREMENT PRIMARY KEY,
     reading FLOAT,
     sensor_id INT,
@@ -33,7 +33,7 @@ CREATE TABLE Readings (
     time_stamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE Login (
+CREATE TABLE login (
     user_id INT AUTO_INCREMENT PRIMARY KEY,
     username  VARCHAR(255),
     password_hash VARCHAR(255),
@@ -41,7 +41,7 @@ CREATE TABLE Login (
     failed_login_attempts INT DEFAULT 0
 );
 
-CREATE TABLE qualitative_Data (
+CREATE TABLE qualitative_data (
     user_id INT,
     nausea INT,
     fatigue INT,
@@ -51,17 +51,17 @@ CREATE TABLE qualitative_Data (
     time_stamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE Provider_Patient_Associations (
+CREATE TABLE provider_patient_associations (
     provider_id INT,
     patient_id INT
 );
 
-CREATE TABLE Sensors_Per_Patient (
+CREATE TABLE sensors_per_patient (
     patient_id INT,
     sensor_id INT
 );
 
-CREATE TABLE Provider_Inbox (
+CREATE TABLE provider_inbox (
     provider_id INT,
     message VARCHAR(255),
     time_stamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
