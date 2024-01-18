@@ -2,6 +2,8 @@ Login to the account using:
 username: seniordesigntestserver@gmail.com
 password: vL2nwux93VArFJ
 
+Guide: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_GettingStarted.CreatingConnecting.MySQL.html
+
 FOR EC2:
 ec2-database-connect is our entrance
 the .ppk is included in this folder, needed for connecting to the EC2 instance
@@ -14,6 +16,10 @@ i-0c87e6d8b0fcd92cc
 publicIPV4 DNS: 
 ec2-54-215-87-137.us-west-1.compute.amazonaws.com
 
+Username:
+ec2-user
+
+
 key-pair name:
 connect-access
 
@@ -21,3 +27,52 @@ connect-access
 FOR RDS:
 master username: admin
 master password: bdYND8yKgub4z3
+
+endpoint: database-test1.chaq6oaiibfk.us-west-1.rds.amazonaws.com
+portnumber: 3306
+
+
+To connect, see the putty setup. Or follow this tutorial: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/putty.html
+the private key is included in this folder 'connnect-access.ppk'
+
+SQL command to connect EC2 to the RDS setup:
+mysql -h endpoint -P 3306 -u admin -p so for use it's:
+mysql -h database-test1.chaq6oaiibfk.us-west-1.rds.amazonaws.com -P 3306 -u admin -p
+You will be prompted to enter a password, ours is:
+bdYND8yKgub4z3
+
+
+Run the commands in make_db.sql after connecting the EC2 instance to RDS. This will make the SQL table.
+
+Run these commands to install node in the EC2 instance:
+sudo yum install -y nodejs
+
+Verify the installation with:
+node -v
+npm -v
+
+We will be pulling in the repo from git since that's easiest, install git with:
+sudo yum install git
+
+Verify installation with: 
+git -v
+
+Pull in the repository with (we only want to clone the backend folder, nothing else that's why we use this series of commands):
+NOTE: you will be prompted to login, generate a PAT token and use that.
+
+git clone --no-checkout https://github.com/osjost/SeniorDesign.git
+cd SeniorDesign
+
+then do:
+git config core.sparseCheckout true
+echo "Backend/*" >> .git/info/sparse-checkout
+
+then do:
+git checkout main
+
+token I have for cloning:
+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
+
+
+To start the server, navigate into it using cd. You can use ls to list the- current directories, then cd "folder name" to get into the one you desire.
+Run 

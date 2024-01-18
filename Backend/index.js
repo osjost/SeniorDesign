@@ -33,17 +33,17 @@ app.get("/", (req, res) => {
 
 
 // COMMENTED OUT FOR TESTING!
-// app.use("/users", verifyJWT, usersRouter);
-// app.use("/readings", verifyJWT, readingsRouter);
-// app.use("/qualitative", verifyJWT, qualitativeRouter);
-// app.use("/inbox", verifyJWT, inboxRouter);
-// app.use("/inbox", verifyJWT, associationRouter);
+app.use("/users", verifyJWT, usersRouter);
+app.use("/readings", verifyJWT, readingsRouter);
+app.use("/qualitative", verifyJWT, qualitativeRouter);
+app.use("/inbox", verifyJWT, inboxRouter);
+app.use("/inbox", verifyJWT, associationRouter);
 
-app.use("/users", usersRouter);
-app.use("/readings", readingsRouter);
-app.use("/qualitative", qualitativeRouter);
-app.use("/inbox", inboxRouter);
-app.use("/associations", associationRouter);
+// app.use("/users", usersRouter);
+// app.use("/readings", readingsRouter);
+// app.use("/qualitative", qualitativeRouter);
+// app.use("/inbox", inboxRouter);
+// app.use("/associations", associationRouter);
 
 app.use("/login", loginRouter);
 app.use("/register", registerRouter);
@@ -64,7 +64,7 @@ const httpsServer = https.createServer(credentials, app);
 
 const httpsPort = 443; // Standard port for HTTPS
 httpsServer.listen(httpsPort, () => {
-  console.log(`HTTPS Server listening at https://localhost:${httpsPort}`);
+  console.log(`HTTPS Server running`);
 });
 
 

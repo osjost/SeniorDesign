@@ -1,4 +1,7 @@
+-- Run this command first
 CREATE DATABASE cytocheck;
+-- then paste in and run all of these commands
+USE cytocheck;
 
 CREATE TABLE Users (
     user_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -63,3 +66,7 @@ CREATE TABLE Provider_Inbox (
     message VARCHAR(255),
     time_stamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+-- to query a table since we're using command line you can do the following (substitute desired values in as needed)
+SELECT provider_id, message, time_stamp
+FROM Provider_Inbox
