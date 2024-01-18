@@ -75,4 +75,6 @@ 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
 
 
 To start the server, navigate into it using cd. You can use ls to list the- current directories, then cd "folder name" to get into the one you desire.
-Run 
+NOTE: You have to re-compile the node modules to work on linux.
+So, delete the node_moduels folder with: rm -rf node_modules
+Then run: npm install
