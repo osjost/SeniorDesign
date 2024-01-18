@@ -89,16 +89,16 @@ sudo node index.js
 AWS TESTING CODE:
 
 testing a register command:
-curl -k -X POST https://ec2-54-215-87-137.us-west-1.compute.amazonaws.com:443/register -H "Content-Type: application/json" -d "{\"password\":\"blah\", \"username\":\"zzaxa12cbdf\",\"role\":\"patient\", \"first_name\":\"test\", \"last_name\":\"test\", \"date_of_birth\":\"1991-02-02\", \"email\":\"test@gmail.com\", \"phone_number\":\"12345678\", \"num_measures\":\"twelve\",\"middle_name\":\"test5\",\"ssn\":\"123-45-6789\", \"signup_code\":\"1\"}"
+curl -k -X POST https://ec2-54-215-87-137.us-west-1.compute.amazonaws.com:443/register -H "Content-Type: application/json" -d "{\"password\":\"blah\", \"username\":\"usertest\",\"role\":\"patient\", \"first_name\":\"test\", \"last_name\":\"test\", \"date_of_birth\":\"1991-02-02\", \"email\":\"test@gmail.com\", \"phone_number\":\"12345678\", \"num_measures\":\"twelve\",\"middle_name\":\"test5\",\"ssn\":\"123-45-6789\", \"signup_code\":\"1\"}"
 
 testing logging in:
-curl -k -X POST https://ec2-54-215-87-137.us-west-1.compute.amazonaws.com:443/login -H "Content-Type: application/json" -d "{\"password\":\"blah\", \"username\":\"zzaxa12cbdf\"}"
+curl -k -X POST https://ec2-54-215-87-137.us-west-1.compute.amazonaws.com:443/login -H "Content-Type: application/json" -d "{\"password\":\"blah\", \"username\":\"usertest\"}"
 
 testing pushing in a reading:
-curl -k -X POST https://ec2-54-215-87-137.us-west-1.compute.amazonaws.com:443/readings -H "Content-Type: application/json" -H "Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6Inp6YXhhMTJjYmRmIiwidXNlcklkIjoxfQ.wVOIjK75IMgN3bPV3WtfXZ6ptHVyaVRjpEDVmfnOCKI" -d "{\"reading\":\"11.1\", \"sensor_id\":\"1\", \"user_id\":\"2\"}"
+curl -k -X POST https://ec2-54-215-87-137.us-west-1.compute.amazonaws.com:443/readings -H "Content-Type: application/json" -H "Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InVzZXJ0ZXN0IiwidXNlcklkIjoyfQ.tycL9eAeJU5EYxOGkY-Ts0JpiF4axmhI06u2WTT1QLg" -d "{\"reading\":\"11.1\", \"sensor_id\":\"1\", \"user_id\":\"2\"}"
 
 testing requesting a reading:
-curl -k -H "Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6Inp6YXhhMTJjYmRmIiwidXNlcklkIjoxfQ.wVOIjK75IMgN3bPV3WtfXZ6ptHVyaVRjpEDVmfnOCKI" https://ec2-54-215-87-137.us-west-1.compute.amazonaws.com:443/readings/2/1
+curl -k -H "Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InVzZXJ0ZXN0IiwidXNlcklkIjoyfQ.tycL9eAeJU5EYxOGkY-Ts0JpiF4axmhI06u2WTT1QLg" https://ec2-54-215-87-137.us-west-1.compute.amazonaws.com:443/readings/2/1
 
 
 
