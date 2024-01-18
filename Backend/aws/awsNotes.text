@@ -28,7 +28,7 @@ FOR RDS:
 master username: admin
 master password: bdYND8yKgub4z3
 
-endpoint: database-test1.chaq6oaiibfk.us-west-1.rds.amazonaws.com
+endpoint/host: database-test1.chaq6oaiibfk.us-west-1.rds.amazonaws.com
 portnumber: 3306
 
 
@@ -70,11 +70,28 @@ echo "Backend/*" >> .git/info/sparse-checkout
 then do:
 git checkout main
 
+To keep the repo up to date use: 
+git pull
+
 token I have for cloning:
 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
-
 
 To start the server, navigate into it using cd. You can use ls to list the- current directories, then cd "folder name" to get into the one you desire.
 NOTE: You have to re-compile the node modules to work on linux.
 So, delete the node_moduels folder with: rm -rf node_modules
+
 Then run: npm install
+
+To start the server navigate into Backend and then run:
+sudo node index.js
+
+
+AWS TESTING CODE:
+
+testing a register command:
+curl -k -X POST https://ec2-54-215-87-137.us-west-1.compute.amazonaws.com:443/register -H "Content-Type: application/json" -d "{\"password\":\"blah\", \"username\":\"zzaxa12cbdf\",\"role\":\"patient\", \"first_name\":\"test\", \"last_name\":\"test\", \"date_of_birth\":\"1991-02-02\", \"email\":\"test@gmail.com\", \"phone_number\":\"12345678\", \"num_measures\":\"twelve\",\"middle_name\":\"test5\",\"ssn\":\"123-45-6789\", \"signup_code\":\"1\"}"
+
+NOTE:
+-secure the SSL certicates
+-change the traffic allowed by ec2
+-change the bcrypt algo (maybe)
