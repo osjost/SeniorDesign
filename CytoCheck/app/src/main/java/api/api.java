@@ -37,7 +37,7 @@ public class api {
         @Override
         public boolean verify(String hostname, SSLSession session) {
             // Bypass hostname verification for "10.0.2.2"
-            return hostname.equals("10.0.2.2");
+            return hostname.equals("ec2-54-215-87-137.us-west-1.compute.amazonaws.com");
         }
     };
 

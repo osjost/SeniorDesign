@@ -222,6 +222,7 @@ public class SignupActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 if (checkAll()) {
+
                     JSONObject userInput = new JSONObject();
                     try {
                         userInput.put("username", String.valueOf(usernameText.getText()));
@@ -241,8 +242,10 @@ public class SignupActivity extends AppCompatActivity {
                     }
                     catch (JSONException e) {
                         e.printStackTrace();
+
                     }
                     String registerString = linkString + "register";
+                    Toast.makeText(SignupActivity.this, "Link error", Toast.LENGTH_SHORT).show();
                     global.sendPostRequestWithHandler(registerString, userInput, new HandlerResponse() {
                         @Override
                         public void handleResponse(String response) {

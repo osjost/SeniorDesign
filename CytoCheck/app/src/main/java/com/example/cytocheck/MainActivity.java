@@ -19,7 +19,7 @@ import api.*;
 
 public class MainActivity extends AppCompatActivity {
     private EditText userTextField, passTextField;
-    private String linkString = "https://10.0.2.2:443/";
+    private String linkString = "https://ec2-54-215-87-137.us-west-1.compute.amazonaws.com:443/"; //This is the link to the server holding the database
     private String usernameResponse = "";
     private String token = "";
     private String userID = "";
