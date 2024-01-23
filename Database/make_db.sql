@@ -67,6 +67,12 @@ CREATE TABLE provider_inbox (
     time_stamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE threshold (
+    patient_id INT,
+    sensor_id INT,
+    threshold VARCHAR(255)
+);
+
 -- to query a table since we're using command line you can do the following (substitute desired values in as needed)
 SELECT provider_id, message, time_stamp
 FROM Provider_Inbox

@@ -89,7 +89,7 @@ sudo node index.js
 AWS TESTING CODE:
 
 testing a register command:
-curl -k -X POST https://ec2-54-215-87-137.us-west-1.compute.amazonaws.com:443/register -H "Content-Type: application/json" -d "{\"password\":\"blah\", \"username\":\"usertest\",\"role\":\"patient\", \"first_name\":\"test\", \"last_name\":\"test\", \"date_of_birth\":\"1991-02-02\", \"email\":\"test@gmail.com\", \"phone_number\":\"12345678\", \"num_measures\":\"twelve\",\"middle_name\":\"test5\",\"ssn\":\"123-45-6789\", \"signup_code\":\"1\"}"
+curl -k -X POST https://ec2-54-215-87-137.us-west-1.compute.amazonaws.com:443/register -H "Content-Type: application/json" -d "{\"password\":\"blah\", \"username\":\"usertest1\",\"role\":\"patient\", \"first_name\":\"test\", \"last_name\":\"test\", \"date_of_birth\":\"1991-02-02\", \"email\":\"test@gmail.com\", \"phone_number\":\"12345678\", \"num_measures\":\"twelve\",\"middle_name\":\"test5\",\"ssn\":\"123-45-6789\", \"signup_code\":\"1\"}"
 
 testing logging in:
 curl -k -X POST https://ec2-54-215-87-137.us-west-1.compute.amazonaws.com:443/login -H "Content-Type: application/json" -d "{\"password\":\"blah\", \"username\":\"usertest\"}"

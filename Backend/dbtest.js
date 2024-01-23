@@ -57,6 +57,9 @@ const userOperations = require('./services/users');
 // test put
 // curl -k -X PUT https://localhost:443/users -H "Content-Type: application/json" -d "{\"role\":\"NEWROLEHAHA\", \"first_name\":\"test\", \"last_name\":\"test\", \"date_of_birth\":\"1991-02-02\", \"email\":\"test@gmail.com\", \"phone_number\":\"12345678\", \"num_measures\":\"twelve\",\"middle_name\":\"test5\",\"ssn\":\"123-45-6789\", \"user_id\":\"1\"}"
 
+// test for threshold get and create
+// curl -k -X POST https://localhost:443/threshold -H "Content-Type: application/json" -d "{\"patient_id\":\"1\", \"sensor_id\":\"1\", \"threshold\":\"test\"}"
+// curl -k https://localhost:443/threshold/1/1
 
 
 // testData.js or your_test_file.js - File where you test the 'create' function

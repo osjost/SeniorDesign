@@ -17,6 +17,7 @@ const readingsRouter = require("./routes/readings");
 const qualitativeRouter = require("./routes/qualitative");
 const inboxRouter = require("./routes/inbox");
 const associationRouter = require("./routes/associations");
+const thresholdRouter = require("./routes/threshold");
 
 const verifyJWT = require("./services/jwtverifier");
 
@@ -37,13 +38,15 @@ app.use("/users", verifyJWT, usersRouter);
 app.use("/readings", verifyJWT, readingsRouter);
 app.use("/qualitative", verifyJWT, qualitativeRouter);
 app.use("/inbox", verifyJWT, inboxRouter);
-app.use("/inbox", verifyJWT, associationRouter);
+app.use("/association", verifyJWT, associationRouter);
+app.use("/threshold", verifyJWT, thresholdRouter)
 
 // app.use("/users", usersRouter);
 // app.use("/readings", readingsRouter);
 // app.use("/qualitative", qualitativeRouter);
 // app.use("/inbox", inboxRouter);
 // app.use("/associations", associationRouter);
+// app.use("/threshold", thresholdRouter)
 
 app.use("/login", loginRouter);
 app.use("/register", registerRouter);
