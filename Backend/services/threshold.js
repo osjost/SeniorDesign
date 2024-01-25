@@ -1,12 +1,21 @@
 const db = require('./db');
 
 async function create(threshold){
+    // if threshold already exists for that sensor type assigned to that user, delete it first before adding it
+
+
+    const deleteResult = await db.query(
+    `DELETE FROM threshold 
+    WHERE patient_id = ? AND sensor_id = ?`,
+    [threshold.patient_id, threshold.sensor_id]
+    );
+
     const result = await db.query(
       `INSERT INTO threshold 
-      (threshold, sensor_id, patient_id) 
+      (upper, lower, sensor_id, patient_id) 
       VALUES 
-      (?, ?, ?)`,
-      [threshold.threshold, threshold.sensor_id, threshold.patient_id]
+      (?, ?, ?, ?)`,
+      [threshold.lower, threshold.upper, threshold.sensor_id, threshold.patient_id]
     );
   
     let message = 'Error in adding threshold';
@@ -27,8 +36,32 @@ async function create(threshold){
     console.log(rows);
     return rows[0];
 }
+
+async function update(threshold){
+    const result = await db.query(
+      `UPDATE threshold
+      SET
+          upper = ?,
+          lower = ?,
+      WHERE patient_id = ?;`,
+      [
+        threshold.upper,
+        threshold.lower,
+        threshold.patient_id
+      ]
+    );
+  
+    let message = 'Error in updating threshold';
+  
+    if (result.affectedRows) {
+      message = 'Threshold updated successfully';
+    }
+  
+    return {message};
+  }
   
   module.exports = {
     get,
-    create
+    create,
+    update
   }
