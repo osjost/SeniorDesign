@@ -28,7 +28,6 @@ FOR RDS:
 master username: admin
 master password: bdYND8yKgub4z3
 
-endpoint/host: database-test1.chaq6oaiibfk.us-west-1.rds.amazonaws.com
 portnumber: 3306
 
 
@@ -89,16 +88,24 @@ sudo node index.js
 AWS TESTING CODE:
 
 testing a register command:
-curl -k -X POST https://ec2-54-215-87-137.us-west-1.compute.amazonaws.com:443/register -H "Content-Type: application/json" -d "{\"password\":\"blah\", \"username\":\"usertest\",\"role\":\"patient\", \"first_name\":\"test\", \"last_name\":\"test\", \"date_of_birth\":\"1991-02-02\", \"email\":\"test@gmail.com\", \"phone_number\":\"12345678\", \"num_measures\":\"twelve\",\"middle_name\":\"test5\",\"ssn\":\"123-45-6789\", \"signup_code\":\"1\"}"
+curl -k -X POST https://ec2-54-193-162-215.us-west-1.compute.amazonaws.com:443/register -H "Content-Type: application/json" -d "{\"password\":\"blah\", \"username\":\"usertest12\",\"role\":\"patient\", \"first_name\":\"test\", \"last_name\":\"test\", \"date_of_birth\":\"1991-02-02\", \"email\":\"test@gmail.com\", \"phone_number\":\"12345678\", \"num_measures\":\"twelve\",\"middle_name\":\"test5\",\"ssn\":\"123-45-6789\", \"signup_code\":\"1\"}"
 
 testing logging in:
-curl -k -X POST https://ec2-54-215-87-137.us-west-1.compute.amazonaws.com:443/login -H "Content-Type: application/json" -d "{\"password\":\"blah\", \"username\":\"usertest\"}"
+curl -k -X POST https://ec2-54-193-162-215.us-west-1.compute.amazonaws.com:443/login -H "Content-Type: application/json" -d "{\"password\":\"blah\", \"username\":\"usertest12\"}"
 
 testing pushing in a reading:
-curl -k -X POST https://ec2-54-215-87-137.us-west-1.compute.amazonaws.com:443/readings -H "Content-Type: application/json" -H "Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InVzZXJ0ZXN0IiwidXNlcklkIjoyfQ.tycL9eAeJU5EYxOGkY-Ts0JpiF4axmhI06u2WTT1QLg" -d "{\"reading\":\"11.1\", \"sensor_id\":\"1\", \"user_id\":\"2\"}"
+curl -k -X POST https://ec2-54-193-162-215.us-west-1.compute.amazonaws.com:443/readings -H "Content-Type: application/json" -H "Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InVzZXJ0ZXN0MTIiLCJ1c2VySWQiOjExfQ.PhPb5tGRFmDwLwIx3X8e6y5-zu7n5tEX3l7CWDqod_c" -d "{\"reading\":\"11.1\", \"sensor_id\":\"1\", \"user_id\":\"11\"}"
+
+11/1
 
 testing requesting a reading:
-curl -k -H "Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InVzZXJ0ZXN0IiwidXNlcklkIjoyfQ.tycL9eAeJU5EYxOGkY-Ts0JpiF4axmhI06u2WTT1QLg" https://ec2-54-215-87-137.us-west-1.compute.amazonaws.com:443/readings/2/1
+curl -k -H "Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InVzZXJ0ZXN0MTIiLCJ1c2VySWQiOjExfQ.PhPb5tGRFmDwLwIx3X8e6y5-zu7n5tEX3l7CWDqod_c" https://ec2-54-193-162-215.us-west-1.compute.amazonaws.com:443/readings/11/1
+
+
+curl -k -X POST https://ec2-54-193-162-215.us-west-1.compute.amazonaws.com:443/login -H "Content-Type: application/json" -d "{\"password\":\"blah\", \"username\":\"usertest11\"}"
+
+
+curl -k -H "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InVzZXJ0ZXN0MTEiLCJ1c2VySWQiOjh9.mmnEMwEmrCnMXoGQ6qQD5mb7Mwdem6afXnELAiKbhr8" https://ec2-54-193-162-215.us-west-1.compute.amazonaws.com:443/associations/1
 
 
 

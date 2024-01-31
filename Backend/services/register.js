@@ -58,26 +58,7 @@ async function register(user){
             message = 'User created succesfully';
         }
 
-        if (user.role == "patient") {
-            const resultAssociation = await db.query(
-            `INSERT INTO provider_patient_associations 
-            (provider_id, patient_id) 
-            VALUES 
-            (?, ?)`,
-            [
-            user.signup_code,
-            resultUserInsert.insertId
-            ]
-        );
-        }
-
-
-        
-        return {message};
-
-
-
-        
+        return {message};        
         }
 
 

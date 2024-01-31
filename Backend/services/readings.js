@@ -1,6 +1,8 @@
 const db = require('./db');
 
 async function create(reading){
+
+  
     const result = await db.query(
       `INSERT INTO readings 
       (reading, sensor_id, user_id) 

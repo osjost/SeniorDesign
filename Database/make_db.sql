@@ -62,9 +62,19 @@ CREATE TABLE sensors_per_patient (
 );
 
 CREATE TABLE provider_inbox (
+    message_id INT AUTO_INCREMENT PRIMARY KEY,
     provider_id INT,
     message VARCHAR(255),
+    message_type VARCHAR(255),
+    sender_id INT,
     time_stamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE threshold (
+    patient_id INT,
+    sensor_id INT,
+    upper FLOAT,
+    lower FLOAT
 );
 
 -- to query a table since we're using command line you can do the following (substitute desired values in as needed)
