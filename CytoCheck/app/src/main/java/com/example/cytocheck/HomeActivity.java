@@ -178,6 +178,14 @@ public class HomeActivity extends AppCompatActivity {
 
             }
         });
+
+        Button associationView = findViewById(R.id.association_view);
+        associationView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setContentView(R.layout.association_layout);
+            }
+        });
         //MVP2 Warning
 //        Button sendWarning = findViewById(R.id.warningButton);
 //        sendWarning.setOnClickListener(new View.OnClickListener() {

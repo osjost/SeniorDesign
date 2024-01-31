@@ -25,6 +25,8 @@ import org.json.JSONObject;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.text.SimpleDateFormat;
+
 
 import api.HandlerResponse;
 import api.*;
@@ -43,7 +45,6 @@ public class SignupActivity extends AppCompatActivity {
     private EditText usernameText;
     private EditText confirmText;
     private EditText emailText;
-    private TextView referralText;
     private boolean userGood = false;
     private boolean passGood = false;
     private boolean confirmGood = false;
@@ -52,7 +53,7 @@ public class SignupActivity extends AppCompatActivity {
     private boolean emailGood = false;
     private boolean dobGood = false;
     private boolean phoneGood = false;
-    private boolean referGood = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +62,15 @@ public class SignupActivity extends AppCompatActivity {
         setContentView(R.layout.activity_signup);
         api global = api.getInstance();
 
+        // Get current timestamp in milliseconds
+        long currentTimeMillis = System.currentTimeMillis();
+
+        // Convert the timestamp to a readable format (optional)
+        String timestampString = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS")
+                .format(new Date(currentTimeMillis));
+
+        // Display the timestamp in a Toast
+        Toast.makeText(this, "Timestamp: " + timestampString, Toast.LENGTH_SHORT).show();
         passText = findViewById(R.id.passwordCreate);
         passText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -233,9 +243,6 @@ public class SignupActivity extends AppCompatActivity {
                         userInput.put("email", String.valueOf(emailText.getText()));
                         userInput.put("phone_number", String.valueOf(phoneField.getText()));
                         userInput.put("role", userRole);
-                        if (userRole.equals("patient")) {
-                            userInput.put("signup_code", String.valueOf(referralText.getText()));
-                        }
                         userInput.put("middle_name", "Middle Name");
                         userInput.put("ssn", "hehe");
                         userInput.put("num_measures", "s");
@@ -245,7 +252,7 @@ public class SignupActivity extends AppCompatActivity {
 
                     }
                     String registerString = linkString + "register";
-                    Toast.makeText(SignupActivity.this, "Link error", Toast.LENGTH_SHORT).show();
+
                     global.sendPostRequestWithHandler(registerString, userInput, new HandlerResponse() {
                         @Override
                         public void handleResponse(String response) {
@@ -258,54 +265,23 @@ public class SignupActivity extends AppCompatActivity {
                 else {
                     Toast.makeText(SignupActivity.this, "Check Red-Highlighted Input Fields", Toast.LENGTH_SHORT).show();
                 }
-
             }
         });
 
         RadioGroup radioHolder = findViewById(R.id.radioGroup);
-        TextView referralLabel = findViewById(R.id.referralCodeLabel);
-        referralText = findViewById(R.id.referralCodeText);
-
         radioHolder.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 // Check which radio button was selected
                 if (checkedId == R.id.providerSelector) {
-                    // If the specific radio button is selected, hide the TextView
-                    referralLabel.setVisibility(View.GONE);
-                    referralText.setVisibility(View.GONE);
                     userRole = "provider";
-                    referGood = true;
                 } else {
-                    // If other radio buttons are selected, make the TextView visible
-                    referralLabel.setVisibility(View.VISIBLE);
-                    referralText.setVisibility(View.VISIBLE);
                     userRole = "patient";
                 }
             }
         });
 
-        referralText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
 
-                }
-                else {
-                    if (!(String.valueOf(referralText.getText()).equals(""))) {
-                        referralText.setBackgroundResource(android.R.drawable.edit_text);
-                        referGood = true;
-                    }
-                    else {
-
-                        //Toast.makeText(SignupActivity.this, "Must enter referral code", Toast.LENGTH_SHORT).show();
-                        Drawable customDrawable = getResources().getDrawable(R.drawable.edittext_border);
-                        referralText.setBackground(customDrawable);
-                        referGood = false;
-                    }
-                }
-            }
-        });
 
         phoneField = findViewById(R.id.phoneField);
 
@@ -334,18 +310,6 @@ public class SignupActivity extends AppCompatActivity {
         });
     }
     private boolean checkAll() {
-        if (!referGood){
-            if (!(String.valueOf(referralText.getText()).equals(""))) {
-                referralText.setBackgroundResource(android.R.drawable.edit_text);
-                referGood = true;
-            }
-            else {
-                //Toast.makeText(SignupActivity.this, "Must enter referral code", Toast.LENGTH_SHORT).show();
-                Drawable customDrawable = getResources().getDrawable(R.drawable.edittext_border);
-                referralText.setBackground(customDrawable);
-                referGood = false;
-            }
-        }
 
         updateBirthday(String.valueOf((dobField.getText())));
 
@@ -419,7 +383,7 @@ public class SignupActivity extends AppCompatActivity {
             confirmText.setBackground(customDrawable);
             confirmGood = false;
         }
-        if (userGood && firstGood && lastGood && passGood && confirmGood && emailGood && phoneGood && dobGood && referGood) {
+        if (userGood && firstGood && lastGood && passGood && confirmGood && emailGood && phoneGood && dobGood) {
             return true;
         }
         else {
@@ -427,6 +391,7 @@ public class SignupActivity extends AppCompatActivity {
         }
 
     }
+
 
     private void showDatePickerDialog() {
         // Create an instance of the DatePickerFragment

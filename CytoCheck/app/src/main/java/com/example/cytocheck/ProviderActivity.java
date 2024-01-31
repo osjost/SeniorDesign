@@ -8,14 +8,13 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.LayoutInflater;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -32,7 +31,6 @@ import api.*;
 public class ProviderActivity extends AppCompatActivity {
     private String linkString;
     private Handler inactivityHandler;
-    private PopupWindow currentPopup;
     private Runnable inactivityRunnable;
     private static final long INACTIVITY_TIMEOUT = 60000; // 60 seconds in milliseconds
     private TextView referralCode;
@@ -40,7 +38,6 @@ public class ProviderActivity extends AppCompatActivity {
     private List<Integer> patientIds = new ArrayList<>();
     private List<String> patientNames = new ArrayList<>();
     private List<PatientInfo> patientList = new ArrayList<>();
-    private int index;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,17 +61,42 @@ public class ProviderActivity extends AppCompatActivity {
                 while (matcher.find()) {
                     // Extract the value
                     int patientId = Integer.parseInt(matcher.group(1));
-
                     // Add the patient ID to the ArrayList
                     patientIds.add(patientId);
                 }
-
                 // Now initiate the second set of requests for patient details
                 fetchPatientDetails(token);
             }
         });
 
-        // Other UI setup code can go here...
+        // prototype for handling populating of inbox
+//        String inboxAddress = linkString + "inbox/" + userID;
+//        global.sendGetRequestWithHandlerWithToken(inboxAddress, token, new HandlerResponse() {
+//            @Override
+//            public void handleResponse(String response) {
+//                Log.d("response", response);
+//                setupInboxUI();
+//                //HERE update functionality for parsing response :)
+//            }
+//        });
+
+        // prototype for sending approval (goes in the onclick for a button somehow) need deletion of request in other button onclick
+//        String associationConfirm = linkString + "associations";
+//        JSONObject patientProviderConnect = new JSONObject();
+//        try {
+//            patientProviderConnect.put("patient_id", "get id from text");
+//            patientProviderConnect.put("provider_id", userID);
+//        }
+//        catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//        global.sendPostRequestWithHandlerWithToken(associationConfirm, patientProviderConnect, token, new HandlerResponse() {
+//            @Override
+//            public void handleResponse(String response) {
+//                //idk make a toast or smth
+//            }
+//        });
+
 
         inactivityHandler = new Handler(Looper.getMainLooper());
         inactivityRunnable = new Runnable() {
@@ -101,6 +123,7 @@ public class ProviderActivity extends AppCompatActivity {
     }
     private void fetchPatientDetails(String token) {
         // Second set of asynchronous requests for patient details
+
         for (int i = 0; i < patientIds.size(); i++) {
             String httpsAddress = linkString + "users/" + patientIds.get(i);
 
@@ -126,30 +149,46 @@ public class ProviderActivity extends AppCompatActivity {
     }
 
     private void setupUI() {
-
-
         // Create the adapter and set it to the ListView
         PatientAdapter adapter = new PatientAdapter(this, patientList);
         ListView listViewPatients = findViewById(R.id.listViewPatients);
         listViewPatients.setAdapter(adapter);
 
-        // Set item click listener
+        // Set item click listener for each patient
         listViewPatients.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // Handle item click here
+
                 PatientInfo selectedPatient = (PatientInfo) parent.getItemAtPosition(position);
                 int selectedPatientId = selectedPatient.getId();
                 String selectedPatientName = selectedPatient.getName();
-
-                // Do something with the selected patient ID and name
-                // For example, show a popup with additional information
+                //TODO :vvv CHANGE TO SEND TO PATIENT VIEW vvv
                 showPopup(selectedPatientId, selectedPatientName);
             }
         });
     }
+    private void setupInboxUI() {
+        // Create the adapter and set it to the ListView
+//        RequestAdapter adapter = new RequestAdapter(this, requestList);
+//        ListView listViewRequests = findViewById(R.id.inboxListView);
+//        listViewRequests.setAdapter(adapter);
+//
+//        // Set item click listener for each patient
+//        listViewRequests.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//
+//                RequestInfo selectedRequest = (RequestInfo) parent.getItemAtPosition(position);
+//                int selectedRequestId = selectedRequest.getId();
+//                String selectedRequestName = selectedRequest.getName();
+//                //TODO :vvv CHANGE TO SEND TO Request VIEW vvv
+//                showPopup(selectedRequestId, selectedRequestName);
+//            }
+//        });
+    }
 
     private void showPopup(int patientId, String patientName) {
+        resetInactivityTimer();
         PopupWindow popupWindow = new PopupWindow(this);
 
         // Inflate the layout for the popup window
@@ -251,5 +290,20 @@ public class ProviderActivity extends AppCompatActivity {
         super.onPause();
         // Remove the callbacks to stop the inactivity timer when the activity is paused
         inactivityHandler.removeCallbacks(inactivityRunnable);
+    }
+
+    // Method to switch to the patient view
+    public void showPatientView(View view) {
+        setContentView(R.layout.patient_view);
+    }
+
+    // Method to switch to the request view
+    public void showRequestView(View view) {
+        setContentView(R.layout.request_view);
+    }
+
+    // Method to go back to the main page
+    public void showProviderPage(View view) {
+        setContentView(R.layout.activity_provider);
     }
 }

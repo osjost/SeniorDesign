@@ -13,13 +13,17 @@ import android.util.Log;
 //Import API stuff
 import org.json.JSONObject;
 import org.json.JSONException;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import api.*;
 
 
 
 public class MainActivity extends AppCompatActivity {
     private EditText userTextField, passTextField;
-    private String linkString = "https://ec2-54-215-87-137.us-west-1.compute.amazonaws.com:443/"; //This is the link to the server holding the database
+    private String linkString = "https://ec2-54-193-162-215.us-west-1.compute.amazonaws.com:443/"; //This is the link to the server holding the database
     private String usernameResponse = "";
     private String token = "";
     private String userID = "";
@@ -55,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
                             JSONObject jsonObject = new JSONObject(response);
                             token = jsonObject.getString("jwt");
                             userID = jsonObject.getString("user_id");
+                            Log.d("eep", jsonObject.toString());
                             String httpsAddress = linkString + "users/" + userID;
                             global.sendGetRequestWithHandlerWithToken(httpsAddress, token, new HandlerResponse() {
                                 @Override
@@ -84,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
                                         }
                                     }
                                     catch (JSONException e) {
-
+                                        Log.d("loginfail", e.getMessage());
                                     }
                                 }
                             });
@@ -101,6 +106,16 @@ public class MainActivity extends AppCompatActivity {
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // Get current timestamp in milliseconds
+                long currentTimeMillis = System.currentTimeMillis();
+
+                // Convert the timestamp to a readable format (optional)
+                String timestampString = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS")
+                        .format(new Date(currentTimeMillis));
+
+                // Display the timestamp in a Toast
+                Toast.makeText(MainActivity.this, "Timestamp: " + timestampString, Toast.LENGTH_SHORT).show();
+
                 Intent intent = new Intent(MainActivity.this, SignupActivity.class); //send user to signup activity
                 intent.putExtra("linkString", linkString); //globalize linkString between activities
 
