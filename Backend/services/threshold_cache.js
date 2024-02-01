@@ -2,31 +2,55 @@ const db = require('./db');
 
 // this caches threshold values so we dont have to keep re-querying the threshold table
 
-let thresholdCache = {} //maps id:[lower, upper]
+let thresholdCache = {} //maps (patient_id, sensor_id):[lower, upper]
 
 // queries the database to generate a threhold cache, use this when server restarts (or later if you want to rebuild the table)
 function createThresholdCache() {
-    async function get(patientId, sensorId) {
-        const rows = await db.query(
-            `SELECT * FROM threshold`,
-            [patientId, sensorId]
-        );
+    async function get() {
+        const rows = await db.query(`SELECT * FROM threshold`);
+        return rows;
     }
 
+    get().then(rows => {
+        for (i = 0; i < rows.length; i++) {
+            jsonObject = rows[i]
+            thresholdCache[create2DKey(jsonObject.patient_id, jsonObject.sensor_id)] = [jsonObject.lower, jsonObject.upper];
+        }
+        console.log(thresholdCache)
+
+    }).catch(error => {
+        console.error('Error:', error);
+    });
 }
 
-function getThresh(patientID) {
-    return thresholdCache.patientID
-
+function create2DKey(key1, key2) {
+    return `${key1}_${key2}`;
 }
 
-function addThresh(patientID, thresholdLower, thresholdUpper) {
-    thresholdCache.patientID = [thresholdLower, thresholdUpper]
+function getThresh(patientID, sensorID) {
+    let accessString = create2DKey(patientID, sensorID);
+    return thresholdCache[accessString];
 }
 
-function deleteThresh(patientID){
-    delete thresholdCache.patientID
-
+function addThresh(patientID, sensorID, thresholdLower, thresholdUpper) {
+    let accessString = create2DKey(patientID, sensorID);
+    thresholdCache[accessString] = [thresholdLower, thresholdUpper];
 }
 
-module.exports = {createThresholdCache, addThresh, getThresh, deleteThresh}
+function deleteThresh(patientID, sensorID){
+    let accessString = create2DKey(patientID, sensorID);
+    delete thresholdCache[accessString];
+}
+
+// used for indexing into our cache
+function create2DKey(key1, key2) {
+    return `${key1}_${key2}`;
+}
+
+// returns true if it exists, false if it doesn't
+function existsInCache(patientID, sensorID) {
+    let accessString = create2DKey(patientID, sensorID);
+    return accessString in thresholdCache;
+}
+
+module.exports = {createThresholdCache, addThresh, getThresh, deleteThresh, existsInCache}

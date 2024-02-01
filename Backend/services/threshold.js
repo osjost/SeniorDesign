@@ -1,4 +1,5 @@
 const db = require('./db');
+const threshold_cache = require('./threshold_cache')
 
 async function create(threshold){
     // if threshold already exists for that sensor type assigned to that user, delete it first before adding it
@@ -23,6 +24,9 @@ async function create(threshold){
     if (result.affectedRows) {
       message = 'Threshold added succesfully';
     }
+
+    // add value to the threshold cache
+    threshold_cache.addThresh(threshold.patient_id, threshold.sensor_id, threshold.lower, threshold.lower)
   
     return {message};
   }
@@ -56,6 +60,9 @@ async function update(threshold){
     if (result.affectedRows) {
       message = 'Threshold updated successfully';
     }
+
+    // update value in the threshold cache
+    threshold_cache.addThresh(threshold.patient_id, threshold.sensor_id, threshold.lower, threshold.lower)
   
     return {message};
   }

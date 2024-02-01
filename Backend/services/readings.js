@@ -1,4 +1,5 @@
 const db = require('./db');
+const threshold_cache = require('./threshold_cache')
 
 async function create(reading){
 
@@ -17,6 +18,19 @@ async function create(reading){
       message = 'Reading added succesfully';
     }
   
+    // perform threshold check if it already exists in the threshold cache
+    if (threshold_cache.existsInCache(reading.patient_id, reading.sensor_id)) {
+      threshold = threshold_cache.getThresh(reading.user_id, reading.sensor_id)
+      lowerBound = threshold[0]
+      upperBound = threshold[1]
+      if (!( upperBound< reading.reading < lowerBound)) {
+        
+      }
+
+
+    }
+    
+
     return {message};
   }
 
