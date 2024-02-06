@@ -108,6 +108,11 @@ curl -k -X POST -H "Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2Vy
 curl -k DELETE -H "Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InVzZXJ0ZXN0MTIiLCJ1c2VySWQiOjExfQ.PhPb5tGRFmDwLwIx3X8e6y5-zu7n5tEX3l7CWDqod_c" https://ec2-54-193-162-215.us-west-1.compute.amazonaws.com:443/associations/1
 
 
+TO LAUNCH IN BACKGROUND:
+nohup npm start > ../serverLog &
+TO KILL PROCESSES:
+killall -9 node
+
 
 NOTE:
 -secure the SSL certicates
