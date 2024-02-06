@@ -26,7 +26,6 @@ public class PatientAdapter extends ArrayAdapter<PatientInfo> {
 
         // Lookup view for data population
         TextView textViewPatientName = convertView.findViewById(R.id.textViewPatientName);
-        //TextView textViewPatientId = convertView.findViewById(R.id.textViewPatientId);
 
         // Populate the data into the template view using the data object
         textViewPatientName.setText(patientInfo.getName());

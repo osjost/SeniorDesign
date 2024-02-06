@@ -1,7 +1,10 @@
 package com.example.cytocheck;
+
+
 import android.content.Intent;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.os.Bundle;
 import android.view.View;
@@ -33,6 +36,8 @@ public class HomeActivity extends AppCompatActivity {
     private TextView welcomeLabel;
     private String token;
     private String userID;
+    private String providerID;
+    private String firstName;
     private boolean fatigueReady = false;
     private String fatigueFinal = "10";
     private String painFinal = "10";
@@ -52,7 +57,7 @@ public class HomeActivity extends AppCompatActivity {
         linkString = intent.getStringExtra("linkString");
         token = intent.getStringExtra("token");
         userID = intent.getStringExtra("userID");
-        String firstName = intent.getStringExtra("firstName");
+        firstName = intent.getStringExtra("firstName");
         welcomeLabel = findViewById(R.id.welcomeLabel);
         welcomeLabel.setText("Welcome, " + firstName);
         userScore = findViewById(R.id.userScoreField);
@@ -184,8 +189,111 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 setContentView(R.layout.association_layout);
+
+                Button deleteAssociation = findViewById(R.id.deleteCurrent);
+                Button createAssociation = findViewById(R.id.submitNewID);
+                Button patientReturn = findViewById(R.id.patientReturn);
+
+                TextView currentLabel = findViewById(R.id.currentProvider);
+                TextView newLabel = findViewById(R.id.newProvider);
+
+                EditText newProviderID = findViewById(R.id.newProviderID);
+
+                // Make the buttons and views initially invisible
+                currentLabel.setVisibility(View.INVISIBLE);
+                deleteAssociation.setVisibility(View.INVISIBLE);
+
+                createAssociation.setVisibility(View.INVISIBLE);
+                newLabel.setVisibility(View.INVISIBLE);
+                newProviderID.setVisibility(View.INVISIBLE);
+                // Get any associations
+                api global = api.getInstance();
+                String patientCurrent = linkString + "associations/" + userID;
+                global.sendGetRequestWithHandlerWithToken(patientCurrent, token, new HandlerResponse() {
+                    @Override
+                    public void handleResponse(String response) {
+                        try {
+                            JSONObject providerInfo = new JSONObject(response);
+                            if (providerInfo.getString("provider_id") == "")  {
+                                createAssociation.setVisibility(View.VISIBLE);
+                                newLabel.setVisibility(View.VISIBLE);
+                                newProviderID.setVisibility(View.VISIBLE);
+                            }
+                            else {
+                                providerID = providerInfo.getString("provider_id");
+                                currentLabel.setText(currentLabel.getText() + " " + providerInfo.getString("provider_id"));
+                                currentLabel.setVisibility(View.VISIBLE);
+                                deleteAssociation.setVisibility(View.VISIBLE);
+                            }
+
+                        }
+                        catch (JSONException e) {
+
+                        }
+                    }
+                });
+
+                deleteAssociation.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        api global = api.getInstance();
+                        String deleteCurrent = linkString + "associations/" + userID;
+                        //TODO
+                        //global.sendDeleteRequest(deleteCurrent,);
+                    }
+                });
+
+                createAssociation.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        api global = api.getInstance();
+                        JSONObject requestHolder = new JSONObject();
+                        try {
+                            requestHolder.put("provider_id","3");
+                            requestHolder.put("message",firstName + " requests association");
+                            requestHolder.put("message_type","association_request");
+                            requestHolder.put("sender_id",userID);
+                        }
+                        catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        String associationString = linkString + "inbox/associations";
+                        global.sendPostRequestWithHandlerWithToken(associationString, requestHolder, token, new HandlerResponse() {
+                            @Override
+                            public void handleResponse(String response) {
+
+                            }
+                        });
+                        Toast.makeText(HomeActivity.this, "Request Sent", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                patientReturn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        // Create an intent to start the HomeActivity
+                        Intent homeIntent = new Intent(HomeActivity.this, HomeActivity.class);
+                        homeIntent.putExtra("linkString", linkString);
+                        homeIntent.putExtra("token", token);
+                        homeIntent.putExtra("userID", userID);
+                        // Add other necessary extras if needed
+
+                        // Start the HomeActivity
+                        startActivity(homeIntent);
+                    }
+
+                });
+
+
+                // Now set the buttons visible
+                // deleteAssociation.setVisibility(View.VISIBLE);
+                // createAssociation.setVisibility(View.VISIBLE);
+
             }
         });
+
+
         //MVP2 Warning
 //        Button sendWarning = findViewById(R.id.warningButton);
 //        sendWarning.setOnClickListener(new View.OnClickListener() {

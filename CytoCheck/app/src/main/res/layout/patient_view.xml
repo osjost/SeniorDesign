@@ -3,4 +3,176 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:gravity="center">
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10sp"
+            android:layout_marginRight="10sp"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <Button
+                android:id="@+id/providerPatientReturn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Back"/>
+
+            <TextView
+                android:id="@+id/patientLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Patient Name"
+                android:textSize="34sp"/>
+
+            <TextView
+                android:id="@+id/patientQualData"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Patient qualitative data"
+                android:textSize="24sp"/>
+            <TextView
+                android:id="@+id/patientHRData"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Patient heart rate data"
+                android:textSize="24sp"/>
+            <TextView
+                android:id="@+id/patientTempData"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Patient temperature data"
+                android:textSize="24sp"/>
+
+            <TextView
+                android:id="@+id/patientThreshold1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Patient Threshold1:"
+                android:textSize="24sp"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/updateThreshold1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Threshold"/>
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+                <Button
+                    android:id="@+id/submitThreshold1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Submit"/>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/patientThreshold2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Patient Threshold2:"
+                android:textSize="24sp"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/updateThreshold2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Threshold"/>
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+                <Button
+                    android:id="@+id/submitThreshold2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Submit"/>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/patientThreshold3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Patient Threshold3:"
+                android:textSize="24sp"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/updateThreshold3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Threshold"/>
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+                <Button
+                    android:id="@+id/submitThreshold3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Submit"/>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/patientThreshold4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Patient Threshold4:"
+                android:textSize="24sp"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/updateThreshold4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Threshold"/>
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+                <Button
+                    android:id="@+id/submitThreshold4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Submit"/>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/patientThreshold5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Patient Threshold5:"
+                android:textSize="24sp"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/updateThreshold5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Threshold"/>
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+                <Button
+                    android:id="@+id/submitThreshold5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Submit"/>
+            </LinearLayout>
+
+
+
+        </LinearLayout>
+    </ScrollView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -36,8 +36,10 @@ public class ProviderActivity extends AppCompatActivity {
     private TextView referralCode;
     private String token;
     private List<Integer> patientIds = new ArrayList<>();
+    private List<Integer> inboxIds = new ArrayList<>();
     private List<String> patientNames = new ArrayList<>();
     private List<PatientInfo> patientList = new ArrayList<>();
+    private List<RequestInfo> requestList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,16 +71,26 @@ public class ProviderActivity extends AppCompatActivity {
             }
         });
 
-        // prototype for handling populating of inbox
-//        String inboxAddress = linkString + "inbox/" + userID;
-//        global.sendGetRequestWithHandlerWithToken(inboxAddress, token, new HandlerResponse() {
-//            @Override
-//            public void handleResponse(String response) {
-//                Log.d("response", response);
-//                setupInboxUI();
-//                //HERE update functionality for parsing response :)
-//            }
-//        });
+        // prototype for handling populating of inbox list
+        String inboxAddress = linkString + "inbox/" + userID;
+        global.sendGetRequestWithHandlerWithToken(inboxAddress, token, new HandlerResponse() {
+            @Override
+            public void handleResponse(String response) {
+                Log.d("response", response);
+
+                Pattern pattern = Pattern.compile("\"message_id\":(\\d+)");
+                Matcher matcher = pattern.matcher(response);
+
+                // Find all matches
+                while (matcher.find()) {
+                    // Extract the value
+                    int inboxId = Integer.parseInt(matcher.group(1));
+                    // Add the patient ID to the ArrayList
+                    inboxIds.add(inboxId);
+                }
+                setupInboxUI();
+            }
+        });
 
         // prototype for sending approval (goes in the onclick for a button somehow) need deletion of request in other button onclick
 //        String associationConfirm = linkString + "associations";
@@ -169,22 +181,22 @@ public class ProviderActivity extends AppCompatActivity {
     }
     private void setupInboxUI() {
         // Create the adapter and set it to the ListView
-//        RequestAdapter adapter = new RequestAdapter(this, requestList);
-//        ListView listViewRequests = findViewById(R.id.inboxListView);
-//        listViewRequests.setAdapter(adapter);
-//
-//        // Set item click listener for each patient
-//        listViewRequests.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//
-//                RequestInfo selectedRequest = (RequestInfo) parent.getItemAtPosition(position);
-//                int selectedRequestId = selectedRequest.getId();
-//                String selectedRequestName = selectedRequest.getName();
-//                //TODO :vvv CHANGE TO SEND TO Request VIEW vvv
-//                showPopup(selectedRequestId, selectedRequestName);
-//            }
-//        });
+        RequestAdapter adapter = new RequestAdapter(this, requestList);
+        ListView listViewRequests = findViewById(R.id.inboxListView);
+        listViewRequests.setAdapter(adapter);
+
+        // Set item click listener for each patient
+        listViewRequests.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                RequestInfo selectedRequest = (RequestInfo) parent.getItemAtPosition(position);
+                int selectedRequestId = selectedRequest.getId();
+                String selectedRequestName = selectedRequest.getName();
+                //TODO :vvv CHANGE TO SEND TO Request VIEW vvv
+                //showPopup(selectedRequestId, selectedRequestName);
+            }
+        });
     }
 
     private void showPopup(int patientId, String patientName) {
@@ -240,12 +252,8 @@ public class ProviderActivity extends AppCompatActivity {
                 } catch (JSONException e) {
                     Log.e("ERROR", "Error parsing JSON: " + e.getMessage());
                 }
-
-
             }
         });
-        // Set the text with patient information
-        //String popupMessage = "Patient ID: " + patientId + "\nPatient Name: " + patientName;
 
 
         // Set close button click listener
