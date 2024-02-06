@@ -44,23 +44,25 @@
             android:id="@+id/listLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Patient List"/>
+            android:text="Patient List"
+            android:textSize="24sp"/>
 
         <ListView
             android:id="@+id/listViewPatients"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="wrap_content" />
 
         <TextView
             android:id="@+id/inboxLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Notifications and Requests" />
+            android:text="Notifications and Requests"
+            android:textSize="24sp"/>
 
         <ListView
             android:id="@+id/inboxListView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="wrap_content" />
 
 
     </LinearLayout>
