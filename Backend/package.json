@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "start": "node index.js"
+    "start": "sudo node index.js"
   },
 
   "dependencies": {
