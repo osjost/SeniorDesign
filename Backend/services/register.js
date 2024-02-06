@@ -26,13 +26,6 @@ async function register(user){
             [user.username, passwordHash]
         );
 
-        if (user.role == "patient") {
-            if (!("signup_code" in user)) {
-                throw new Error('Patient requires signup code');
-            }
-        }
-
-
         const resultUserInsert = await db.query(
             `INSERT INTO users 
             (role, first_name, last_name, middle_name, ssn, date_of_birth, email, phone_number, num_measures) 

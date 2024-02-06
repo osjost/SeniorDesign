@@ -19,6 +19,8 @@ const inboxRouter = require("./routes/inbox");
 const associationRouter = require("./routes/associations");
 const thresholdRouter = require("./routes/threshold");
 
+const threshold_test_cache = require("./services/threshold_cache")
+
 const verifyJWT = require("./services/jwtverifier");
 
 app.use(express.json());
@@ -53,6 +55,7 @@ app.use("/register", registerRouter);
 
 
 
+threshold_test_cache.createThresholdCache();
 
 /* Error handler middleware */
 app.use((err, req, res, next) => {
@@ -61,6 +64,9 @@ app.use((err, req, res, next) => {
   res.status(statusCode).json({ message: err.message });
   return;
 });
+
+// Stuff on a timer
+
 
 // Create HTTPS server with the Express app
 const httpsServer = https.createServer(credentials, app);

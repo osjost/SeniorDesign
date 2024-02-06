@@ -41,7 +41,7 @@ const userOperations = require('./services/users');
 
 
 // testing for register
-// curl -k -X POST https://localhost:443/register -H "Content-Type: application/json" -d "{\"password\":\"blah\", \"username\":\"zzaxa12cbdf1\",\"role\":\"patient\", \"first_name\":\"test\", \"last_name\":\"test\", \"date_of_birth\":\"1991-02-02\", \"email\":\"test@gmail.com\", \"phone_number\":\"12345678\", \"num_measures\":\"twelve\",\"middle_name\":\"test5\",\"ssn\":\"123-45-6789\", \"signup_code\":\"1\"}"
+// curl -k -X POST https://localhost:443/register -H "Content-Type: application/json" -d "{\"password\":\"blah\", \"username\":\"zzaxa12cbdf111\",\"role\":\"patient\", \"first_name\":\"test\", \"last_name\":\"test\", \"date_of_birth\":\"1991-02-02\", \"email\":\"test@gmail.com\", \"phone_number\":\"12345678\", \"num_measures\":\"twelve\",\"middle_name\":\"test5\",\"ssn\":\"123-45-6789\"}"
 
 
 
