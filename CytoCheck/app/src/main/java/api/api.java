@@ -320,6 +320,42 @@ public class api {
         });
         thread.start();
     }
+    public void sendDeleteRequestWithTokenWithHandler(String httpsAddress, String token, HandlerResponse handler) {
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    URL obj = new URL(httpsAddress);
+                    HttpsURLConnection connection = (HttpsURLConnection) obj.openConnection();
+                    connection.setRequestMethod("DELETE");
+                    connection.setRequestProperty("Authorization", token);
+                    //REMOVE THIS LATER WHEN DEPLOYED, USED HERE FOR TESTING PURPOSES
+                    connection.setHostnameVerifier(hostnameVerifier);
+                    int responseCode = connection.getResponseCode();
+                    System.out.println("DELETE Response Code :: " + responseCode);
+                    if (responseCode == HttpsURLConnection.HTTP_OK) { // success
+                        BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                        String inputLine;
+                        StringBuffer response = new StringBuffer();
+
+                        while ((inputLine = in.readLine()) != null) {
+                            response.append(inputLine);
+                        }
+                        in.close();
+
+                        // print result
+                        handler.handleResponse(response.toString());
+                    } else {
+                        Log.d("failure", "DELETE request did not work :(");
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    // Handle exceptions
+                }
+            }
+        });
+        thread.start();
+    }
 
 
     public void sendPutRequest(String httpsAddress, JSONObject jsonInput) {

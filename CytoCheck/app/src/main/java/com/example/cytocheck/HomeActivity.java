@@ -212,6 +212,7 @@ public class HomeActivity extends AppCompatActivity {
                 global.sendGetRequestWithHandlerWithToken(patientCurrent, token, new HandlerResponse() {
                     @Override
                     public void handleResponse(String response) {
+                        Log.d("associations", response);
                         try {
                             JSONObject providerInfo = new JSONObject(response);
                             runOnUiThread(new Runnable() {
@@ -251,8 +252,21 @@ public class HomeActivity extends AppCompatActivity {
                     public void onClick(View view) {
                         api global = api.getInstance();
                         String deleteCurrent = linkString + "associations/" + userID;
-                        //TODO
-                        //global.sendDeleteRequest(deleteCurrent,);
+                        global.sendDeleteRequestWithTokenWithHandler(deleteCurrent,token, new HandlerResponse(){
+                            @Override
+                            public void handleResponse(String response) {
+                                Intent homeIntent = new Intent(HomeActivity.this, HomeActivity.class);
+                                homeIntent.putExtra("linkString", linkString);
+                                homeIntent.putExtra("token", token);
+                                homeIntent.putExtra("userID", userID);
+                                homeIntent.putExtra("firstName", firstName);
+
+                                // Start the HomeActivity
+                                startActivity(homeIntent);
+                            }
+                        });
+
+
                     }
                 });
 
@@ -297,11 +311,6 @@ public class HomeActivity extends AppCompatActivity {
                     }
 
                 });
-
-
-                // Now set the buttons visible
-                // deleteAssociation.setVisibility(View.VISIBLE);
-                // createAssociation.setVisibility(View.VISIBLE);
 
             }
         });

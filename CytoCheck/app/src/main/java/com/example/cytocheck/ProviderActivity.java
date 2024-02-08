@@ -105,9 +105,6 @@ public class ProviderActivity extends AppCompatActivity {
             }
         });
 
-        // prototype for sending approval (goes in the onclick for a button somehow) need deletion of request in other button onclick
-
-
 
         inactivityHandler = new Handler(Looper.getMainLooper());
         inactivityRunnable = new Runnable() {
@@ -245,12 +242,12 @@ public class ProviderActivity extends AppCompatActivity {
                                     thresholdData.put("patient_id", selectedPatientId);
                                     thresholdData.put("lower", "7");
                                     thresholdData.put("upper", "10");
-                                    global.sendPostRequestWithHandlerWithToken(thresholdString, thresholdData, token, new HandlerResponse() {
-                                        @Override
-                                        public void handleResponse(String response) {
-                                            //TODO Toast to say submitted
-                                        }
-                                    });
+//                                    global.sendPostRequestWithHandlerWithToken(thresholdString, thresholdData, token, new HandlerResponse() {
+//                                        @Override
+//                                        public void handleResponse(String response) {
+//                                            //TODO Toast to say submitted
+//                                        }
+//                                    });
                                 }
                                 catch (JSONException e) {
                                     e.printStackTrace();
@@ -323,6 +320,20 @@ public class ProviderActivity extends AppCompatActivity {
                                     @Override
                                     public void handleResponse(String response) {
                                         //TODO DELETE REQUEST and SEND BACK TO PROVIDER ACTIVITY
+                                        String inboxDelete = linkString + "inbox/" + selectedRequestId;
+                                        global.sendDeleteRequestWithTokenWithHandler(inboxDelete, token, new HandlerResponse() {
+
+                                            @Override
+                                            public void handleResponse(String response) {
+                                                Intent providerIntent = new Intent(ProviderActivity.this, ProviderActivity.class);
+                                                providerIntent.putExtra("linkString", linkString);
+                                                providerIntent.putExtra("token", token);
+                                                providerIntent.putExtra("userID", userID);
+
+                                                startActivity(providerIntent);
+                                            }
+                                        });
+
                                     }
                                 });
                             }
@@ -331,6 +342,20 @@ public class ProviderActivity extends AppCompatActivity {
                             @Override
                             public void onClick(View v) {
                                 //TODO DELETE REQUEST and SEND BACK TO PROVIDER ACTIVITY
+                                String inboxDelete = linkString + "inbox/" + selectedRequestId;
+                                api global = api.getInstance();
+                                global.sendDeleteRequestWithTokenWithHandler(inboxDelete, token, new HandlerResponse() {
+
+                                    @Override
+                                    public void handleResponse(String response) {
+                                        Intent providerIntent = new Intent(ProviderActivity.this, ProviderActivity.class);
+                                        providerIntent.putExtra("linkString", linkString);
+                                        providerIntent.putExtra("token", token);
+                                        providerIntent.putExtra("userID", userID);
+
+                                        startActivity(providerIntent);
+                                    }
+                                });
                             }
                         });
                     }
@@ -339,38 +364,6 @@ public class ProviderActivity extends AppCompatActivity {
         });
     }
 
-//    private void showPopup(int patientId, String patientName) {
-//        resetInactivityTimer();
-//        PopupWindow popupWindow = new PopupWindow(this);
-//
-//        // Inflate the layout for the popup window
-//        View popupView = getLayoutInflater().inflate(R.layout.popup_layout, null);
-//
-//        // Set the content view of the popup window
-//        popupWindow.setContentView(popupView);
-//
-//        // Set the width and height of the popup window
-//        popupWindow.setWidth(WindowManager.LayoutParams.WRAP_CONTENT);
-//        popupWindow.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
-//
-//        // Find TextView and Button in the popup layout
-//        TextView popupText = popupView.findViewById(R.id.popupText);
-//        Button closeButton = popupView.findViewById(R.id.closeButton);
-//
-
-//
-//
-//        // Set close button click listener
-//        closeButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                popupWindow.dismiss(); // Close the popup when the close button is clicked
-//            }
-//        });
-//
-//        // Show the popup window at a specific location on the screen
-//        popupWindow.showAtLocation(popupView, Gravity.CENTER, 0, 0);
-//    }
 
 
     @Override
