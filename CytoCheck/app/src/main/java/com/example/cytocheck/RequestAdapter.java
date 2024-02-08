@@ -27,7 +27,7 @@ public class RequestAdapter extends ArrayAdapter<RequestInfo>{
         TextView textViewRequestName = convertView.findViewById(R.id.textViewRequestName);
 
         // Populate the data into the template view using the data object
-        textViewRequestName.setText(requestInfo.getName());
+        textViewRequestName.setText("Message id: " + requestInfo.getId());
 
 
         // Return the completed view to render on screen

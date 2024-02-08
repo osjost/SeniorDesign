@@ -67,11 +67,7 @@
                 <EditText
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
-                <Button
-                    android:id="@+id/submitThreshold1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Submit"/>
+
             </LinearLayout>
 
             <TextView
@@ -91,11 +87,6 @@
                 <EditText
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
-                <Button
-                    android:id="@+id/submitThreshold2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Submit"/>
             </LinearLayout>
 
             <TextView
@@ -115,11 +106,6 @@
                 <EditText
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
-                <Button
-                    android:id="@+id/submitThreshold3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Submit"/>
             </LinearLayout>
 
             <TextView
@@ -139,11 +125,6 @@
                 <EditText
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
-                <Button
-                    android:id="@+id/submitThreshold4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Submit"/>
             </LinearLayout>
 
             <TextView
@@ -163,13 +144,13 @@
                 <EditText
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
-                <Button
-                    android:id="@+id/submitThreshold5"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Submit"/>
             </LinearLayout>
 
+            <Button
+                android:id="@+id/submitAllThresholds"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Update All Thresholds"/>
 
 
         </LinearLayout>

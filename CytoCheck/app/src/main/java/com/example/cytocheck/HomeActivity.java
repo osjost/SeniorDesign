@@ -199,7 +199,7 @@ public class HomeActivity extends AppCompatActivity {
 
                 EditText newProviderID = findViewById(R.id.newProviderID);
 
-                // Make the buttons and views initially invisible
+                // Make the Text views and buttons initially invisible
                 currentLabel.setVisibility(View.INVISIBLE);
                 deleteAssociation.setVisibility(View.INVISIBLE);
 
@@ -214,21 +214,34 @@ public class HomeActivity extends AppCompatActivity {
                     public void handleResponse(String response) {
                         try {
                             JSONObject providerInfo = new JSONObject(response);
-                            if (providerInfo.getString("provider_id") == "")  {
-                                createAssociation.setVisibility(View.VISIBLE);
-                                newLabel.setVisibility(View.VISIBLE);
-                                newProviderID.setVisibility(View.VISIBLE);
-                            }
-                            else {
-                                providerID = providerInfo.getString("provider_id");
-                                currentLabel.setText(currentLabel.getText() + " " + providerInfo.getString("provider_id"));
-                                currentLabel.setVisibility(View.VISIBLE);
-                                deleteAssociation.setVisibility(View.VISIBLE);
-                            }
-
-                        }
-                        catch (JSONException e) {
-
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    try {
+                                        if (providerInfo.getString("provider_id") == null) {
+                                            createAssociation.setVisibility(View.VISIBLE);
+                                            newLabel.setVisibility(View.VISIBLE);
+                                            newProviderID.setVisibility(View.VISIBLE);
+                                        } else {
+                                            providerID = providerInfo.getString("provider_id");
+                                            currentLabel.setText(currentLabel.getText() + " " + providerInfo.getString("provider_id"));
+                                            currentLabel.setVisibility(View.VISIBLE);
+                                            deleteAssociation.setVisibility(View.VISIBLE);
+                                        }
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            });
+                        } catch (JSONException e) {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    createAssociation.setVisibility(View.VISIBLE);
+                                    newLabel.setVisibility(View.VISIBLE);
+                                    newProviderID.setVisibility(View.VISIBLE);
+                                }
+                            });
                         }
                     }
                 });
@@ -250,8 +263,8 @@ public class HomeActivity extends AppCompatActivity {
                         api global = api.getInstance();
                         JSONObject requestHolder = new JSONObject();
                         try {
-                            requestHolder.put("provider_id","3");
-                            requestHolder.put("message",firstName + " requests association");
+                            requestHolder.put("provider_id",String.valueOf(newProviderID.getText()));
+                            requestHolder.put("message",firstName);
                             requestHolder.put("message_type","association_request");
                             requestHolder.put("sender_id",userID);
                         }
@@ -277,7 +290,7 @@ public class HomeActivity extends AppCompatActivity {
                         homeIntent.putExtra("linkString", linkString);
                         homeIntent.putExtra("token", token);
                         homeIntent.putExtra("userID", userID);
-                        // Add other necessary extras if needed
+                        homeIntent.putExtra("firstName", firstName);
 
                         // Start the HomeActivity
                         startActivity(homeIntent);

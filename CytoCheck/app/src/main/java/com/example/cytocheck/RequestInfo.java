@@ -2,19 +2,25 @@ package com.example.cytocheck;
 
 public class RequestInfo {
 
-    private int id;
-    private String name;
+    private int messageID;
+    private String message;
+    private String messageType;
+    private int senderID;
 
-    public RequestInfo(int id, String name) {
-        this.id = id;
-        this.name = name;
+    public RequestInfo(int id, String message, String messageType, int senderID) {
+        this.messageID = id;
+        this.message = message;
+        this.messageType = messageType;
+        this.senderID = senderID;
     }
 
     public int getId() {
-        return id;
+        return messageID;
     }
 
-    public String getName() {
-        return name;
+    public String getMessage() {
+        return message;
     }
+    public String getMessageType() {return messageType;}
+    public int getSenderID() {return  senderID;}
 }

@@ -50,11 +50,12 @@ public class MainActivity extends AppCompatActivity {
                 catch (JSONException e){
                     e.printStackTrace();
                 }
+                Log.d("Login Sent", "login sent");
                 String loginString = linkString + "login";
                 global.sendPostRequestWithHandler(loginString, loginSend, new HandlerResponse() {
                     @Override
                     public void handleResponse(String response) {
-
+                        Log.d("response", response);
                         try {
                             JSONObject jsonObject = new JSONObject(response);
                             token = jsonObject.getString("jwt");
@@ -66,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
                                 public void handleResponse(String response) {
                                     String firstName = "";
                                     String role = "";
+                                    Log.d("login result", response);
                                     try {
                                         JSONObject userProfile = new JSONObject(response);
                                         firstName = userProfile.getString("first_name");
@@ -95,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
                             });
                         }
                         catch (JSONException e) {
-
+                            Log.d("loginfail", e.getMessage());
                         }
                     }
                 });
