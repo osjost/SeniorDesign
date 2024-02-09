@@ -240,6 +240,7 @@ public class ProviderActivity extends AppCompatActivity {
                                 JSONObject thresholdData = new JSONObject();
                                 try {
                                     thresholdData.put("patient_id", selectedPatientId);
+                                    thresholdData.put("sensor_id", "1");
                                     thresholdData.put("lower", "7");
                                     thresholdData.put("upper", "10");
 //                                    global.sendPostRequestWithHandlerWithToken(thresholdString, thresholdData, token, new HandlerResponse() {

@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
                 catch (JSONException e){
                     e.printStackTrace();
                 }
-                Log.d("Login Sent", "login sent");
+                Log.d("Login Sent", loginSend.toString());
                 String loginString = linkString + "login";
                 global.sendPostRequestWithHandler(loginString, loginSend, new HandlerResponse() {
                     @Override

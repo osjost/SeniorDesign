@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -214,20 +215,22 @@ public class HomeActivity extends AppCompatActivity {
                     public void handleResponse(String response) {
                         Log.d("associations", response);
                         try {
-                            JSONObject providerInfo = new JSONObject(response);
+                            JSONArray responseInfo = new JSONArray(response);
+                            JSONObject providerInfo = responseInfo.getJSONObject(0);
+                            Log.d("providerInfo", providerInfo.toString());
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
                                     try {
-                                        if (providerInfo.getString("provider_id") == null) {
-                                            createAssociation.setVisibility(View.VISIBLE);
-                                            newLabel.setVisibility(View.VISIBLE);
-                                            newProviderID.setVisibility(View.VISIBLE);
-                                        } else {
+                                        if (providerInfo.has("provider_id")) {
                                             providerID = providerInfo.getString("provider_id");
                                             currentLabel.setText(currentLabel.getText() + " " + providerInfo.getString("provider_id"));
                                             currentLabel.setVisibility(View.VISIBLE);
                                             deleteAssociation.setVisibility(View.VISIBLE);
+                                        } else {
+                                            createAssociation.setVisibility(View.VISIBLE);
+                                            newLabel.setVisibility(View.VISIBLE);
+                                            newProviderID.setVisibility(View.VISIBLE);
                                         }
                                     } catch (JSONException e) {
                                         e.printStackTrace();
