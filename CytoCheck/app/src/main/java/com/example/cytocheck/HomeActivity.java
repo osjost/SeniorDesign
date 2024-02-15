@@ -283,7 +283,7 @@ public class HomeActivity extends AppCompatActivity {
                         JSONObject requestHolder = new JSONObject();
                         try {
                             requestHolder.put("provider_id",String.valueOf(newProviderID.getText()));
-                            requestHolder.put("message",firstName);
+                            requestHolder.put("message",userID);
                             requestHolder.put("message_type","association_request");
                             requestHolder.put("sender_id",userID);
                         }

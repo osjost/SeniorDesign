@@ -80,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
                                             intent.putExtra("linkString", linkString); //globalize linkString between activities
 
                                             startActivity(intent);
+                                            finish();
                                         }
                                         else if (role.equals("provider")) { //if the user is a provider, take them to the provider interface
                                             Intent intent = new Intent(MainActivity.this, ProviderActivity.class);
@@ -88,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
                                             intent.putExtra("linkString", linkString); //globalize linkString between activities
 
                                             startActivity(intent);
+                                            finish();
                                         }
                                     }
                                     catch (JSONException e) {

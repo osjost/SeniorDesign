@@ -123,6 +123,7 @@ public class ProviderActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(ProviderActivity.this, MainActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -236,6 +237,10 @@ public class ProviderActivity extends AppCompatActivity {
                             @Override
                             public void onClick(View v) {
                                 api global = api.getInstance();
+                                //get lower and upper from GUI and check if they are doubles
+                                
+                                //TODO if they are doubles and not null, do next, else toast
+                                
                                 String thresholdString = linkString + "threshold";
                                 JSONObject thresholdData = new JSONObject();
                                 try {

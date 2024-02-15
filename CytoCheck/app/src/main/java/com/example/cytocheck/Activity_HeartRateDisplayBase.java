@@ -201,7 +201,7 @@ public abstract class Activity_HeartRateDisplayBase extends Activity {
 
                 }
                 else {
-                    dataCount += 1; //increment data count to say that our app has recieved one more data point
+                    dataCount += 1; //increment data count to say that our app has received one more data point
                     dataSum += computedHeartRate;
                     avgData = dataSum / dataCount;
                     if (dataCount >= 20) { //userDefined number of how many cycles to send data after

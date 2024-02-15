@@ -22,6 +22,7 @@
                 android:id="@+id/providerPatientReturn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="20sp"
                 android:text="Back"/>
 
             <TextView
@@ -54,7 +55,7 @@
                 android:id="@+id/patientThreshold1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Patient Threshold1:"
+                android:text="Patient Heart Rate Threshold:"
                 android:textSize="24sp"/>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -63,10 +64,24 @@
                     android:id="@+id/updateThreshold1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Threshold"/>
+                    android:text="Heart Rate (BPM):"/>
                 <EditText
+                    android:id="@+id/lowerBound1"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:hint="50"
+                    android:text=""/>
+                <TextView
+                    android:id="@+id/greaterHR"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="&lt; Safe &lt;"/>
+                <EditText
+                    android:id="@+id/upperBound1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="150"
+                    android:text=""/>
 
             </LinearLayout>
 
@@ -74,7 +89,7 @@
                 android:id="@+id/patientThreshold2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Patient Threshold2:"
+                android:text="Patient Temperature Threshold:"
                 android:textSize="24sp"/>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -83,67 +98,25 @@
                     android:id="@+id/updateThreshold2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Threshold"/>
+                    android:text="Temperature (F):"/>
                 <EditText
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/patientThreshold3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Patient Threshold3:"
-                android:textSize="24sp"/>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:id="@+id/updateThreshold3"
+                    android:id="@+id/lowerBound2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Threshold"/>
-                <EditText
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/patientThreshold4"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Patient Threshold4:"
-                android:textSize="24sp"/>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                    android:hint="95"
+                    android:text=""/>
                 <TextView
-                    android:id="@+id/updateThreshold4"
+                    android:id="@+id/greaterTemp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Threshold"/>
+                    android:text="&lt; Safe &lt;"/>
                 <EditText
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/patientThreshold5"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Patient Threshold5:"
-                android:textSize="24sp"/>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:id="@+id/updateThreshold5"
+                    android:id="@+id/upperBound2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Threshold"/>
-                <EditText
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:hint="105"
+                    android:text=""/>
+
             </LinearLayout>
 
             <Button
