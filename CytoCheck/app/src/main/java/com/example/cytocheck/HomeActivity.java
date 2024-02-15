@@ -120,14 +120,16 @@ public class HomeActivity extends AppCompatActivity {
         ImageView myImageView2 = findViewById(R.id.likert2);
         ImageView myImageView3 = findViewById(R.id.likert3);
 
-        // Set the image resource programmatically (optional if you've set it in XML)
-         myImageView.setImageResource(R.drawable.likert);
+        // Set the image resource
+        myImageView.setImageResource(R.drawable.likert);
+
         Button loginButton = findViewById(R.id.logOut); //Login Functionality
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(HomeActivity.this, MainActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
 

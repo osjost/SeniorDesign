@@ -493,8 +493,4 @@ public class SignupActivity extends AppCompatActivity {
             return formatted.toString();
         }
     }
-
-
-
 }
-
