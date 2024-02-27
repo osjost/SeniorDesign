@@ -25,7 +25,7 @@ import org.json.JSONObject;
 
 import api.*;
 
-public class HomeActivity extends AppCompatActivity {
+public class PatientActivity extends AppCompatActivity {
     private String linkString;
     private SeekBar healthSlideBar;
     private ImageView likertImage;
@@ -127,7 +127,7 @@ public class HomeActivity extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(HomeActivity.this, MainActivity.class);
+                Intent intent = new Intent(PatientActivity.this, LoginActivity.class);
                 startActivity(intent);
                 finish();
             }
@@ -260,13 +260,13 @@ public class HomeActivity extends AppCompatActivity {
                         global.sendDeleteRequestWithTokenWithHandler(deleteCurrent,token, new HandlerResponse(){
                             @Override
                             public void handleResponse(String response) {
-                                Intent homeIntent = new Intent(HomeActivity.this, HomeActivity.class);
+                                Intent homeIntent = new Intent(PatientActivity.this, PatientActivity.class);
                                 homeIntent.putExtra("linkString", linkString);
                                 homeIntent.putExtra("token", token);
                                 homeIntent.putExtra("userID", userID);
                                 homeIntent.putExtra("firstName", firstName);
 
-                                // Start the HomeActivity
+                                // Start the PatientActivity
                                 startActivity(homeIntent);
                             }
                         });
@@ -297,21 +297,21 @@ public class HomeActivity extends AppCompatActivity {
 
                             }
                         });
-                        Toast.makeText(HomeActivity.this, "Request Sent", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(PatientActivity.this, "Request Sent", Toast.LENGTH_SHORT).show();
                     }
                 });
 
                 patientReturn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        // Create an intent to start the HomeActivity
-                        Intent homeIntent = new Intent(HomeActivity.this, HomeActivity.class);
+                        // Create an intent to start the PatientActivity
+                        Intent homeIntent = new Intent(PatientActivity.this, PatientActivity.class);
                         homeIntent.putExtra("linkString", linkString);
                         homeIntent.putExtra("token", token);
                         homeIntent.putExtra("userID", userID);
                         homeIntent.putExtra("firstName", firstName);
 
-                        // Start the HomeActivity
+                        // Start the PatientActivity
                         startActivity(homeIntent);
                     }
 
@@ -332,7 +332,7 @@ public class HomeActivity extends AppCompatActivity {
         sensorButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(HomeActivity.this, SensorActivity.class);
+                Intent intent = new Intent(PatientActivity.this, SensorActivity.class);
                 intent.putExtra("linkString", linkString);
                 intent.putExtra("token", token);
                 intent.putExtra("userID", userID);

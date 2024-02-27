@@ -21,7 +21,7 @@ import api.*;
 
 
 
-public class MainActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
     private EditText userTextField, passTextField;
     private String linkString = "https://ec2-54-193-162-215.us-west-1.compute.amazonaws.com:443/"; //This is the link to the server holding the database
     private String usernameResponse = "";
@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
                                         firstName = userProfile.getString("first_name");
                                         role = userProfile.getString("role");
                                         if (role.equals("patient")) { //user is a patient so they can be taken to their respective interface
-                                            Intent intent = new Intent(MainActivity.this, HomeActivity.class);
+                                            Intent intent = new Intent(LoginActivity.this, PatientActivity.class);
                                             intent.putExtra("token", token);
                                             intent.putExtra("userID", userID);
                                             intent.putExtra("firstName", firstName);
@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
                                             finish();
                                         }
                                         else if (role.equals("provider")) { //if the user is a provider, take them to the provider interface
-                                            Intent intent = new Intent(MainActivity.this, ProviderActivity.class);
+                                            Intent intent = new Intent(LoginActivity.this, ProviderActivity.class);
                                             intent.putExtra("token", token);
                                             intent.putExtra("userID", userID);
                                             intent.putExtra("linkString", linkString); //globalize linkString between activities
@@ -118,9 +118,9 @@ public class MainActivity extends AppCompatActivity {
                         .format(new Date(currentTimeMillis));
 
                 // Display the timestamp in a Toast
-                Toast.makeText(MainActivity.this, "Timestamp: " + timestampString, Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, "Timestamp: " + timestampString, Toast.LENGTH_SHORT).show();
 
-                Intent intent = new Intent(MainActivity.this, SignupActivity.class); //send user to signup activity
+                Intent intent = new Intent(LoginActivity.this, SignupActivity.class); //send user to signup activity
                 intent.putExtra("linkString", linkString); //globalize linkString between activities
 
                 startActivity(intent);

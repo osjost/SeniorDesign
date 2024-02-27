@@ -5,20 +5,16 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.PopupWindow;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -111,7 +107,7 @@ public class ProviderActivity extends AppCompatActivity {
             @Override
             public void run() {
                 // Log out the user on inactivity timeout
-                Intent intent = new Intent(ProviderActivity.this, MainActivity.class);
+                Intent intent = new Intent(ProviderActivity.this, LoginActivity.class);
                 startActivity(intent);
             }
         };
@@ -121,7 +117,7 @@ public class ProviderActivity extends AppCompatActivity {
         homeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(ProviderActivity.this, MainActivity.class);
+                Intent intent = new Intent(ProviderActivity.this, LoginActivity.class);
                 startActivity(intent);
                 finish();
             }
@@ -237,27 +233,58 @@ public class ProviderActivity extends AppCompatActivity {
                             @Override
                             public void onClick(View v) {
                                 api global = api.getInstance();
+
                                 //get lower and upper from GUI and check if they are doubles
-                                
+                                EditText hrLowerThreshBox = findViewById(R.id.lowerBound1);
+                                EditText hrUpperThreshBox = findViewById(R.id.upperBound1);
+
+                                EditText tempLowerThreshBox = findViewById(R.id.lowerBound2);
+                                EditText tempUpperThreshBox = findViewById(R.id.upperBound2);
+
                                 //TODO if they are doubles and not null, do next, else toast
                                 
+                                String.valueOf(hrLowerThreshBox.getText());
+
                                 String thresholdString = linkString + "threshold";
                                 JSONObject thresholdData = new JSONObject();
                                 try {
                                     thresholdData.put("patient_id", selectedPatientId);
                                     thresholdData.put("sensor_id", "1");
-                                    thresholdData.put("lower", "7");
-                                    thresholdData.put("upper", "10");
-//                                    global.sendPostRequestWithHandlerWithToken(thresholdString, thresholdData, token, new HandlerResponse() {
-//                                        @Override
-//                                        public void handleResponse(String response) {
-//                                            //TODO Toast to say submitted
-//                                        }
-//                                    });
+                                    thresholdData.put("lower", String.valueOf(hrLowerThreshBox.getText()));
+                                    thresholdData.put("upper", String.valueOf(hrUpperThreshBox.getText()));
+                                    Log.d("preHR", thresholdData.toString());
+                                    global.sendPostRequestWithHandlerWithToken(thresholdString, thresholdData, token, new HandlerResponse() {
+                                        @Override
+                                        public void handleResponse(String response) {
+                                            //TODO Toast to say submitted
+                                            Log.d("hrsubmit", response);
+                                        }
+                                    });
                                 }
                                 catch (JSONException e) {
                                     e.printStackTrace();
                                 }
+
+                                JSONObject tempThresholdData = new JSONObject();
+                                try {
+                                    tempThresholdData.put("patient_id", selectedPatientId);
+                                    tempThresholdData.put("sensor_id", "2");
+                                    tempThresholdData.put("lower", String.valueOf(tempLowerThreshBox.getText()));
+                                    tempThresholdData.put("upper", String.valueOf(tempUpperThreshBox.getText()));
+
+                                    Log.d("tempdata", tempThresholdData.toString());
+                                    global.sendPostRequestWithHandlerWithToken(thresholdString, tempThresholdData, token, new HandlerResponse() {
+                                        @Override
+                                        public void handleResponse(String response) {
+                                            //TODO Toast to say submitted
+                                            Log.d("tempsubmit", response);
+                                        }
+                                    });
+                                }
+                                catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                                Toast.makeText(ProviderActivity.this, "Thresholds Submitted", Toast.LENGTH_SHORT).show();
                             }
                         });
 
