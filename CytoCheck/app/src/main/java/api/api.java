@@ -191,8 +191,10 @@ public class api {
                     }
 
                 } catch (Exception e) {
-                    e.printStackTrace();
-
+                    //e.printStackTrace();
+                    if (handler != null) {
+                        handler.handleResponse("failure");
+                    }
                 }
             }
         });

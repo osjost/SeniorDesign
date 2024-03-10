@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -251,11 +252,20 @@ public class SignupActivity extends AppCompatActivity {
                     global.sendPostRequestWithHandler(registerString, userInput, new HandlerResponse() {
                         @Override
                         public void handleResponse(String response) {
-                            Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
-                            startActivity(intent);
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (response == "failure") {
+                                        Toast.makeText(SignupActivity.this, "Account Creation Failed", Toast.LENGTH_SHORT).show();
+                                    }
+                                    else {
+                                        Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
+                                        startActivity(intent);
+                                    }
+                                }
+                            });
                         }
                     });
-
                 }
                 else {
                     Toast.makeText(SignupActivity.this, "Check Red-Highlighted Input Fields", Toast.LENGTH_SHORT).show();

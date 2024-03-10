@@ -227,6 +227,7 @@ public class ProviderActivity extends AppCompatActivity {
                                 providerIntent.putExtra("userID", userID);
 
                                 startActivity(providerIntent);
+                                finish();
                             }
                         });
                         submitThresholds.setOnClickListener(new View.OnClickListener() {

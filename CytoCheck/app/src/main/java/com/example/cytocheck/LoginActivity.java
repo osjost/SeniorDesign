@@ -27,10 +27,12 @@ public class LoginActivity extends AppCompatActivity {
     private String usernameResponse = "";
     private String token = "";
     private String userID = "";
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_login);
 
         Button loginButton = findViewById(R.id.loginSubmit); //Login Functionality
         userTextField = findViewById(R.id.userTextField);
@@ -50,57 +52,71 @@ public class LoginActivity extends AppCompatActivity {
                 catch (JSONException e){
                     e.printStackTrace();
                 }
-                Log.d("Login Sent", loginSend.toString());
+                //Log.d("Login Sent", loginSend.toString());
                 String loginString = linkString + "login";
                 global.sendPostRequestWithHandler(loginString, loginSend, new HandlerResponse() {
                     @Override
                     public void handleResponse(String response) {
-                        Log.d("response", response);
-                        try {
-                            JSONObject jsonObject = new JSONObject(response);
-                            token = jsonObject.getString("jwt");
-                            userID = jsonObject.getString("user_id");
-                            Log.d("eep", jsonObject.toString());
-                            String httpsAddress = linkString + "users/" + userID;
-                            global.sendGetRequestWithHandlerWithToken(httpsAddress, token, new HandlerResponse() {
-                                @Override
-                                public void handleResponse(String response) {
-                                    String firstName = "";
-                                    String role = "";
-                                    Log.d("login result", response);
-                                    try {
-                                        JSONObject userProfile = new JSONObject(response);
-                                        firstName = userProfile.getString("first_name");
-                                        role = userProfile.getString("role");
-                                        if (role.equals("patient")) { //user is a patient so they can be taken to their respective interface
-                                            Intent intent = new Intent(LoginActivity.this, PatientActivity.class);
-                                            intent.putExtra("token", token);
-                                            intent.putExtra("userID", userID);
-                                            intent.putExtra("firstName", firstName);
-                                            intent.putExtra("linkString", linkString); //globalize linkString between activities
+                        //Log.d("response", response);
+                        // Run response handling on a UI thread to make toasts
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    JSONObject jsonObject = new JSONObject(response);
+                                    token = jsonObject.getString("jwt");
+                                    userID = jsonObject.getString("user_id");
+                                    String httpsAddress = linkString + "users/" + userID;
+                                    global.sendGetRequestWithHandlerWithToken(httpsAddress, token, new HandlerResponse() {
 
-                                            startActivity(intent);
-                                            finish();
-                                        }
-                                        else if (role.equals("provider")) { //if the user is a provider, take them to the provider interface
-                                            Intent intent = new Intent(LoginActivity.this, ProviderActivity.class);
-                                            intent.putExtra("token", token);
-                                            intent.putExtra("userID", userID);
-                                            intent.putExtra("linkString", linkString); //globalize linkString between activities
+                                        @Override
+                                        public void handleResponse(String response) {
+                                            // Run response handling on a UI thread to make toasts
+                                            runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    String firstName = "";
+                                                    String role = "";
+                                                    //Log.d("login result", response);
+                                                    try {
+                                                        JSONObject userProfile = new JSONObject(response);
+                                                        firstName = userProfile.getString("first_name");
+                                                        role = userProfile.getString("role");
+                                                        if (role.equals("patient")) { //user is a patient so they can be taken to their respective interface
+                                                            Intent intent = new Intent(LoginActivity.this, PatientActivity.class);
+                                                            intent.putExtra("token", token);
+                                                            intent.putExtra("userID", userID);
+                                                            intent.putExtra("firstName", firstName);
+                                                            intent.putExtra("linkString", linkString); //globalize linkString between activities
 
-                                            startActivity(intent);
-                                            finish();
+                                                            startActivity(intent);
+                                                            finish();
+                                                        }
+                                                        else if (role.equals("provider")) { //if the user is a provider, take them to the provider interface
+                                                            Intent intent = new Intent(LoginActivity.this, ProviderActivity.class);
+                                                            intent.putExtra("token", token);
+                                                            intent.putExtra("userID", userID);
+                                                            intent.putExtra("linkString", linkString); //globalize linkString between activities
+
+                                                            startActivity(intent);
+                                                            finish();
+                                                        }
+                                                    }
+                                                    catch (JSONException e) {
+                                                        Toast.makeText(LoginActivity.this, "Login failed", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                }
+                                            });
+
                                         }
-                                    }
-                                    catch (JSONException e) {
-                                        Log.d("loginfail", e.getMessage());
-                                    }
+                                    });
                                 }
-                            });
-                        }
-                        catch (JSONException e) {
-                            Log.d("loginfail", e.getMessage());
-                        }
+                                catch (JSONException e) {
+                                    Toast.makeText(LoginActivity.this, "Login failed", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+
                     }
                 });
             }
@@ -110,15 +126,6 @@ public class LoginActivity extends AppCompatActivity {
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Get current timestamp in milliseconds
-                long currentTimeMillis = System.currentTimeMillis();
-
-                // Convert the timestamp to a readable format (optional)
-                String timestampString = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS")
-                        .format(new Date(currentTimeMillis));
-
-                // Display the timestamp in a Toast
-                Toast.makeText(LoginActivity.this, "Timestamp: " + timestampString, Toast.LENGTH_SHORT).show();
 
                 Intent intent = new Intent(LoginActivity.this, SignupActivity.class); //send user to signup activity
                 intent.putExtra("linkString", linkString); //globalize linkString between activities

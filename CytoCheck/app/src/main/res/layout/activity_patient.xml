@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:gravity="center">
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="10sp"
+        android:layout_marginRight="10sp"
+        android:orientation="vertical"
+        android:gravity="center">
+
+    <LinearLayout
+        android:id="@+id/welcomeContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10sp"
+        android:layout_marginRight="10sp"
+        android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/welcomeLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Welcome, User"
+        android:textSize="34sp"/>
+
+    <Button
+        android:id="@+id/logOut"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20sp"
+        android:text="Log Out"/>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/association_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20sp"
+        android:text="Link New and View Providers"/>
+
+    <LinearLayout
+        android:id="@+id/fatigueContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10sp"
+        android:layout_marginRight="10sp"
+        android:layout_marginTop="30sp"
+        android:layout_marginBottom="10sp"
+        android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/userFeelingQuery"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Fatigue:"
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/userScoreField"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:layout_marginLeft="20sp"
+        tools:text="0/10" />
+
+    <Button
+        android:id="@+id/surveySubmit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="40sp"
+        android:text="Submit" />
+
+    </LinearLayout>
+
+    <SeekBar
+        android:id="@+id/healthSlider"
+        style="@style/Widget.AppCompat.SeekBar.Discrete"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:max="10"
+        android:progress="0"/>
+
+    <ImageView
+        android:id="@+id/likert"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:srcCompat="@drawable/likert"
+        tools:visibility="visible" />
+
+    <LinearLayout
+        android:id="@+id/painContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30sp"
+        android:layout_marginBottom="10sp"
+        android:layout_marginLeft="10sp"
+        android:layout_marginRight="10sp"
+        android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/userFeelingQuery2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Pain:"
+        android:textSize="24sp"/>
+
+    <TextView
+        android:id="@+id/userScoreField2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20sp"
+        android:textSize="20sp"
+        tools:text="0/10" />
+
+    <Button
+        android:id="@+id/surveySubmit2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="40sp"
+        android:text="Submit"/>
+    </LinearLayout>
+
+    <SeekBar
+        android:id="@+id/healthSlider2"
+        style="@style/Widget.AppCompat.SeekBar.Discrete"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:max="10"
+        android:progress="0"/>
+
+    <ImageView
+        android:id="@+id/likert2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        app:srcCompat="@drawable/likert"
+        tools:srcCompat="@drawable/likert"
+        tools:visibility="visible" />
+
+    <LinearLayout
+        android:id="@+id/nauseaContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30sp"
+        android:layout_marginBottom="10sp"
+        android:layout_marginLeft="10sp"
+        android:layout_marginRight="10sp"
+        android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/userFeelingQuery3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Nausea:"
+        android:textSize="24sp"/>
+
+    <TextView
+        android:id="@+id/userScoreField3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20sp"
+        android:textSize="20sp"
+        tools:text="0/10" />
+
+    <Button
+        android:id="@+id/surveySubmit3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="40sp"
+        android:text="Submit"/>
+
+    </LinearLayout>
+
+    <SeekBar
+        android:id="@+id/healthSlider3"
+        style="@style/Widget.AppCompat.SeekBar.Discrete"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:max="10"
+        android:progress="0"/>
+
+    <ImageView
+        android:id="@+id/likert3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/likert"
+        tools:srcCompat="@drawable/likert"
+        tools:visibility="visible" />
+
+    <LinearLayout
+        android:id="@+id/surveyContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30sp"
+        android:layout_marginBottom="30sp"
+        android:layout_marginLeft="10sp"
+        android:layout_marginRight="10sp"
+        android:orientation="horizontal">
+
+    <Button
+        android:id="@+id/rashButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Rash Survey"/>
+
+    <Button
+        android:id="@+id/symptomExtra"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30sp"
+        android:text="Additional Symptoms"/>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/sensorButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Connect Sensor"/>
+
+    </LinearLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

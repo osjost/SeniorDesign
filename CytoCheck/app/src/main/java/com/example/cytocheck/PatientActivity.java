@@ -53,7 +53,7 @@ public class PatientActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home); // Create a new XML layout for this activity if needed
+        setContentView(R.layout.activity_patient); // Create a new XML layout for this activity if needed
         Intent intent = getIntent();
         linkString = intent.getStringExtra("linkString");
         token = intent.getStringExtra("token");
@@ -313,6 +313,7 @@ public class PatientActivity extends AppCompatActivity {
 
                         // Start the PatientActivity
                         startActivity(homeIntent);
+                        finish();
                     }
 
                 });
