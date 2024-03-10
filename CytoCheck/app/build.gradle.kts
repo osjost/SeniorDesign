@@ -22,20 +22,31 @@ android {
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
 }
 
-dependencies {
+repositories {
+    google()
+    mavenCentral()
+    // Add JitPack repository here
+    maven { url = uri("https://jitpack.io") }
+}
 
+dependencies {
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.10.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    // MPAndroidChart dependency
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
+
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+
     implementation(files("libs/fit_21.105.00.jar"))
     implementation(files("libs/antpluginlib_3-9-0.aar"))
 }

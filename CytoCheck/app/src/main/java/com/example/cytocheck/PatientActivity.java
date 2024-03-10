@@ -17,6 +17,13 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.Description;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+import java.util.ArrayList;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import org.json.JSONArray;
@@ -59,22 +66,41 @@ public class PatientActivity extends AppCompatActivity {
         token = intent.getStringExtra("token");
         userID = intent.getStringExtra("userID");
         firstName = intent.getStringExtra("firstName");
+
+        // Initialize Variables for view elements
         welcomeLabel = findViewById(R.id.welcomeLabel);
         welcomeLabel.setText("Welcome, " + firstName);
+
         userScore = findViewById(R.id.userScoreField);
         healthSlideBar = findViewById(R.id.healthSlider);
+
         likertImage = findViewById(R.id.likert);
+        ImageView myImageView = findViewById(R.id.likert);
+        ImageView myImageView2 = findViewById(R.id.likert2);
+        ImageView myImageView3 = findViewById(R.id.likert3);
+
+        // Set the image resource
+        myImageView.setImageResource(R.drawable.likert);
 
         painSlideBar = findViewById(R.id.healthSlider2);
         userPain = findViewById(R.id.userScoreField2);
 
         nauseaSlideBar = findViewById(R.id.healthSlider3);
         userNausea = findViewById(R.id.userScoreField3);
+
+        // Dynamically update the patient graphs when data is retrieved
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                
+            }
+        });
+
+        // On click/change Listeners for elements
         healthSlideBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar healthSlideBar, int progress, boolean fromUser) {
                 // 'progress' contains the new value of the SeekBar
-                // 'fromUser' is true if the change was initiated by the user, false if it was programmatically set
                 userScore.setText((10-progress) + "/10");
                 fatigueFinal = String.valueOf(10-progress);
             }
@@ -85,11 +111,11 @@ public class PatientActivity extends AppCompatActivity {
             public void onStopTrackingTouch(SeekBar healthSlideBar) { //Called when user is done
             }
         });
+
         painSlideBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar painSlideBar, int progress, boolean fromUser) {
                 // 'progress' contains the new value of the SeekBar
-                // 'fromUser' is true if the change was initiated by the user, false if it was programmatically set
                 userPain.setText((10-progress) + "/10");
                 painFinal = String.valueOf(10-progress);
             }
@@ -100,11 +126,11 @@ public class PatientActivity extends AppCompatActivity {
             public void onStopTrackingTouch(SeekBar painSlideBar) { //Called when user is done
             }
         });
+
         nauseaSlideBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar nauseaSlideBar, int progress, boolean fromUser) {
                 // 'progress' contains the new value of the SeekBar
-                // 'fromUser' is true if the change was initiated by the user, false if it was programmatically set
                 userNausea.setText((10-progress) + "/10");
                 nauseaFinal = String.valueOf(10-progress);
             }
@@ -116,14 +142,7 @@ public class PatientActivity extends AppCompatActivity {
             }
         });
 
-        ImageView myImageView = findViewById(R.id.likert);
-        ImageView myImageView2 = findViewById(R.id.likert2);
-        ImageView myImageView3 = findViewById(R.id.likert3);
-
-        // Set the image resource
-        myImageView.setImageResource(R.drawable.likert);
-
-        Button loginButton = findViewById(R.id.logOut); //Login Functionality
+        Button loginButton = findViewById(R.id.logOut); //Logout Functionality
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -133,7 +152,7 @@ public class PatientActivity extends AppCompatActivity {
             }
         });
 
-        Button surveyProcess = findViewById(R.id.surveySubmit); //Signup functionality
+        Button surveyProcess = findViewById(R.id.surveySubmit); //Submit functionality
         surveyProcess.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -151,7 +170,7 @@ public class PatientActivity extends AppCompatActivity {
             }
         });
 
-        Button painProcess = findViewById(R.id.surveySubmit2); //Signup functionality
+        Button painProcess = findViewById(R.id.surveySubmit2); //Submit functionality
         painProcess.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -168,7 +187,7 @@ public class PatientActivity extends AppCompatActivity {
                 checkAll();
             }
         });
-        Button nauseaProcess = findViewById(R.id.surveySubmit3); //Signup functionality
+        Button nauseaProcess = findViewById(R.id.surveySubmit3); //Submit functionality
         nauseaProcess.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -192,7 +211,7 @@ public class PatientActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 setContentView(R.layout.association_layout);
-
+                // This instantiates the Association view
                 Button deleteAssociation = findViewById(R.id.deleteCurrent);
                 Button createAssociation = findViewById(R.id.submitNewID);
                 Button patientReturn = findViewById(R.id.patientReturn);
@@ -209,8 +228,10 @@ public class PatientActivity extends AppCompatActivity {
                 createAssociation.setVisibility(View.INVISIBLE);
                 newLabel.setVisibility(View.INVISIBLE);
                 newProviderID.setVisibility(View.INVISIBLE);
+
                 // Get any associations
                 api global = api.getInstance();
+
                 String patientCurrent = linkString + "associations/" + userID;
                 global.sendGetRequestWithHandlerWithToken(patientCurrent, token, new HandlerResponse() {
                     @Override
@@ -315,9 +336,7 @@ public class PatientActivity extends AppCompatActivity {
                         startActivity(homeIntent);
                         finish();
                     }
-
                 });
-
             }
         });
 
