@@ -18,6 +18,7 @@ const qualitativeRouter = require("./routes/qualitative");
 const inboxRouter = require("./routes/inbox");
 const associationRouter = require("./routes/associations");
 const thresholdRouter = require("./routes/threshold");
+const fccRouter = require("./routes/fcc");
 
 const threshold_test_cache = require("./services/threshold_cache")
 
@@ -42,6 +43,7 @@ app.get("/", (req, res) => {
 // app.use("/inbox", verifyJWT, inboxRouter);
 // app.use("/associations", verifyJWT, associationRouter);
 // app.use("/threshold", verifyJWT, thresholdRouter)
+// app.use("/fcc", verifyJWT, fccRouter)
 
 app.use("/users", usersRouter);
 app.use("/readings", readingsRouter);
@@ -49,6 +51,7 @@ app.use("/qualitative", qualitativeRouter);
 app.use("/inbox", inboxRouter);
 app.use("/associations", associationRouter);
 app.use("/threshold", thresholdRouter)
+app.use("/fcc", fccRouter)
 
 app.use("/login", loginRouter);
 app.use("/register", registerRouter);
