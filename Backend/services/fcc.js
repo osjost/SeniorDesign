@@ -6,7 +6,7 @@ async function create(fcc){
       (user_id, fcc) 
       VALUES 
       (?, ?)`,
-      [fcc.fcc, fcc.user_id]
+      [fcc.user_id, fcc.fcc]
     );
   
     let message = 'Error in adding fcc';
@@ -33,7 +33,7 @@ async function update(fcc){
   const result = await db.query(
     `UPDATE fcc_associations
     SET
-        fcc = ?,
+        fcc = ?
     WHERE user_id = ?;`,
     [
       fcc.fcc,

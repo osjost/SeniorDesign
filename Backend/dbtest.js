@@ -76,7 +76,11 @@ const userOperations = require('./services/users');
 
 // curl -k -X DELETE https://localhost:443/inbox/1
 
-// curl -k https://localhost:443/associations/1
+
+// FCC
+// curl -k -X POST https://localhost:443/fcc -H "Content-Type: application/json" -d "{\"user_id\":\"1\", \"fcc\":\"aaaaaaaa\"}"
+// curl -k https://localhost:443/fcc/1
+// curl -k -X PUT https://localhost:443/fcc -H "Content-Type: application/json" -d "{\"user_id\":\"1\", \"fcc\":\"bbbbbbbb\"}"
 
 
 // testData.js or your_test_file.js - File where you test the 'create' function
