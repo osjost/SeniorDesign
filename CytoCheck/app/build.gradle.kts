@@ -1,6 +1,5 @@
 plugins {
     id("com.android.application")
-    // Add the Google services Gradle plugin
     id("com.google.gms.google-services")
 }
 
@@ -78,5 +77,4 @@ dependencies {
 
     // AndroidX Fragment KTX for Fragment use
     implementation("androidx.fragment:fragment-ktx:1.4.0")
-
 }
