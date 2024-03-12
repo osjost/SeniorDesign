@@ -3,9 +3,9 @@ const router = express.Router();
 const associations = require('../services/associations');
 
 /* GET */
-router.get('/:provider_id', async function(req, res, next) {
+router.get('/:user_id', async function(req, res, next) {
     try {
-      res.json(await associations.getAll(req.params.provider_id));
+      res.json(await associations.getAll(req.params.user_id));
     } catch (err) {
       console.error(`Error while getting associations`, err.message);
       next(err);

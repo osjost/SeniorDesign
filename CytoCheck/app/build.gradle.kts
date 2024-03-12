@@ -1,5 +1,7 @@
 plugins {
     id("com.android.application")
+    // Add the Google services Gradle plugin
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -49,4 +51,32 @@ dependencies {
 
     implementation(files("libs/fit_21.105.00.jar"))
     implementation(files("libs/antpluginlib_3-9-0.aar"))
+
+    // Import the Firebase BoM
+    implementation(platform("com.google.firebase:firebase-bom:32.7.1"))
+
+    // When using the BoM, you don't specify versions in Firebase library dependencies
+
+    // Add the dependency for the Firebase SDK for Google Analytics
+    implementation("com.google.firebase:firebase-analytics")
+
+    // TODO: Add the dependencies for any other Firebase products you want to use
+    // See https://firebase.google.com/docs/android/setup#available-libraries
+    // For example, add the dependencies for Firebase Authentication and Cloud Firestore
+    implementation("com.google.firebase:firebase-auth")
+    implementation("com.google.firebase:firebase-firestore")
+    implementation("com.google.firebase:firebase-messaging")
+
+//    val activityVersion = "1.8.2"
+//    implementation("androidx.activity:activity:$activityVersion")
+//
+//    val fragmentVersion = "1.6.2"
+//    implementation("androidx.fragment:fragment:$fragmentVersion")\
+
+    // AndroidX Activity KTX for ActivityResultLauncher
+    implementation("androidx.activity:activity-ktx:1.4.0")
+
+    // AndroidX Fragment KTX for Fragment use
+    implementation("androidx.fragment:fragment-ktx:1.4.0")
+
 }

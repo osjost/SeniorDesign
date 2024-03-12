@@ -4,7 +4,6 @@ const threshold_cache = require('./threshold_cache')
 async function create(threshold){
     // if threshold already exists for that sensor type assigned to that user, delete it first before adding it
 
-
     const deleteResult = await db.query(
     `DELETE FROM threshold 
     WHERE patient_id = ? AND sensor_id = ?`,
@@ -26,7 +25,7 @@ async function create(threshold){
     }
 
     // add value to the threshold cache
-    threshold_cache.addThresh(threshold.patient_id, threshold.sensor_id, threshold.lower, threshold.lower)
+    threshold_cache.addThresh(threshold.patient_id, threshold.sensor_id, threshold.lower, threshold.upper)
   
     return {message};
   }
@@ -47,11 +46,12 @@ async function update(threshold){
       SET
           upper = ?,
           lower = ?,
-      WHERE patient_id = ?;`,
+      WHERE patient_id = ? AND sensor_id = ?;`,
       [
         threshold.upper,
         threshold.lower,
-        threshold.patient_id
+        threshold.patient_id,
+        threshold.sensor_id
       ]
     );
   
@@ -62,7 +62,7 @@ async function update(threshold){
     }
 
     // update value in the threshold cache
-    threshold_cache.addThresh(threshold.patient_id, threshold.sensor_id, threshold.lower, threshold.lower)
+    threshold_cache.addThresh(threshold.patient_id, threshold.sensor_id, threshold.lower, threshold.upper)
   
     return {message};
   }

@@ -88,10 +88,10 @@ sudo node index.js
 AWS TESTING CODE:
 
 testing a register command:
-curl -k -X POST https://ec2-54-193-162-215.us-west-1.compute.amazonaws.com:443/register -H "Content-Type: application/json" -d "{\"password\":\"blah\", \"username\":\"usertest12\",\"role\":\"patient\", \"first_name\":\"test\", \"last_name\":\"test\", \"date_of_birth\":\"1991-02-02\", \"email\":\"test@gmail.com\", \"phone_number\":\"12345678\", \"num_measures\":\"twelve\",\"middle_name\":\"test5\",\"ssn\":\"123-45-6789\"}"
+curl -k -X POST https://ec2-54-193-162-215.us-west-1.compute.amazonaws.com:443/register -H "Content-Type: application/json" -d "{\"password\":\"blah\", \"username\":\"u2\",\"role\":\"patient\", \"first_name\":\"test\", \"last_name\":\"test\", \"date_of_birth\":\"1991-02-02\", \"email\":\"test@gmail.com\", \"phone_number\":\"12345678\", \"num_measures\":\"twelve\",\"middle_name\":\"test5\",\"ssn\":\"123-45-6789\"}"
 
 testing logging in:
-curl -k -X POST https://ec2-54-193-162-215.us-west-1.compute.amazonaws.com:443/login -H "Content-Type: application/json" -d "{\"password\":\"pass\", \"username\":\"Muehehe\"}"
+curl -k -X POST https://ec2-54-193-162-215.us-west-1.compute.amazonaws.com:443/login -H "Content-Type: application/json" -d "{\"password\":\"blah\", \"username\":\"u\"}"
 
 testing pushing in a reading:
 curl -k -X POST https://ec2-54-193-162-215.us-west-1.compute.amazonaws.com:443/readings -H "Content-Type: application/json" -H "Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InVzZXJ0ZXN0MTIiLCJ1c2VySWQiOjExfQ.PhPb5tGRFmDwLwIx3X8e6y5-zu7n5tEX3l7CWDqod_c" -d "{\"reading\":\"11.1\", \"sensor_id\":\"1\", \"user_id\":\"11\"}"
@@ -107,6 +107,9 @@ curl -k -X POST -H "Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2Vy
 
 curl -k DELETE -H "Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InVzZXJ0ZXN0MTIiLCJ1c2VySWQiOjExfQ.PhPb5tGRFmDwLwIx3X8e6y5-zu7n5tEX3l7CWDqod_c" https://ec2-54-193-162-215.us-west-1.compute.amazonaws.com:443/associations/1
 
+
+Associations get:
+curl -k -H "Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6Ik11ZWhlaGUiLCJ1c2VySWQiOjE3fQ.kCV-U-8gywVEApgrLOVu8oep7bX7uab4ALEmT3HmvaU" https://ec2-54-193-162-215.us-west-1.compute.amazonaws.com:443/associations/1
 
 TO LAUNCH IN BACKGROUND:
 nohup npm start > ../serverLog &

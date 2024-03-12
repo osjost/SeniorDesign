@@ -1,10 +1,10 @@
 const db = require('./db');
 
-async function getAll(providerId) {
-    const rows = await db.query(
-        `SELECT * FROM provider_patient_associations WHERE provider_id = ?;`,
-        [providerId]
-    );
+async function getAll(userId) {
+  const rows = await db.query(
+    `SELECT * FROM provider_patient_associations WHERE provider_id = ? OR patient_id = ?;`,
+    [userId, userId]
+);
 
     console.log(rows);
     return rows;

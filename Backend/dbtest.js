@@ -56,7 +56,7 @@ const userOperations = require('./services/users');
 // test associatoins
 // curl -k https://localhost:443/associations/1
 // making a new associatino:
-// curl -k -X POST https://localhost:443/associations -H "Content-Type: application/json" -d "{\"patient_id\":\"1\", \"provider_id\":\"1\"}"
+// curl -k -X POST https://localhost:443/associations -H "Content-Type: application/json" -d "{\"patient_id\":\"1\", \"provider_id\":\"2\"}"
 
 
 // test put
@@ -75,6 +75,9 @@ const userOperations = require('./services/users');
 
 
 // curl -k -X DELETE https://localhost:443/inbox/1
+
+// curl -k https://localhost:443/associations/1
+
 
 // testData.js or your_test_file.js - File where you test the 'create' function
 const sampleCreateUser = {

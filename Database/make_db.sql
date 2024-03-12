@@ -77,6 +77,11 @@ CREATE TABLE threshold (
     lower FLOAT
 );
 
+CREATE TABLE fcc_associations  (
+    patient_id INT,
+    provider_fcc VARCHAR(255)
+);
+
 -- to query a table since we're using command line you can do the following (substitute desired values in as needed)
 SELECT provider_id, message, time_stamp
 FROM Provider_Inbox
