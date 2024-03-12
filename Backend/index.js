@@ -20,6 +20,8 @@ const associationRouter = require("./routes/associations");
 const thresholdRouter = require("./routes/threshold");
 const fccRouter = require("./routes/fcc");
 
+// const fireBaseTest = require("./services/messaging")
+
 const threshold_test_cache = require("./services/threshold_cache")
 
 const verifyJWT = require("./services/jwtverifier");
@@ -78,6 +80,8 @@ const httpsPort = 443; // Standard port for HTTPS
 httpsServer.listen(httpsPort, () => {
   console.log(`HTTPS Server running`);
 });
+
+// fireBaseTest.sendFirebaseNotification("fD-PDrTkQB2TDao5T7ylX5:APA91bEbVUZdi7nniFFzTK4wmdxOThEfm2IjRpVf-nL51ayhrAhuQEB06wBmvYk9DJfm2gmXHoTGUssj5-Kr1KMWMXdMkq9nOyeFf8Qd5cW6htzdFx5ugACKmABcS-j4dsVE4ZB_DW3J","blah","hello");
 
 
 // const express = require("express");

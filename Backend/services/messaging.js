@@ -1,7 +1,7 @@
 const admin = require('firebase-admin');
 
 // Initialize Firebase Admin with your project credentials
-const serviceAccount = require('../google-services.json');
+const serviceAccount = require('../cytocheck-push-service-firebase-adminsdk-q3plv-f5d4c4defc.json');
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)
