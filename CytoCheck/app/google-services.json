@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "819391973159",
+    "project_id": "cytocheck-push-service",
+    "storage_bucket": "cytocheck-push-service.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:819391973159:android:25f2a8fad9582ff8e44b02",
+        "android_client_info": {
+          "package_name": "com.example.cytocheck"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB6kFwB8DtYGQ9On5tW9S4iBynnKpbLadw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
