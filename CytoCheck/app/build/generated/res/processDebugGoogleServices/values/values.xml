@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="gcm_defaultSenderId" translatable="false">819391973159</string>
-    <string name="google_api_key" translatable="false">AIzaSyB6kFwB8DtYGQ9On5tW9S4iBynnKpbLadw</string>
-    <string name="google_app_id" translatable="false">1:819391973159:android:25f2a8fad9582ff8e44b02</string>
-    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyB6kFwB8DtYGQ9On5tW9S4iBynnKpbLadw</string>
-    <string name="google_storage_bucket" translatable="false">cytocheck-push-service.appspot.com</string>
-    <string name="project_id" translatable="false">cytocheck-push-service</string>
-</resources>
