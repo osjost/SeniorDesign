@@ -1,6 +1,8 @@
 package com.example.cytocheck;
 
 
+import static com.example.cytocheck.DataProcessor.processData;
+
 import android.content.Intent;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -10,6 +12,7 @@ import android.view.LayoutInflater;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -20,20 +23,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.cytocheck.DateAxisValueFormatter;
 import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.components.Description;
-import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.charts.BarChart;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -44,7 +36,8 @@ import org.json.JSONObject;
 import api.*;
 
 public class PatientActivity extends AppCompatActivity {
-    private LineChart userDataChart;
+    private BarChart userData;
+    private Spinner mSpinner;
     private String linkString;
     private SeekBar healthSlideBar;
     private ImageView likertImage;
@@ -100,193 +93,30 @@ public class PatientActivity extends AppCompatActivity {
         nauseaSlideBar = findViewById(R.id.healthSlider3);
         userNausea = findViewById(R.id.userScoreField3);
 
-        userDataChart = findViewById(R.id.userData);
+        userData = findViewById(R.id.userData);
+        mSpinner = findViewById(R.id.selectorSpinner); // Assuming you have a Spinner in your layout
+
 
         api global = api.getInstance();
         String patientAddress = linkString + "qualitative/" + userID;
         global.sendGetRequestWithHandlerWithToken(patientAddress, token, new HandlerResponse() {
             @Override
             public void handleResponse(String response) {
-                try {
-                    JSONArray jsonArray = new JSONArray(response);
-                    ArrayList<Entry> painEntries = new ArrayList<>();
-                    ArrayList<Entry> fatigueEntries = new ArrayList<>();
-                    ArrayList<Entry> nauseaEntries = new ArrayList<>();
-                    ArrayList<String> timestamps = new ArrayList<>();
-
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault());
-
-                    // Filter data for all options (daily, weekly, and monthly)
-                    Calendar cal = Calendar.getInstance();
-                    cal.setTimeInMillis(System.currentTimeMillis());
-
-                    // Daily data
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        JSONObject jsonObject = jsonArray.getJSONObject(i);
-                        Date date = sdf.parse(jsonObject.getString("time_stamp"));
-                        Calendar calData = Calendar.getInstance();
-                        calData.setTime(date);
-                        Calendar calToday = Calendar.getInstance();
-                        if (calData.get(Calendar.YEAR) == calToday.get(Calendar.YEAR) &&
-                                calData.get(Calendar.MONTH) == calToday.get(Calendar.MONTH) &&
-                                calData.get(Calendar.DAY_OF_MONTH) == calToday.get(Calendar.DAY_OF_MONTH)) {
-                            long millis = date.getTime();
-                            timestamps.add(sdf.format(date));
-                            painEntries.add(new Entry(millis, jsonObject.getInt("pain")));
-                            fatigueEntries.add(new Entry(millis, jsonObject.getInt("fatigue")));
-                            nauseaEntries.add(new Entry(millis, jsonObject.getInt("nausea")));
-                        }
+                Log.d("userData", response);
+                mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        String selectedTimeframe = (String) parent.getItemAtPosition(position);
+                        // Call processData method from DataProcessor class passing the BarChart object and selected timeframe
+                        processData(response, userData, selectedTimeframe);
                     }
 
-// Weekly data
-                    Calendar calStartOfWeek = Calendar.getInstance();
-                    calStartOfWeek.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
-                    calStartOfWeek.set(Calendar.HOUR_OF_DAY, 0);
-                    calStartOfWeek.set(Calendar.MINUTE, 0);
-                    calStartOfWeek.set(Calendar.SECOND, 0);
-                    calStartOfWeek.set(Calendar.MILLISECOND, 0);
-                    Calendar calEndOfWeek = (Calendar) calStartOfWeek.clone();
-                    calEndOfWeek.add(Calendar.DAY_OF_MONTH, 7);
-                    calEndOfWeek.set(Calendar.HOUR_OF_DAY, 23);
-                    calEndOfWeek.set(Calendar.MINUTE, 59);
-                    calEndOfWeek.set(Calendar.SECOND, 59);
-                    calEndOfWeek.set(Calendar.MILLISECOND, 999);
-                    ArrayList<Entry> painEntriesWeekly = new ArrayList<>();
-                    ArrayList<Entry> fatigueEntriesWeekly = new ArrayList<>();
-                    ArrayList<Entry> nauseaEntriesWeekly = new ArrayList<>();
-                    ArrayList<String> timestampsWeekly = new ArrayList<>();
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        JSONObject jsonObject = jsonArray.getJSONObject(i);
-                        Date date = sdf.parse(jsonObject.getString("time_stamp"));
-                        if (date.after(calStartOfWeek.getTime()) && date.before(calEndOfWeek.getTime())) {
-                            long millis = date.getTime();
-                            timestampsWeekly.add(sdf.format(date));
-                            painEntriesWeekly.add(new Entry(millis, jsonObject.getInt("pain")));
-                            fatigueEntriesWeekly.add(new Entry(millis, jsonObject.getInt("fatigue")));
-                            nauseaEntriesWeekly.add(new Entry(millis, jsonObject.getInt("nausea")));
-                        }
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+                        // Do nothing
                     }
+                });
 
-// Monthly data
-                    Calendar calStartOfMonth = Calendar.getInstance();
-                    calStartOfMonth.set(Calendar.DAY_OF_MONTH, 1);
-                    calStartOfMonth.set(Calendar.HOUR_OF_DAY, 0);
-                    calStartOfMonth.set(Calendar.MINUTE, 0);
-                    calStartOfMonth.set(Calendar.SECOND, 0);
-                    calStartOfMonth.set(Calendar.MILLISECOND, 0);
-                    Calendar calEndOfMonth = (Calendar) calStartOfMonth.clone();
-                    calEndOfMonth.add(Calendar.MONTH, 1);
-                    calEndOfMonth.add(Calendar.DAY_OF_MONTH, -1);
-                    calEndOfMonth.set(Calendar.HOUR_OF_DAY, 23);
-                    calEndOfMonth.set(Calendar.MINUTE, 59);
-                    calEndOfMonth.set(Calendar.SECOND, 59);
-                    calEndOfMonth.set(Calendar.MILLISECOND, 999);
-                    ArrayList<Entry> painEntriesMonthly = new ArrayList<>();
-                    ArrayList<Entry> fatigueEntriesMonthly = new ArrayList<>();
-                    ArrayList<Entry> nauseaEntriesMonthly = new ArrayList<>();
-                    ArrayList<String> timestampsMonthly = new ArrayList<>();
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        JSONObject jsonObject = jsonArray.getJSONObject(i);
-                        Date date = sdf.parse(jsonObject.getString("time_stamp"));
-                        if (date.after(calStartOfMonth.getTime()) && date.before(calEndOfMonth.getTime())) {
-                            long millis = date.getTime();
-                            timestampsMonthly.add(sdf.format(date));
-                            painEntriesMonthly.add(new Entry(millis, jsonObject.getInt("pain")));
-                            fatigueEntriesMonthly.add(new Entry(millis, jsonObject.getInt("fatigue")));
-                            nauseaEntriesMonthly.add(new Entry(millis, jsonObject.getInt("nausea")));
-                        }
-                    }
-
-
-                    // Create LineDataSets for each option
-                    LineDataSet painDataSet = new LineDataSet(painEntries, "Pain (Daily)");
-                    LineDataSet fatigueDataSet = new LineDataSet(fatigueEntries, "Fatigue (Daily)");
-                    LineDataSet nauseaDataSet = new LineDataSet(nauseaEntries, "Nausea (Daily)");
-
-                    LineDataSet painDataSetWeekly = new LineDataSet(painEntriesWeekly, "Pain (Weekly)");
-                    LineDataSet fatigueDataSetWeekly = new LineDataSet(fatigueEntriesWeekly, "Fatigue (Weekly)");
-                    LineDataSet nauseaDataSetWeekly = new LineDataSet(nauseaEntriesWeekly, "Nausea (Weekly)");
-
-                    LineDataSet painDataSetMonthly = new LineDataSet(painEntriesMonthly, "Pain (Monthly)");
-                    LineDataSet fatigueDataSetMonthly = new LineDataSet(fatigueEntriesMonthly, "Fatigue (Monthly)");
-                    LineDataSet nauseaDataSetMonthly = new LineDataSet(nauseaEntriesMonthly, "Nausea (Monthly)");
-
-                    // Set colors for the data sets
-                    painDataSet.setColor(Color.RED);
-                    fatigueDataSet.setColor(Color.BLUE);
-                    nauseaDataSet.setColor(Color.GREEN);
-
-                    painDataSetWeekly.setColor(Color.RED);
-                    fatigueDataSetWeekly.setColor(Color.BLUE);
-                    nauseaDataSetWeekly.setColor(Color.GREEN);
-
-                    painDataSetMonthly.setColor(Color.RED);
-                    fatigueDataSetMonthly.setColor(Color.BLUE);
-                    nauseaDataSetMonthly.setColor(Color.GREEN);
-
-                    // Set line widths
-                    painDataSet.setLineWidth(2f);
-                    fatigueDataSet.setLineWidth(2f);
-                    nauseaDataSet.setLineWidth(2f);
-
-                    painDataSetWeekly.setLineWidth(2f);
-                    fatigueDataSetWeekly.setLineWidth(2f);
-                    nauseaDataSetWeekly.setLineWidth(2f);
-
-                    painDataSetMonthly.setLineWidth(2f);
-                    fatigueDataSetMonthly.setLineWidth(2f);
-                    nauseaDataSetMonthly.setLineWidth(2f);
-
-                    // Add data sets to the LineData object
-                    LineData lineData = new LineData(painDataSet, fatigueDataSet, nauseaDataSet);
-                    LineData lineDataWeekly = new LineData(painDataSetWeekly, fatigueDataSetWeekly, nauseaDataSetWeekly);
-                    LineData lineDataMonthly = new LineData(painDataSetMonthly, fatigueDataSetMonthly, nauseaDataSetMonthly);
-
-                    // Set initial data
-                    userDataChart.setData(lineData);
-                    userDataChart.invalidate();
-
-                    // Add a selector to switch between data options
-                    Spinner selectorSpinner = findViewById(R.id.selectorSpinner);
-                    selectorSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                        @Override
-                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                            DateAxisValueFormatter axisFormatter;
-                            switch (position) {
-                                case 0:
-                                    axisFormatter = new DateAxisValueFormatter(timestamps, DateAxisValueFormatter.DAILY);
-                                    userDataChart.setData(lineData);
-                                    break;
-                                case 1:
-                                    axisFormatter = new DateAxisValueFormatter(timestampsWeekly, DateAxisValueFormatter.WEEKLY);
-                                    userDataChart.setData(lineDataWeekly);
-                                    break;
-                                case 2:
-                                    axisFormatter = new DateAxisValueFormatter(timestampsMonthly, DateAxisValueFormatter.MONTHLY);
-                                    userDataChart.setData(lineDataMonthly);
-                                    break;
-                                default:
-                                    axisFormatter = new DateAxisValueFormatter(timestamps, DateAxisValueFormatter.DAILY);
-                                    userDataChart.setData(lineData);
-                                    break;
-                            }
-                            XAxis xAxis = userDataChart.getXAxis();
-                            xAxis.setValueFormatter(axisFormatter);
-                            userDataChart.invalidate();
-                        }
-
-                        @Override
-                        public void onNothingSelected(AdapterView<?> parent) {
-                            // Handle nothing selected
-                        }
-                    });
-
-
-                } catch (JSONException e) {
-                    Log.e("ERROR", "Error parsing JSON: " + e.getMessage());
-                } catch (ParseException e) {
-                    throw new RuntimeException(e);
-                }
             }
         });
 

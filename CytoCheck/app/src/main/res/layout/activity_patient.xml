@@ -52,7 +52,7 @@
         android:layout_marginTop="20sp"
         android:text="Link New and View Providers"/>
 
-    <com.github.mikephil.charting.charts.LineChart
+    <com.github.mikephil.charting.charts.BarChart
         android:id="@+id/userData"
         android:layout_width="match_parent"
         android:layout_height="200sp" />
