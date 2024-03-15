@@ -37,6 +37,10 @@ import api.*;
 
 public class PatientActivity extends AppCompatActivity {
     private BarChart userData;
+    private BarChart userHRData;
+    private BarChart userTempData;
+    private LineChart userHRLine;
+    private  LineChart userTempLine;
     private Spinner mSpinner;
     private String linkString;
     private SeekBar healthSlideBar;
@@ -93,8 +97,12 @@ public class PatientActivity extends AppCompatActivity {
         nauseaSlideBar = findViewById(R.id.healthSlider3);
         userNausea = findViewById(R.id.userScoreField3);
 
-        userData = findViewById(R.id.userData);
-        mSpinner = findViewById(R.id.selectorSpinner); // Assuming you have a Spinner in your layout
+        userData = findViewById(R.id.userData); // Qualitative data bar chart
+        userHRData = findViewById(R.id.userHRData); // Quantitative Heart Rate Data Bar chart
+        userTempData = findViewById(R.id.userTempData); // Quantitative Temperature bar chart
+        userHRLine = findViewById(R.id.userHRLine); // Quantitative heart rate line chart
+        userTempLine = findViewById(R.id.userTempLine); // Quantitative temperature line chart
+        mSpinner = findViewById(R.id.selectorSpinner);
 
 
         api global = api.getInstance();
@@ -117,6 +125,22 @@ public class PatientActivity extends AppCompatActivity {
                     }
                 });
 
+            }
+        });
+
+        String patientHR = linkString + "readings/" + userID + "/1";
+        global.sendGetRequestWithHandlerWithToken(patientHR, token, new HandlerResponse() {
+            @Override
+            public void handleResponse(String response) {
+                Log.d("patientHRVals", response);
+            }
+        });
+
+        String patientTemp = linkString + "readings/" + userID + "/2";
+        global.sendGetRequestWithHandlerWithToken(patientHR, token, new HandlerResponse() {
+            @Override
+            public void handleResponse(String response) {
+                Log.d("patientTempVals", response);
             }
         });
 
