@@ -84,6 +84,16 @@ public class DataProcessor {
         }
         return entries;
     }
+    private static List<QuanEntry> parseJsonQuanData(String jsonData) {
+        List<QuanEntry> entries = new ArrayList<>();
+        try {
+            JSONArray jsonArray = new JSONArray(jsonData);
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                int data = jsonObject.getDouble("")
+            }
+        }
+    }
 
     private static Map<String, List<Entry>> aggregateDataByDay(List<Entry> entries) {
         Map<String, List<Entry>> dailyData = new HashMap<>();
@@ -327,6 +337,65 @@ public class DataProcessor {
         @Override
         public String toString() {
             return "Timestamp: " + timestamp + ", Nausea: " + nausea + ", Fatigue: " + fatigue + ", Pain: " + pain;
+        }
+    }
+
+    private static class QuanEntry {
+        private final String timestamp;
+        private final int sensorID;
+        private final int data;
+
+        public QuanEntry(String timestamp, int data, int sensorID) {
+            this.timestamp = timestamp;
+            this.sensorID = sensorID;
+            this.data = data;
+        }
+
+        public String getTimestamp() {
+            return timestamp;
+        }
+
+        public int getData() {
+            return data;
+        }
+
+        public int getSensorID() {
+            return sensorID;
+        }
+
+
+        public String getFormattedDate(String pattern) {
+            try {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault());
+                Date date = sdf.parse(timestamp);
+                SimpleDateFormat outputFormat = new SimpleDateFormat(pattern, Locale.getDefault());
+                return outputFormat.format(date);
+            } catch (ParseException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        public boolean isWithinDateRange(Date startDate, Date endDate) {
+            try {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault());
+                Date entryDate = sdf.parse(timestamp);
+                return entryDate.after(startDate) && entryDate.before(endDate);
+            } catch (ParseException e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+
+        @Override
+        public String toString() {
+            if (sensorID == 1) {
+                return "Timestamp: " + timestamp + ", HR: " + data;
+            }
+            else {
+                return "Timestamp: " + timestamp + ", Temperature: " + data;
+            }
+
         }
     }
 }
