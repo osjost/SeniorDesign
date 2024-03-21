@@ -40,23 +40,23 @@ app.get("/", (req, res) => {
 
 
 // COMMENTED OUT FOR TESTING!
-// app.use("/users", verifyJWT, usersRouter);
-// app.use("/readings", verifyJWT, readingsRouter);
-// app.use("/qualitative", verifyJWT, qualitativeRouter);
-// app.use("/inbox", verifyJWT, inboxRouter);
-// app.use("/associations", verifyJWT, associationRouter);
-// app.use("/threshold", verifyJWT, thresholdRouter)
-// app.use("/fcc", verifyJWT, fccRouter)
-// app.use("/emergency", verifyJWT, emergencyRouter)
+app.use("/users", verifyJWT, usersRouter);
+app.use("/readings", verifyJWT, readingsRouter);
+app.use("/qualitative", verifyJWT, qualitativeRouter);
+app.use("/inbox", verifyJWT, inboxRouter);
+app.use("/associations", verifyJWT, associationRouter);
+app.use("/threshold", verifyJWT, thresholdRouter)
+app.use("/fcc", verifyJWT, fccRouter)
+app.use("/emergency", verifyJWT, emergencyRouter)
 
-app.use("/users", usersRouter);
-app.use("/readings", readingsRouter);
-app.use("/qualitative", qualitativeRouter);
-app.use("/inbox", inboxRouter);
-app.use("/associations", associationRouter);
-app.use("/threshold", thresholdRouter)
-app.use("/fcc", fccRouter);
-app.use("/emergency", emergencyRouter);
+// app.use("/users", usersRouter);
+// app.use("/readings", readingsRouter);
+// app.use("/qualitative", qualitativeRouter);
+// app.use("/inbox", inboxRouter);
+// app.use("/associations", associationRouter);
+// app.use("/threshold", thresholdRouter)
+// app.use("/fcc", fccRouter);
+// app.use("/emergency", emergencyRouter);
 
 app.use("/login", loginRouter);
 app.use("/register", registerRouter);
