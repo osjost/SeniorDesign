@@ -1,6 +1,17 @@
 const db = require('./db');
 
 async function create(qualitative){
+
+      // get the previously stored value
+      const rows = await db.query(
+        `SELECT * 
+          FROM qualitative_data 
+          WHERE user_id = ? 
+          ORDER BY time_stamp DESC 
+          LIMIT 1`,
+        [qualitative.user_id]
+      );
+
     const result = await db.query(
       `INSERT INTO qualitative_data 
       (user_id, nausea, fatigue, pain, rash, other) 
@@ -21,15 +32,7 @@ async function create(qualitative){
       message = 'qualitative data added succesfully';
     }
 
-    // detect if we want to send a notification and send if yes
-    const rows = await db.query(
-      `SELECT * 
-       FROM qualitative_data 
-       WHERE user_id = ? 
-       ORDER BY created_at DESC 
-       LIMIT 1`,
-      [qualitative.user_id]
-    );
+
 
     if (rows.length != 0) {
       entry = rows[0]
