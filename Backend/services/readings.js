@@ -1,5 +1,7 @@
 const db = require('./db');
 const threshold_cache = require('./threshold_cache')
+const smsService = require("./messaging")
+const fcc = require("./fcc")
 
 async function create(reading){
 
@@ -17,17 +19,30 @@ async function create(reading){
     if (result.affectedRows) {
       message = 'Reading added succesfully';
     }
-  
+
     // perform threshold check if it already exists in the threshold cache
     if (threshold_cache.existsInCache(reading.patient_id, reading.sensor_id)) {
       threshold = threshold_cache.getThresh(reading.user_id, reading.sensor_id)
       lowerBound = threshold[0]
       upperBound = threshold[1]
       if (!( upperBound< reading.reading < lowerBound)) {
-        
+
+        // figure out what doctor we need to alert
+        const rows = await db.query(
+          `SELECT * FROM provider_patient_associations WHERE patient_id = ?;`,
+          [reading.user_id]
+      );
+
+      for (const provider of rows) {
+        // get fcc of entry
+        let fccRows = fcc.get(provider.provider_id)
+  
+        for (const fcc of fccRows) {
+          smsService.sendFirebaseNotification(fcc, "Emergency with user " + reading.user_id, "Threshold breach detected") 
+        }
       }
 
-
+      }
     }
     
 
