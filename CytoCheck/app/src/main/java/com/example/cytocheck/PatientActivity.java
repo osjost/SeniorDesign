@@ -2,6 +2,7 @@ package com.example.cytocheck;
 
 
 import static com.example.cytocheck.DataProcessor.processData;
+import static com.example.cytocheck.DataProcessor.processQuanData;
 
 import android.content.Intent;
 import android.app.AlertDialog;
@@ -65,6 +66,10 @@ public class PatientActivity extends AppCompatActivity {
     private boolean nauseaReady = false;
     private boolean rashReady = false;
     private boolean extraReady = false;
+    private String userQualResponse;
+    private String userHRResponse;
+    private String userTempResponse;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,6 +108,19 @@ public class PatientActivity extends AppCompatActivity {
         userHRLine = findViewById(R.id.userHRLine); // Quantitative heart rate line chart
         userTempLine = findViewById(R.id.userTempLine); // Quantitative temperature line chart
         mSpinner = findViewById(R.id.selectorSpinner);
+        mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedTimeframe = (String) parent.getItemAtPosition(position);
+                updateAllGraphs(selectedTimeframe);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Do nothing
+            }
+        });
+
 
 
         api global = api.getInstance();
@@ -111,19 +129,7 @@ public class PatientActivity extends AppCompatActivity {
             @Override
             public void handleResponse(String response) {
                 Log.d("userData", response);
-                mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                        String selectedTimeframe = (String) parent.getItemAtPosition(position);
-                        // Call processData method from DataProcessor class passing the BarChart object and selected timeframe
-                        processData(response, userData, selectedTimeframe);
-                    }
-
-                    @Override
-                    public void onNothingSelected(AdapterView<?> parent) {
-                        // Do nothing
-                    }
-                });
+                userQualResponse = response;
 
             }
         });
@@ -132,15 +138,18 @@ public class PatientActivity extends AppCompatActivity {
         global.sendGetRequestWithHandlerWithToken(patientHR, token, new HandlerResponse() {
             @Override
             public void handleResponse(String response) {
+                userHRResponse = response;
                 Log.d("patientHRVals", response);
             }
         });
 
         String patientTemp = linkString + "readings/" + userID + "/2";
-        global.sendGetRequestWithHandlerWithToken(patientHR, token, new HandlerResponse() {
+        global.sendGetRequestWithHandlerWithToken(patientTemp, token, new HandlerResponse() {
             @Override
             public void handleResponse(String response) {
                 Log.d("patientTempVals", response);
+                userTempResponse = response;
+                updateAllGraphs("Daily");
             }
         });
 
@@ -518,6 +527,11 @@ public class PatientActivity extends AppCompatActivity {
 
         // Show the AlertDialog
         builder.create().show();
+    }
+    private void updateAllGraphs(String selectedTimeframe) {
+        processData(userQualResponse, userData, selectedTimeframe);
+        processQuanData(userHRResponse, userHRLine, userHRData, 1, selectedTimeframe);
+        processQuanData(userTempResponse, userTempLine, userTempData, 2, selectedTimeframe);
     }
 
 }
