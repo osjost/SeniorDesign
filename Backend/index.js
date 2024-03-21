@@ -84,13 +84,6 @@ httpsServer.listen(httpsPort, () => {
   console.log(`HTTPS Server running`);
 });
 
-
-cron.schedule('36 12 * * *', () => {
-  cronrequest.sendRequests();
-  console.log('Running a task at 12:09 PM every day');
-});
-
-
 cron.schedule('00 18 * * *', () => {
   cronrequest.sendRequests();
 });

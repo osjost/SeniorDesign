@@ -47,7 +47,9 @@ async function create(qualitative){
 
         for (const provider of rows) {
           // get fcc of entry
-          let fccRows = fcc.get(provider.provider_id)
+          let fccRows = await fcc.get(provider.provider_id)
+
+
 
           for (const fcc of fccRows) {
             smsService.sendFirebaseNotification(fcc, "Emergency with user " + reading.user_id, "Threshold breach detected") 

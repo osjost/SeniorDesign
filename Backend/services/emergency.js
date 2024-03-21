@@ -1,5 +1,7 @@
 const db = require('./db');
+const fcc = require('./fcc')
 const appInbox = require("./inbox")
+const smsService = require("./messaging")
 
 async function create(emergency){
 
@@ -11,11 +13,11 @@ async function create(emergency){
 
     for (const provider of rows) {
         // get fcc of entry
-        let fccRows = fcc.get(provider.provider_id)
+        let fccRows = await fcc.get(provider.provider_id)
   
-        for (const fcc of fccRows) {
+        for (let currFcc of fccRows) {
         // issue a push notification
-          smsService.sendFirebaseNotification(fcc, "Emergency with user " + emergency.user_id, emergency.user_id + " has issued an emergency notification")
+          smsService.sendFirebaseNotification(currFcc, "Emergency with user " + emergency.user_id, emergency.user_id + " has issued an emergency notification")
 
         // add emergency message to the inbox
         let message = {"provider_id":provider.provider_id,

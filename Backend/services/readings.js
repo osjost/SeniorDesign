@@ -21,12 +21,12 @@ async function create(reading){
     }
 
     // perform threshold check if it already exists in the threshold cache
-    if (threshold_cache.existsInCache(reading.patient_id, reading.sensor_id)) {
+    
+    if (threshold_cache.existsInCache(reading.user_id, reading.sensor_id)) {
       threshold = threshold_cache.getThresh(reading.user_id, reading.sensor_id)
       lowerBound = threshold[0]
       upperBound = threshold[1]
-      if (!( upperBound< reading.reading < lowerBound)) {
-
+      if (!( upperBound < reading.reading < lowerBound)) {
         // figure out what doctor we need to alert
         const rows = await db.query(
           `SELECT * FROM provider_patient_associations WHERE patient_id = ?;`,
@@ -35,11 +35,13 @@ async function create(reading){
 
       for (const provider of rows) {
         // get fcc of entry
-        let fccRows = fcc.get(provider.provider_id)
+        let fccRows = await fcc.get(provider.provider_id)
   
         for (const fcc of fccRows) {
           smsService.sendFirebaseNotification(fcc, "Emergency with user " + reading.user_id, "Threshold breach detected") 
         }
+
+        console.log("triggered")
       }
 
       }

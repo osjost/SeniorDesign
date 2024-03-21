@@ -15,7 +15,7 @@ async function create(threshold){
       (upper, lower, sensor_id, patient_id) 
       VALUES 
       (?, ?, ?, ?)`,
-      [threshold.lower, threshold.upper, threshold.sensor_id, threshold.patient_id]
+      [threshold.upper, threshold.lower, threshold.sensor_id, threshold.patient_id]
     );
   
     let message = 'Error in adding threshold';
@@ -25,7 +25,7 @@ async function create(threshold){
     }
 
     // add value to the threshold cache
-    threshold_cache.addThresh(threshold.patient_id, threshold.sensor_id, threshold.lower, threshold.upper)
+    threshold_cache.addThresh(threshold.patient_id, threshold.sensor_id, threshold.upper, threshold.lower)
   
     return {message};
   }
