@@ -1,14 +1,17 @@
 const db = require('./db');
 
-
-// user_id INT,
-// nausea INT,
-// fatigue INT,
-// pain INT,
-// rash BOOL,
-// other VARCHAR(255),
-
 async function create(qualitative){
+
+      // get the previously stored value
+      const rows = await db.query(
+        `SELECT * 
+          FROM qualitative_data 
+          WHERE user_id = ? 
+          ORDER BY time_stamp DESC 
+          LIMIT 1`,
+        [qualitative.user_id]
+      );
+
     const result = await db.query(
       `INSERT INTO qualitative_data 
       (user_id, nausea, fatigue, pain, rash, other) 
@@ -28,6 +31,40 @@ async function create(qualitative){
     if (result.affectedRows) {
       message = 'qualitative data added succesfully';
     }
+
+
+
+    if (rows.length != 0) {
+      entry = rows[0]
+      const conditionsMet = 
+        Math.abs(entry.nausea - qualitative.nausea) > 3 ||
+        Math.abs(entry.fatigue - qualitative.fatigue) > 3 ||
+        Math.abs(entry.pain - qualitative.pain) > 3 ||
+        Math.abs(entry.rash - qualitative.rash) > 3;
+
+      if (conditionsMet) {
+          const rows = await db.query(
+            `SELECT * FROM provider_patient_associations WHERE patient_id = ?;`,
+            [reading.user_id]
+        );
+
+        for (const provider of rows) {
+          // get fcc of entry
+          let fccRows = await fcc.get(provider.provider_id)
+
+
+
+          for (const fcc of fccRows) {
+            smsService.sendFirebaseNotification(fcc, "Emergency with user " + reading.user_id, "Threshold breach detected") 
+          }
+        }
+
+      }
+    }
+    
+
+
+
   
     return {message};
   }

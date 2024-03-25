@@ -19,10 +19,11 @@ const inboxRouter = require("./routes/inbox");
 const associationRouter = require("./routes/associations");
 const thresholdRouter = require("./routes/threshold");
 const fccRouter = require("./routes/fcc");
-
-// const fireBaseTest = require("./services/messaging")
+const emergencyRouter = require("./routes/emergency")
 
 const threshold_test_cache = require("./services/threshold_cache")
+const cron = require('node-cron')
+const cronrequest = require("./services/cronrequest")
 
 const verifyJWT = require("./services/jwtverifier");
 
@@ -39,21 +40,23 @@ app.get("/", (req, res) => {
 
 
 // COMMENTED OUT FOR TESTING!
-// app.use("/users", verifyJWT, usersRouter);
-// app.use("/readings", verifyJWT, readingsRouter);
-// app.use("/qualitative", verifyJWT, qualitativeRouter);
-// app.use("/inbox", verifyJWT, inboxRouter);
-// app.use("/associations", verifyJWT, associationRouter);
-// app.use("/threshold", verifyJWT, thresholdRouter)
-// app.use("/fcc", verifyJWT, fccRouter)
+app.use("/users", verifyJWT, usersRouter);
+app.use("/readings", verifyJWT, readingsRouter);
+app.use("/qualitative", verifyJWT, qualitativeRouter);
+app.use("/inbox", verifyJWT, inboxRouter);
+app.use("/associations", verifyJWT, associationRouter);
+app.use("/threshold", verifyJWT, thresholdRouter)
+app.use("/fcc", verifyJWT, fccRouter)
+app.use("/emergency", verifyJWT, emergencyRouter)
 
-app.use("/users", usersRouter);
-app.use("/readings", readingsRouter);
-app.use("/qualitative", qualitativeRouter);
-app.use("/inbox", inboxRouter);
-app.use("/associations", associationRouter);
-app.use("/threshold", thresholdRouter)
-app.use("/fcc", fccRouter)
+// app.use("/users", usersRouter);
+// app.use("/readings", readingsRouter);
+// app.use("/qualitative", qualitativeRouter);
+// app.use("/inbox", inboxRouter);
+// app.use("/associations", associationRouter);
+// app.use("/threshold", thresholdRouter)
+// app.use("/fcc", fccRouter);
+// app.use("/emergency", emergencyRouter);
 
 app.use("/login", loginRouter);
 app.use("/register", registerRouter);
@@ -80,6 +83,15 @@ const httpsPort = 443; // Standard port for HTTPS
 httpsServer.listen(httpsPort, () => {
   console.log(`HTTPS Server running`);
 });
+
+cron.schedule('00 18 * * *', () => {
+  cronrequest.sendRequests();
+});
+
+cron.schedule('00 8 * * *', () => {
+  cronrequest.sendRequests();
+});
+
 
 // fireBaseTest.sendFirebaseNotification("fD-PDrTkQB2TDao5T7ylX5:APA91bEbVUZdi7nniFFzTK4wmdxOThEfm2IjRpVf-nL51ayhrAhuQEB06wBmvYk9DJfm2gmXHoTGUssj5-Kr1KMWMXdMkq9nOyeFf8Qd5cW6htzdFx5ugACKmABcS-j4dsVE4ZB_DW3J","blah","hello");
 

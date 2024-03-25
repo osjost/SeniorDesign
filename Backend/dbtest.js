@@ -22,7 +22,7 @@ const userOperations = require('./services/users');
 
 
 // testing for readings:
-// curl -k -X POST https://localhost:443/readings -H "Content-Type: application/json" -d "{\"reading\":\"11.1\", \"sensor_id\":\"1\", \"user_id\":\"2\"}"
+// curl -k -X POST https://localhost:443/readings -H "Content-Type: application/json" -d "{\"reading\":\"11.1\", \"sensor_id\":\"1\", \"user_id\":\"1\"}"
 
 // curl -k https://localhost:443/readings/2/1
 
@@ -81,6 +81,12 @@ const userOperations = require('./services/users');
 // curl -k -X POST https://localhost:443/fcc -H "Content-Type: application/json" -d "{\"user_id\":\"1\", \"fcc\":\"aaaaaaaa\"}"
 // curl -k https://localhost:443/fcc/1
 // curl -k -X PUT https://localhost:443/fcc -H "Content-Type: application/json" -d "{\"user_id\":\"1\", \"fcc\":\"bbbbbbbb\"}"
+
+
+// Testing for emergency
+
+// curl -k -X POST https://localhost:443/emergency -H "Content-Type: application/json" -d "{\"user_id\":\"1\"}"
+
 
 
 // testData.js or your_test_file.js - File where you test the 'create' function
