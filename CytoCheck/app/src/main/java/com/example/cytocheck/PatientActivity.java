@@ -409,7 +409,7 @@ public class PatientActivity extends AppCompatActivity {
         sensorButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(PatientActivity.this, SensorActivity.class);
+                Intent intent = new Intent(PatientActivity.this, Activity_Launcher.class);
                 intent.putExtra("linkString", linkString);
                 intent.putExtra("token", token);
                 intent.putExtra("userID", userID);

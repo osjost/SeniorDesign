@@ -1,6 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+
+    <queries>
+        <package android:name="com.dsi.ant.plugins.antplus" />
+    </queries>
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADVERTISE" />
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+    <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
+    <uses-permission android:name="android.permission.BLUETOOTH_PRIVILEGED" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
     <uses-permission android:name="android.permission.INTERNET" />
     <application
         android:allowBackup="true"
@@ -32,14 +47,36 @@
         <activity android:name=".ProviderActivity">
         </activity>
 
-        <activity android:name=".SensorActivity"/>
 
         <activity
             android:name=".Activity_HeartRateDisplayBase"
             android:exported="false" />
         <activity
-            android:name=".Activity_AsyncScanHeartRateSampler"
+            android:name=".Activity_BiometricViewer"
             android:exported="false" />
+        <activity
+            android:name=".Activity_SensorConnecter"
+            android:exported="false" />
+        <activity
+            android:name=".Activity_UserManual"
+            android:exported="false"
+            android:label="@string/title_activity_user_manual"
+            android:theme="@style/Theme.CytoCheck.NoActionBar" />
+        <activity
+            android:name=".Activity_Launcher"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <service
+            android:name=".BluetoothLeService"
+            android:enabled="true"
+            android:exported="false" />
+
 
     </application>
 

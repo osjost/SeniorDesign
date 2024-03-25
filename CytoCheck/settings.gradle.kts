@@ -2,7 +2,8 @@ pluginManagement {
     repositories {
         google()
         mavenCentral()
-        // Add other repositories here
+	gradlePluginPortal()
+
         maven { url = uri("https://jitpack.io") }
     }
 }
