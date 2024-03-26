@@ -37,6 +37,7 @@ public class LoginActivity extends AppCompatActivity {
     private String linkString = "https://ec2-54-193-162-215.us-west-1.compute.amazonaws.com:443/"; //This is the link to the server holding the database
     private String usernameResponse = "";
     private String token = "";
+    private String notificationToken = "";
     private String userID = "";
 
     private final ActivityResultLauncher<String> requestPermissionLauncher =
@@ -125,6 +126,7 @@ public class LoginActivity extends AppCompatActivity {
                                                             intent.putExtra("userID", userID);
                                                             intent.putExtra("firstName", firstName);
                                                             intent.putExtra("linkString", linkString); //globalize linkString between activities
+                                                            intent.putExtra("notificationToken", notificationToken);
 
                                                             startActivity(intent);
                                                             finish();
@@ -134,6 +136,7 @@ public class LoginActivity extends AppCompatActivity {
                                                             intent.putExtra("token", token);
                                                             intent.putExtra("userID", userID);
                                                             intent.putExtra("linkString", linkString); //globalize linkString between activities
+                                                            intent.putExtra("notificationToken", notificationToken);
 
                                                             startActivity(intent);
                                                             finish();
@@ -193,10 +196,9 @@ public class LoginActivity extends AppCompatActivity {
                             }
 
                             // Get new FCM registration token
-                            String token = task.getResult();
 
-                            // Log and toast
-                            Log.d("messaging", token);
+                            notificationToken = task.getResult();
+
                             // Send the token to your server to keep it updated
                         }
                     });

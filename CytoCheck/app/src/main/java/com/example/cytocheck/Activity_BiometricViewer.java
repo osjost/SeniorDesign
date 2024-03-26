@@ -46,6 +46,10 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+import api.*;
+
 /**
  * Base class to connects to Heart Rate Plugin and display all the event data.
  */
@@ -81,6 +85,9 @@ public abstract class Activity_BiometricViewer extends Activity {
     private String linkString;
     private String userID;
     private String token;
+    private int HRdataCount = 0;
+    private double HRavgData = 0;
+    private int HRdataSum = 0;
 
     /* -------------------------------------------------------- */
 
@@ -204,6 +211,32 @@ public abstract class Activity_BiometricViewer extends Activity {
 
                 if (!DataState.ZERO_DETECTED.equals(dataState)) {
                     tempHRText = String.valueOf(computedHeartRate);
+
+                    api global = api.getInstance();
+                    HRdataCount += 1; //increment data count to say that our app has received one more data point
+                    HRdataSum += computedHeartRate;
+                    HRavgData = HRdataSum / HRdataCount;
+                    if (HRdataCount >= 20) { //userDefined number of how many cycles to send data after
+                        HRdataCount = 0;
+                        HRdataSum = 0;
+                        //Send post with average data
+                        JSONObject sensorData = new JSONObject();
+                        try {
+                            sensorData.put("reading", String.format("%.5f", HRavgData));
+                            sensorData.put("sensor_id", "1");
+                            sensorData.put("user_id", userID);
+                        } catch (JSONException e) {
+
+                        }
+                        String sendDataString = linkString + "readings";
+                        global.sendPostRequestWithHandlerWithToken(sendDataString, sensorData, token, new HandlerResponse() {
+                            @Override
+                            public void handleResponse(String response) {
+
+                            }
+
+                        });
+                    }
                 } else {
                     tempHRText = "NaN";
                 }
@@ -336,6 +369,25 @@ public abstract class Activity_BiometricViewer extends Activity {
 
             tv_tempData.setText(value);
             tv_degreesUnit.setText(unit);
+
+            api global = api.getInstance();
+            JSONObject sensorData = new JSONObject();
+            try {
+                sensorData.put("reading", String.format("%.5f", mTemperature));
+                sensorData.put("sensor_id", "2");
+                sensorData.put("user_id", userID);
+            }
+            catch (JSONException e) {
+
+            }
+            String sendDataString = linkString + "readings";
+            global.sendPostRequestWithHandlerWithToken(sendDataString,sensorData,token, new HandlerResponse() {
+                @Override
+                public void handleResponse(String response) {
+
+                }
+
+            });
 
         } else {
             tv_tempData.setText("NaN");

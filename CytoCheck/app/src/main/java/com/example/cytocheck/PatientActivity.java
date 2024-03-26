@@ -56,6 +56,7 @@ public class PatientActivity extends AppCompatActivity {
     private String userID;
     private String providerID;
     private String firstName;
+    private String notifToken;
     private boolean fatigueReady = false;
     private String fatigueFinal = "10";
     private String painFinal = "10";
@@ -80,6 +81,7 @@ public class PatientActivity extends AppCompatActivity {
         token = intent.getStringExtra("token");
         userID = intent.getStringExtra("userID");
         firstName = intent.getStringExtra("firstName");
+        notifToken = intent.getStringExtra("notificationToken");
 
         // Initialize Variables for view elements
         welcomeLabel = findViewById(R.id.welcomeLabel);
@@ -124,6 +126,22 @@ public class PatientActivity extends AppCompatActivity {
 
 
         api global = api.getInstance();
+
+        String notifAddress = linkString + "fcc";
+        JSONObject userObject = new JSONObject();
+        try {
+            userObject.put("user_id", userID);
+            userObject.put("fcc", notifToken);
+        } catch (JSONException e) {
+
+        }
+        global.sendPostRequestWithHandlerWithToken(notifAddress, userObject, token, new HandlerResponse() {
+            @Override
+            public void handleResponse(String response) {
+
+            }
+        });
+
         String patientAddress = linkString + "qualitative/" + userID;
         global.sendGetRequestWithHandlerWithToken(patientAddress, token, new HandlerResponse() {
             @Override

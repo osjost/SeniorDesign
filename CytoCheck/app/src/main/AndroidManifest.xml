@@ -47,10 +47,6 @@
         <activity android:name=".ProviderActivity">
         </activity>
 
-
-        <activity
-            android:name=".Activity_HeartRateDisplayBase"
-            android:exported="false" />
         <activity
             android:name=".Activity_BiometricViewer"
             android:exported="false" />

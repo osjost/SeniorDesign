@@ -32,24 +32,37 @@
                 android:text="Patient Name"
                 android:textSize="34sp"/>
 
-            <TextView
-                android:id="@+id/patientQualData"
+
+            <com.github.mikephil.charting.charts.BarChart
+                android:id="@+id/userData"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Patient qualitative data"
-                android:textSize="24sp"/>
-            <TextView
-                android:id="@+id/patientHRData"
+                android:layout_height="200sp" />
+
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/userHRLine"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Patient heart rate data"
-                android:textSize="24sp"/>
-            <TextView
-                android:id="@+id/patientTempData"
+                android:layout_height="200sp" />
+
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/userTempLine"
                 android:layout_width="match_parent"
+                android:layout_height="200sp" />
+
+            <com.github.mikephil.charting.charts.BarChart
+                android:id="@+id/userHRData"
+                android:layout_width="match_parent"
+                android:layout_height="200sp" />
+
+            <com.github.mikephil.charting.charts.BarChart
+                android:id="@+id/userTempData"
+                android:layout_width="match_parent"
+                android:layout_height="200sp" />
+
+            <Spinner
+                android:id="@+id/selectorSpinner"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Patient temperature data"
-                android:textSize="24sp"/>
+                android:entries="@array/selector_items" />
 
             <TextView
                 android:id="@+id/patientThreshold1"
@@ -124,6 +137,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Update All Thresholds"/>
+
+            <TextView
+                android:id="@+id/patientQualData"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Patient qualitative data"
+                android:textSize="24sp"/>
 
 
         </LinearLayout>

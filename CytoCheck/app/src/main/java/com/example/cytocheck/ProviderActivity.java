@@ -1,5 +1,8 @@
 package com.example.cytocheck;
 
+import static com.example.cytocheck.DataProcessor.processData;
+import static com.example.cytocheck.DataProcessor.processQuanData;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -11,12 +14,16 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.charts.LineChart;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -25,6 +32,15 @@ import org.json.JSONObject;
 import api.*;
 
 public class ProviderActivity extends AppCompatActivity {
+    private BarChart userData;
+    private BarChart userHRData;
+    private BarChart userTempData;
+    private LineChart userHRLine;
+    private  LineChart userTempLine;
+    private String userQualResponse;
+    private String userHRResponse;
+    private String userTempResponse;
+    private Spinner mSpinner;
     private String linkString;
     private Handler inactivityHandler;
     private Runnable inactivityRunnable;
@@ -32,6 +48,7 @@ public class ProviderActivity extends AppCompatActivity {
     private TextView referralCode;
     private String token;
     private String userID;
+    private String notifToken;
     private String qualitativeDetails;
     private List<Integer> patientIds = new ArrayList<>();
     private List<Integer> inboxIds = new ArrayList<>();
@@ -46,9 +63,27 @@ public class ProviderActivity extends AppCompatActivity {
         linkString = intent.getStringExtra("linkString");
         token = intent.getStringExtra("token");
         userID = intent.getStringExtra("userID");
+        notifToken = intent.getStringExtra("notificationToken");
         setContentView(R.layout.activity_provider);
 
         api global = api.getInstance();
+
+        String notifAddress = linkString + "fcc";
+        JSONObject userObject = new JSONObject();
+        try {
+            userObject.put("user_id", userID);
+            userObject.put("fcc", notifToken);
+        } catch (JSONException e) {
+
+        }
+        global.sendPostRequestWithHandlerWithToken(notifAddress, userObject, token, new HandlerResponse() {
+            @Override
+            public void handleResponse(String response) {
+
+            }
+        });
+
+
         String associationAddress = linkString + "associations/" + userID;
         global.sendGetRequestWithHandlerWithToken(associationAddress, token, new HandlerResponse() {
             @Override
@@ -181,9 +216,59 @@ public class ProviderActivity extends AppCompatActivity {
 
                         patientName.setText(selectedPatientName);
 
+                        // Charting Elements
+                        userData = findViewById(R.id.userData); // Qualitative data bar chart
+                        userHRData = findViewById(R.id.userHRData); // Quantitative Heart Rate Data Bar chart
+                        userTempData = findViewById(R.id.userTempData); // Quantitative Temperature bar chart
+                        userHRLine = findViewById(R.id.userHRLine); // Quantitative heart rate line chart
+                        userTempLine = findViewById(R.id.userTempLine); // Quantitative temperature line chart
+                        mSpinner = findViewById(R.id.selectorSpinner);
+                        mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                            @Override
+                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                                String selectedTimeframe = (String) parent.getItemAtPosition(position);
+                                updateAllGraphs(selectedTimeframe);
+                            }
+
+                            @Override
+                            public void onNothingSelected(AdapterView<?> parent) {
+                                // Do nothing
+                            }
+                        });
+
                         api global = api.getInstance();
-                        String patientAddress = linkString + "qualitative/" + selectedPatientId;
+
+                        String patientAddress = linkString + "qualitative/" + userID;
                         global.sendGetRequestWithHandlerWithToken(patientAddress, token, new HandlerResponse() {
+                            @Override
+                            public void handleResponse(String response) {
+                                Log.d("userData", response);
+                                userQualResponse = response;
+
+                            }
+                        });
+
+                        String patientHR = linkString + "readings/" + userID + "/1";
+                        global.sendGetRequestWithHandlerWithToken(patientHR, token, new HandlerResponse() {
+                            @Override
+                            public void handleResponse(String response) {
+                                userHRResponse = response;
+                                Log.d("patientHRVals", response);
+                            }
+                        });
+
+                        String patientTemp = linkString + "readings/" + userID + "/2";
+                        global.sendGetRequestWithHandlerWithToken(patientTemp, token, new HandlerResponse() {
+                            @Override
+                            public void handleResponse(String response) {
+                                Log.d("patientTempVals", response);
+                                userTempResponse = response;
+                                updateAllGraphs("Daily");
+                            }
+                        });
+
+                        String patientQualAddress = linkString + "qualitative/" + selectedPatientId;
+                        global.sendGetRequestWithHandlerWithToken(patientQualAddress, token, new HandlerResponse() {
                             @Override
                             public void handleResponse(String response) {
                                 try {
@@ -195,14 +280,12 @@ public class ProviderActivity extends AppCompatActivity {
                                         JSONObject patientObtained = patientsArray.getJSONObject(i);
 
                                         // Extract information for each patient
-                                        String fatigueString = "Fatigue: " + patientObtained.getInt("fatigue") + "/10" + "\n";
-                                        String painString = "Pain: " + patientObtained.getInt("pain") + "/10" + "\n";
-                                        String nauseaString = "Nausea: " + patientObtained.getInt("nausea") + "/10" + "\n";
+                                        String timeStamp = "Date: " + patientObtained.getString("time_stamp") + "\n";
                                         String rashString = "Rash: " + patientObtained.getString("rash") + "\n";
                                         String otherString = "Other: " + patientObtained.getString("other") + "\n";
 
                                         // Combine the information for the current patient
-                                        qualitativeDetails += fatigueString + painString + nauseaString + rashString + otherString;
+                                        qualitativeDetails += timeStamp + rashString + otherString;
 
                                     }
                                     // Update UI with the information for the current patient
@@ -429,6 +512,12 @@ public class ProviderActivity extends AppCompatActivity {
         super.onPause();
         // Remove the callbacks to stop the inactivity timer when the activity is paused
         inactivityHandler.removeCallbacks(inactivityRunnable);
+    }
+
+    private void updateAllGraphs(String selectedTimeframe) {
+        processData(userQualResponse, userData, selectedTimeframe);
+        processQuanData(userHRResponse, userHRLine, userHRData, 1, selectedTimeframe);
+        processQuanData(userTempResponse, userTempLine, userTempData, 2, selectedTimeframe);
     }
 
 }
