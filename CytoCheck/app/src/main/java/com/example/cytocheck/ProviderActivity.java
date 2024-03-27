@@ -37,9 +37,7 @@ public class ProviderActivity extends AppCompatActivity {
     private BarChart userTempData;
     private LineChart userHRLine;
     private  LineChart userTempLine;
-    private String userQualResponse;
-    private String userHRResponse;
-    private String userTempResponse;
+
     private Spinner mSpinner;
     private String linkString;
     private Handler inactivityHandler;
@@ -76,12 +74,12 @@ public class ProviderActivity extends AppCompatActivity {
         } catch (JSONException e) {
 
         }
-        global.sendPostRequestWithHandlerWithToken(notifAddress, userObject, token, new HandlerResponse() {
-            @Override
-            public void handleResponse(String response) {
-
-            }
-        });
+//        global.sendPostRequestWithHandlerWithToken(notifAddress, userObject, token, new HandlerResponse() {
+//            @Override
+//            public void handleResponse(String response) {
+//
+//            }
+//        });
 
 
         String associationAddress = linkString + "associations/" + userID;
@@ -157,6 +155,20 @@ public class ProviderActivity extends AppCompatActivity {
                 finish();
             }
         });
+        Button refresh = findViewById(R.id.refreshButton);
+        refresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent providerIntent = new Intent(ProviderActivity.this, ProviderActivity.class);
+                providerIntent.putExtra("linkString", linkString);
+                providerIntent.putExtra("token", token);
+                providerIntent.putExtra("userID", userID);
+                providerIntent.putExtra("notificationToken", notifToken);
+
+                startActivity(providerIntent);
+                finish();
+            }
+        });
 
         referralCode = findViewById(R.id.referralCode);
         referralCode.setText("Referral Code: " + userID);
@@ -214,6 +226,7 @@ public class ProviderActivity extends AppCompatActivity {
                         TextView patientName = findViewById(R.id.patientLabel);
                         TextView patientQualData = findViewById(R.id.patientQualData);
 
+
                         patientName.setText(selectedPatientName);
 
                         // Charting Elements
@@ -223,49 +236,41 @@ public class ProviderActivity extends AppCompatActivity {
                         userHRLine = findViewById(R.id.userHRLine); // Quantitative heart rate line chart
                         userTempLine = findViewById(R.id.userTempLine); // Quantitative temperature line chart
                         mSpinner = findViewById(R.id.selectorSpinner);
-                        mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                            @Override
-                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                                String selectedTimeframe = (String) parent.getItemAtPosition(position);
-                                updateAllGraphs(selectedTimeframe);
-                            }
 
-                            @Override
-                            public void onNothingSelected(AdapterView<?> parent) {
-                                // Do nothing
-                            }
-                        });
 
                         api global = api.getInstance();
-
-                        String patientAddress = linkString + "qualitative/" + userID;
+                        Log.d("userID", String.valueOf(selectedPatientId));
+                        String patientAddress = linkString + "qualitative/" + selectedPatientId;
                         global.sendGetRequestWithHandlerWithToken(patientAddress, token, new HandlerResponse() {
                             @Override
                             public void handleResponse(String response) {
                                 Log.d("userData", response);
-                                userQualResponse = response;
-
+                                selectedPatient.setQualData(response);
+                                String patientHR = linkString + "readings/" + selectedPatientId + "/1";
+                                global.sendGetRequestWithHandlerWithToken(patientHR, token, new HandlerResponse() {
+                                    @Override
+                                    public void handleResponse(String response) {
+                                        selectedPatient.setHRData(response);
+                                        Log.d("patientHRVals", response);
+                                        String patientTemp = linkString + "readings/" + selectedPatientId + "/2";
+                                        global.sendGetRequestWithHandlerWithToken(patientTemp, token, new HandlerResponse() {
+                                            @Override
+                                            public void handleResponse(String response) {
+                                                Log.d("patientTempVals", response);
+                                                selectedPatient.setTempData(response);
+                                                runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        updateAllGraphs("Daily", selectedPatient.getQualData(), selectedPatient.getHRData(), selectedPatient.getTempData());
+                                                    }
+                                                });
+                                            }
+                                        });
+                                    }
+                                });
                             }
                         });
 
-                        String patientHR = linkString + "readings/" + userID + "/1";
-                        global.sendGetRequestWithHandlerWithToken(patientHR, token, new HandlerResponse() {
-                            @Override
-                            public void handleResponse(String response) {
-                                userHRResponse = response;
-                                Log.d("patientHRVals", response);
-                            }
-                        });
-
-                        String patientTemp = linkString + "readings/" + userID + "/2";
-                        global.sendGetRequestWithHandlerWithToken(patientTemp, token, new HandlerResponse() {
-                            @Override
-                            public void handleResponse(String response) {
-                                Log.d("patientTempVals", response);
-                                userTempResponse = response;
-                                updateAllGraphs("Daily");
-                            }
-                        });
 
                         String patientQualAddress = linkString + "qualitative/" + selectedPatientId;
                         global.sendGetRequestWithHandlerWithToken(patientQualAddress, token, new HandlerResponse() {
@@ -293,11 +298,28 @@ public class ProviderActivity extends AppCompatActivity {
                                         @Override
                                         public void run() {
                                             patientQualData.setText("Qualitative data: \n" + qualitativeDetails);
-                                        }
-                                    });
+                                        }});
                                 } catch (JSONException e) {
                                     Log.e("ERROR", "Error parsing JSON: " + e.getMessage());
                                 }
+                            }
+                        });
+
+                        mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                            @Override
+                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                                String selectedTimeframe = (String) parent.getItemAtPosition(position);
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        updateAllGraphs(selectedTimeframe, selectedPatient.getQualData(), selectedPatient.getHRData(), selectedPatient.getTempData());
+                                    }
+                                });
+                            }
+
+                            @Override
+                            public void onNothingSelected(AdapterView<?> parent) {
+                                // Do nothing
                             }
                         });
 
@@ -308,6 +330,7 @@ public class ProviderActivity extends AppCompatActivity {
                                 providerIntent.putExtra("linkString", linkString);
                                 providerIntent.putExtra("token", token);
                                 providerIntent.putExtra("userID", userID);
+                                providerIntent.putExtra("notificationToken", notifToken);
 
                                 startActivity(providerIntent);
                                 finish();
@@ -514,7 +537,8 @@ public class ProviderActivity extends AppCompatActivity {
         inactivityHandler.removeCallbacks(inactivityRunnable);
     }
 
-    private void updateAllGraphs(String selectedTimeframe) {
+    private void updateAllGraphs(String selectedTimeframe, String userQualResponse, String userHRResponse, String userTempResponse) {
+
         processData(userQualResponse, userData, selectedTimeframe);
         processQuanData(userHRResponse, userHRLine, userHRData, 1, selectedTimeframe);
         processQuanData(userTempResponse, userTempLine, userTempData, 2, selectedTimeframe);

@@ -4,18 +4,29 @@
     <value>
       <entry key="app">
         <State>
+          <runningDeviceTargetSelectedWithDropDown>
+            <Target>
+              <type value="RUNNING_DEVICE_TARGET" />
+              <deviceKey>
+                <Key>
+                  <type value="VIRTUAL_DEVICE_PATH" />
+                  <value value="C:\Users\adria\.android\avd\Cytocheck_Phone.avd" />
+                </Key>
+              </deviceKey>
+            </Target>
+          </runningDeviceTargetSelectedWithDropDown>
           <targetSelectedWithDropDown>
             <Target>
               <type value="QUICK_BOOT_TARGET" />
               <deviceKey>
                 <Key>
                   <type value="VIRTUAL_DEVICE_PATH" />
-                  <value value="C:\Users\adria\.android\avd\Maybe_number_2.avd" />
+                  <value value="C:\Users\adria\.android\avd\Cytocheck_Phone.avd" />
                 </Key>
               </deviceKey>
             </Target>
           </targetSelectedWithDropDown>
-          <timeTargetWasSelectedWithDropDown value="2024-03-21T21:09:00.096174900Z" />
+          <timeTargetWasSelectedWithDropDown value="2024-03-27T05:44:57.251167900Z" />
         </State>
       </entry>
     </value>

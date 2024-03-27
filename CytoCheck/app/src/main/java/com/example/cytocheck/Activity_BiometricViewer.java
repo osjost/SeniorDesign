@@ -373,7 +373,7 @@ public abstract class Activity_BiometricViewer extends Activity {
             api global = api.getInstance();
             JSONObject sensorData = new JSONObject();
             try {
-                sensorData.put("reading", String.format("%.5f", mTemperature));
+                sensorData.put("reading", String.format("%.5f",TemperatureReading.celsiusToFahrenheit(mTemperature)));
                 sensorData.put("sensor_id", "2");
                 sensorData.put("user_id", userID);
             }

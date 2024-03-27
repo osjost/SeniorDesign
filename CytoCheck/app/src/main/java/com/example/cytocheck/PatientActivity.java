@@ -114,7 +114,12 @@ public class PatientActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedTimeframe = (String) parent.getItemAtPosition(position);
-                updateAllGraphs(selectedTimeframe);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        updateAllGraphs(selectedTimeframe);
+                    }
+                });
             }
 
             @Override
@@ -127,49 +132,56 @@ public class PatientActivity extends AppCompatActivity {
 
         api global = api.getInstance();
 
-        String notifAddress = linkString + "fcc";
-        JSONObject userObject = new JSONObject();
-        try {
-            userObject.put("user_id", userID);
-            userObject.put("fcc", notifToken);
-        } catch (JSONException e) {
+                String notifAddress = linkString + "fcc";
+                JSONObject userObject = new JSONObject();
+                try {
+                    userObject.put("user_id", userID);
+                    userObject.put("fcc", notifToken);
+                } catch (JSONException e) {
 
-        }
-        global.sendPostRequestWithHandlerWithToken(notifAddress, userObject, token, new HandlerResponse() {
-            @Override
-            public void handleResponse(String response) {
+                }
+                global.sendPostRequestWithHandlerWithToken(notifAddress, userObject, token, new HandlerResponse() {
+                    @Override
+                    public void handleResponse(String response) {
 
-            }
-        });
+                    }
+                });
 
-        String patientAddress = linkString + "qualitative/" + userID;
-        global.sendGetRequestWithHandlerWithToken(patientAddress, token, new HandlerResponse() {
-            @Override
-            public void handleResponse(String response) {
-                Log.d("userData", response);
-                userQualResponse = response;
+                String patientAddress = linkString + "qualitative/" + userID;
+                global.sendGetRequestWithHandlerWithToken(patientAddress, token, new HandlerResponse() {
+                    @Override
+                    public void handleResponse(String response) {
+                        Log.d("userData", response);
+                        userQualResponse = response;
 
-            }
-        });
+                    }
+                });
 
-        String patientHR = linkString + "readings/" + userID + "/1";
-        global.sendGetRequestWithHandlerWithToken(patientHR, token, new HandlerResponse() {
-            @Override
-            public void handleResponse(String response) {
-                userHRResponse = response;
-                Log.d("patientHRVals", response);
-            }
-        });
+                String patientHR = linkString + "readings/" + userID + "/1";
+                global.sendGetRequestWithHandlerWithToken(patientHR, token, new HandlerResponse() {
+                    @Override
+                    public void handleResponse(String response) {
+                        userHRResponse = response;
+                        Log.d("patientHRVals", response);
+                    }
+                });
 
-        String patientTemp = linkString + "readings/" + userID + "/2";
-        global.sendGetRequestWithHandlerWithToken(patientTemp, token, new HandlerResponse() {
-            @Override
-            public void handleResponse(String response) {
-                Log.d("patientTempVals", response);
-                userTempResponse = response;
-                updateAllGraphs("Daily");
-            }
-        });
+                String patientTemp = linkString + "readings/" + userID + "/2";
+                global.sendGetRequestWithHandlerWithToken(patientTemp, token, new HandlerResponse() {
+                    @Override
+                    public void handleResponse(String response) {
+                        Log.d("patientTempVals", response);
+                        userTempResponse = response;
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                updateAllGraphs("Daily");
+                            }
+                        });
+                    }
+                });
+
+
 
         // On click/change Listeners for elements
         healthSlideBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -361,9 +373,11 @@ public class PatientActivity extends AppCompatActivity {
                                 homeIntent.putExtra("token", token);
                                 homeIntent.putExtra("userID", userID);
                                 homeIntent.putExtra("firstName", firstName);
+                                homeIntent.putExtra("notificationToken", notifToken);
 
                                 // Start the PatientActivity
                                 startActivity(homeIntent);
+                                finish();
                             }
                         });
 
@@ -390,7 +404,15 @@ public class PatientActivity extends AppCompatActivity {
                         global.sendPostRequestWithHandlerWithToken(associationString, requestHolder, token, new HandlerResponse() {
                             @Override
                             public void handleResponse(String response) {
+                                Intent homeIntent = new Intent(PatientActivity.this, PatientActivity.class);
+                                homeIntent.putExtra("linkString", linkString);
+                                homeIntent.putExtra("token", token);
+                                homeIntent.putExtra("userID", userID);
+                                homeIntent.putExtra("firstName", firstName);
+                                homeIntent.putExtra("notificationToken", notifToken);
 
+                                // Start the PatientActivity
+                                startActivity(homeIntent);
                             }
                         });
                         Toast.makeText(PatientActivity.this, "Request Sent", Toast.LENGTH_SHORT).show();
