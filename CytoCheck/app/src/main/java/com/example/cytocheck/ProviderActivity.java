@@ -315,6 +315,56 @@ public class ProviderActivity extends AppCompatActivity {
                             }
                         });
 
+
+                        //get lower and upper from GUI and check if they are doubles
+                        EditText hrLowerThreshBox = findViewById(R.id.lowerBound1);
+                        EditText hrUpperThreshBox = findViewById(R.id.upperBound1);
+                        global.sendGetRequestWithHandlerWithToken(linkString + "threshold/" + selectedPatientId + "/1", token, new HandlerResponse() {
+                            @Override
+                            public void handleResponse(String response) {
+
+                                try {
+                                    JSONObject patientHRThreshold = new JSONObject(response);
+                                    String hrUpper = patientHRThreshold.getString("upper");
+                                    String hrLower = patientHRThreshold.getString("lower");
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            hrLowerThreshBox.setHint(hrLower);
+                                            hrUpperThreshBox.setHint(hrUpper);
+                                        }
+                                    });
+
+                                } catch (JSONException e) {
+
+                                }
+                            }
+                        });
+
+
+                        EditText tempLowerThreshBox = findViewById(R.id.lowerBound2);
+                        EditText tempUpperThreshBox = findViewById(R.id.upperBound2);
+                        global.sendGetRequestWithHandlerWithToken(linkString + "threshold/" + selectedPatientId + "/2", token, new HandlerResponse() {
+                            @Override
+                            public void handleResponse(String response) {
+
+                                try {
+                                    JSONObject patientTempThreshold = new JSONObject(response);
+                                    String tempUpper = patientTempThreshold.getString("upper");
+                                    String tempLower = patientTempThreshold.getString("lower");
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            tempLowerThreshBox.setHint(tempLower);
+                                            tempUpperThreshBox.setHint(tempUpper);
+                                        }
+                                    });
+
+                                } catch (JSONException e) {
+
+                                }
+                            }
+                        });
                         mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                             @Override
                             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -355,40 +405,12 @@ public class ProviderActivity extends AppCompatActivity {
                                 //get lower and upper from GUI and check if they are doubles
                                 EditText hrLowerThreshBox = findViewById(R.id.lowerBound1);
                                 EditText hrUpperThreshBox = findViewById(R.id.upperBound1);
-                                global.sendGetRequestWithHandlerWithToken(linkString + "threshold/" + selectedPatientId + "/1", token, new HandlerResponse() {
-                                    @Override
-                                    public void handleResponse(String response) {
 
-                                        try {
-                                            JSONObject patientHRThreshold = new JSONObject(response);
-                                            String hrUpper = patientHRThreshold.getString("upper");
-                                            String hrLower = patientHRThreshold.getString("lower");
-                                            hrLowerThreshBox.setHint(hrLower);
-                                            hrUpperThreshBox.setHint(hrUpper);
-                                        } catch (JSONException e) {
-
-                                        }
-                                    }
-                                });
 
 
                                 EditText tempLowerThreshBox = findViewById(R.id.lowerBound2);
                                 EditText tempUpperThreshBox = findViewById(R.id.upperBound2);
-                                global.sendGetRequestWithHandlerWithToken(linkString + "threshold/" + selectedPatientId + "/2", token, new HandlerResponse() {
-                                    @Override
-                                    public void handleResponse(String response) {
 
-                                        try {
-                                            JSONObject patientTempThreshold = new JSONObject(response);
-                                            String tempUpper = patientTempThreshold.getString("upper");
-                                            String tempLower = patientTempThreshold.getString("lower");
-                                            tempLowerThreshBox.setHint(tempLower);
-                                            tempUpperThreshBox.setHint(tempUpper);
-                                        } catch (JSONException e) {
-
-                                        }
-                                    }
-                                });
 
                                 //TODO if they are doubles and not null, do next, else toast
                                 
