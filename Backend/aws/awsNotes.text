@@ -9,7 +9,6 @@ ec2-database-connect is our entrance
 the .ppk is included in this folder, needed for connecting to the EC2 instance
 Note: .ppk is used for PUTTY connections
 
-NOTE: I used 0.0.0.0/0 for SSH access, WE HAVE TO CHANGE THIS LATER SINCE THIS IS PUBLICALY ACCESSIBLE!! DONE FOR DEVELOPMENT
 ec2 identifier:
 i-0c87e6d8b0fcd92cc
 
@@ -136,10 +135,3 @@ curl -k -X POST -H "Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2Vy
 provider 8 patient 7
 
 curl -k -X POST https://ec2-54-193-162-215.us-west-1.compute.amazonaws.com:443/readings -H "Content-Type: application/json" -H "Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InVzZXJ0ZXN0MTIiLCJ1c2VySWQiOjExfQ.PhPb5tGRFmDwLwIx3X8e6y5-zu7n5tEX3l7CWDqod_c" -d "{\"reading\":\"150\", \"sensor_id\":\"1\", \"user_id\":\"7\"}"
-
-
-NOTE:
--secure the SSL certicates
--change the traffic allowed by ec2
--change the bcrypt algo (maybe)
-
