@@ -1,6 +1,11 @@
 const db = require('./db');
 
 async function create(fcc){
+  
+  const deleteResult = await db.query(
+    `DELETE FROM fcc_associations WHERE user_id = ?`,
+    [fcc.user_id]
+);
     const result = await db.query(
       `INSERT INTO fcc_associations 
       (user_id, fcc) 

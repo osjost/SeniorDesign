@@ -84,12 +84,16 @@ httpsServer.listen(httpsPort, () => {
   console.log(`HTTPS Server running`);
 });
 
-cron.schedule('00 18 * * *', () => {
+cron.schedule('40 18 * * *', () => {
   cronrequest.sendRequests();
+}, {
+  timezone: "America/Phoenix"
 });
 
 cron.schedule('00 8 * * *', () => {
   cronrequest.sendRequests();
+}, {
+  timezone: "America/Phoenix"
 });
 
 

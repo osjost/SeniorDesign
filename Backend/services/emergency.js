@@ -16,16 +16,24 @@ async function create(emergency){
         let fccRows = await fcc.get(provider.provider_id)
   
         for (let currFcc of fccRows) {
+          // add emergency message to the inbox
+        const result = await db.query(
+          `INSERT INTO provider_inbox 
+          (provider_id, message, message_type, sender_id) 
+          VALUES 
+          (?, ?, ?,?)`,
+          [provider.provider_id,
+            "Emergency issued!",
+            "emergency",
+            emergency.user_id
+        ]
+        );
         // issue a push notification
-          smsService.sendFirebaseNotification(currFcc, "Emergency with user " + emergency.user_id, emergency.user_id + " has issued an emergency notification")
+          smsService.sendFirebaseNotification(currFcc.fcc, "Emergency with user " + emergency.user_id, emergency.user_id + " has issued an emergency notification")
 
-        // add emergency message to the inbox
-        let message = {"provider_id":provider.provider_id,
-        "message":"Emergency issued!",
-        "message_type":"emergency",
-        "sender_id":emergency.user_id
-        }
-        appInbox.create(message)
+          
+        
+
         }
       }
 
@@ -39,5 +47,5 @@ async function create(emergency){
   }
 
   module.exports = {
-    create,
+    create
   }
