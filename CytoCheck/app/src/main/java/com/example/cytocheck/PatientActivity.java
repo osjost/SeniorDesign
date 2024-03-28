@@ -110,6 +110,69 @@ public class PatientActivity extends AppCompatActivity {
         userHRLine = findViewById(R.id.userHRLine); // Quantitative heart rate line chart
         userTempLine = findViewById(R.id.userTempLine); // Quantitative temperature line chart
         mSpinner = findViewById(R.id.selectorSpinner);
+
+
+
+
+        api global = api.getInstance();
+
+        String notifAddress = linkString + "fcc";
+        JSONObject userObject = new JSONObject();
+        try {
+            userObject.put("user_id", userID);
+            userObject.put("fcc", notifToken);
+        } catch (JSONException e) {
+
+        }
+        global.sendPostRequestWithHandlerWithToken(notifAddress, userObject, token, new HandlerResponse() {
+            @Override
+            public void handleResponse(String response) {
+            }
+        });
+
+
+        String patientAddress = linkString + "qualitative/" + userID;
+        global.sendGetRequestWithHandlerWithToken(patientAddress, token, new HandlerResponse() {
+            @Override
+            public void handleResponse(String response) {
+                userQualResponse = response;
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                                processData(response, userData, "Daily");
+                            }
+                });
+                String patientHR = linkString + "readings/" + userID + "/1";
+                global.sendGetRequestWithHandlerWithToken(patientHR, token, new HandlerResponse() {
+                    @Override
+                    public void handleResponse(String response) {
+                        userHRResponse = response;
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                processQuanData(response, userHRLine, userHRData, 1, "Daily");
+                            }
+                        });
+                        String patientTemp = linkString + "readings/" + userID + "/2";
+                        global.sendGetRequestWithHandlerWithToken(patientTemp, token, new HandlerResponse() {
+                            @Override
+                            public void handleResponse(String response) {
+                                userTempResponse = response;
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        processQuanData(response, userTempLine, userTempData, 2, "Daily");
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
+            }
+        });
+
+
+
         mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -117,7 +180,19 @@ public class PatientActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        updateAllGraphs(selectedTimeframe);
+                        processData(userQualResponse, userData, selectedTimeframe);
+                    }
+                });
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        processQuanData(userHRResponse, userHRLine, userHRData, 1, selectedTimeframe);
+                    }
+                });
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        processQuanData(userTempResponse, userTempLine, userTempData, 2, selectedTimeframe);
                     }
                 });
             }
@@ -127,70 +202,6 @@ public class PatientActivity extends AppCompatActivity {
                 // Do nothing
             }
         });
-
-
-
-        api global = api.getInstance();
-
-                String notifAddress = linkString + "fcc";
-                JSONObject userObject = new JSONObject();
-                try {
-                    userObject.put("user_id", userID);
-                    userObject.put("fcc", notifToken);
-                } catch (JSONException e) {
-
-                }
-                global.sendPostRequestWithHandlerWithToken(notifAddress, userObject, token, new HandlerResponse() {
-                    @Override
-                    public void handleResponse(String response) {
-
-                    }
-                });
-
-
-                String patientAddress = linkString + "qualitative/" + userID;
-                global.sendGetRequestWithHandlerWithToken(patientAddress, token, new HandlerResponse() {
-                    @Override
-                    public void handleResponse(String response) {
-                        userQualResponse = response;
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                processData(response, userData, "Daily");
-                            }
-                        });
-                        String patientHR = linkString + "readings/" + userID + "/1";
-                        global.sendGetRequestWithHandlerWithToken(patientHR, token, new HandlerResponse() {
-                            @Override
-                            public void handleResponse(String response) {
-                                userHRResponse = response;
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        processQuanData(response, userHRLine, userHRData, 1, "Daily");
-                                    }
-                                });
-                                String patientTemp = linkString + "readings/" + userID + "/2";
-                                global.sendGetRequestWithHandlerWithToken(patientTemp, token, new HandlerResponse() {
-                                    @Override
-                                    public void handleResponse(String response) {
-                                        userTempResponse = response;
-                                        runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                processQuanData(response, userTempLine, userTempData, 2, "Daily");
-                                            }
-                                        });
-                                    }
-                                });
-                            }
-                        });
-                    }
-                });
-
-
-
-
 
 
 
