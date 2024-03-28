@@ -123,6 +123,9 @@ curl -k -X POST -H "Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2Vy
 
 curl -k -X POST -H "Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InVzZXJ0ZXN0MTIiLCJ1c2VySWQiOjExfQ.PhPb5tGRFmDwLwIx3X8e6y5-zu7n5tEX3l7CWDqod_c" https://ec2-54-193-162-215.us-west-1.compute.amazonaws.com:443/emergency -H "Content-Type: application/json" -d "{\"user_id\":\"7\"}"
 
+curl -k -X POST -H "Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InVzZXJ0ZXN0MTIiLCJ1c2VySWQiOjExfQ.PhPb5tGRFmDwLwIx3X8e6y5-zu7n5tEX3l7CWDqod_c" https://ec2-54-193-162-215.us-west-1.compute.amazonaws.com:443/thresholdalert -H "Content-Type: application/json" -d "{\"user_id\":\"7\", \"sensor_id\":\"1\"}"
+
+
 curl -k -X POST https://localhost:443/emergency -H "Content-Type: application/json" -d "{\"user_id\":\"1\"}"
 
 

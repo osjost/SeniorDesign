@@ -20,6 +20,7 @@ const associationRouter = require("./routes/associations");
 const thresholdRouter = require("./routes/threshold");
 const fccRouter = require("./routes/fcc");
 const emergencyRouter = require("./routes/emergency")
+const thresholdBreachRouter = require("./routes/thresholdbreach")
 
 const threshold_test_cache = require("./services/threshold_cache")
 const cron = require('node-cron')
@@ -45,9 +46,10 @@ app.use("/readings", verifyJWT, readingsRouter);
 app.use("/qualitative", verifyJWT, qualitativeRouter);
 app.use("/inbox", verifyJWT, inboxRouter);
 app.use("/associations", verifyJWT, associationRouter);
-app.use("/threshold", verifyJWT, thresholdRouter)
-app.use("/fcc", verifyJWT, fccRouter)
-app.use("/emergency", verifyJWT, emergencyRouter)
+app.use("/threshold", verifyJWT, thresholdRouter);
+app.use("/fcc", verifyJWT, fccRouter);
+app.use("/emergency", verifyJWT, emergencyRouter);
+app.use("/thresholdbreach", verifyJWT, thresholdBreachRouter);
 
 // app.use("/users", usersRouter);
 // app.use("/readings", readingsRouter);
