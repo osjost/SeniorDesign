@@ -33,50 +33,67 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 
 public class DataProcessor {
 
     public static void processData(String jsonData, BarChart barChart, String timeFrame) {
-        List<QualEntry> entries = parseJsonData(jsonData);
-        Map<String, List<QualEntry>> data;
 
-        switch (timeFrame) {
-            case "Weekly":
-                data = aggregateDataByWeek(entries);
-                break;
-            case "Monthly":
-                data = aggregateDataByMonth(entries);
-                break;
-            default:
-                data = aggregateDataByDay(entries);
-                break;
+        if (jsonData == "[]" || jsonData == null || jsonData == "") {
+            Log.d("numm qual data", jsonData);
+            barChart.setVisibility(View.GONE);
+        }
+        else {
+            List<QualEntry> entries = parseJsonData(jsonData);
+            Map<String, List<QualEntry>> data;
+            barChart.setVisibility(View.VISIBLE);
+            switch (timeFrame) {
+                case "Weekly":
+                    data = aggregateDataByWeek(entries);
+                    break;
+                case "Monthly":
+                    data = aggregateDataByMonth(entries);
+                    break;
+                default:
+                    data = aggregateDataByDay(entries);
+                    break;
+            }
+
+            plotData(barChart, data);
         }
 
-        plotData(barChart, data);
     }
     public static void processQuanData(String jsonData, LineChart userDaily, BarChart userBar, int sensorID, String timeframe) {
-        List<QuanEntry> entries = parseJsonQuanData(jsonData);
-        Map<String, List<QuanEntry>> data;
 
-        switch (timeframe) {
-            case "Weekly":
-                userDaily.setVisibility(View.GONE);
-                userBar.setVisibility(View.VISIBLE);
-                data = aggregateQuanDataByWeek(entries, sensorID);
-                plotQuanData(userBar, data, sensorID);
-                break;
-            case "Monthly":
-                userDaily.setVisibility(View.GONE);
-                userBar.setVisibility(View.VISIBLE);
-                data = aggregateQuanDataByMonth(entries, sensorID);
-                plotQuanData(userBar, data, sensorID);
-                break;
-            default:
-                userDaily.setVisibility(View.VISIBLE);
-                userBar.setVisibility(View.GONE);
-                data = aggregateQuanDataByDay(entries, sensorID);
-                plotQuanLine(userDaily, data, sensorID);
-                break;
+        if (jsonData == "[]" || jsonData == null || jsonData == "") {
+            Log.d("numm quan data", jsonData);
+            userDaily.setVisibility(View.GONE);
+            userBar.setVisibility(View.GONE);
+        }
+        else {
+            List<QuanEntry> entries = parseJsonQuanData(jsonData);
+            Map<String, List<QuanEntry>> data;
+
+            switch (timeframe) {
+                case "Weekly":
+                    userDaily.setVisibility(View.GONE);
+                    userBar.setVisibility(View.VISIBLE);
+                    data = aggregateQuanDataByWeek(entries, sensorID);
+                    plotQuanData(userBar, data, sensorID);
+                    break;
+                case "Monthly":
+                    userDaily.setVisibility(View.GONE);
+                    userBar.setVisibility(View.VISIBLE);
+                    data = aggregateQuanDataByMonth(entries, sensorID);
+                    plotQuanData(userBar, data, sensorID);
+                    break;
+                default:
+                    userDaily.setVisibility(View.VISIBLE);
+                    userBar.setVisibility(View.GONE);
+                    data = aggregateQuanDataByDay(entries, sensorID);
+                    plotQuanLine(userDaily, data, sensorID);
+                    break;
+            }
         }
     }
 
@@ -91,13 +108,17 @@ public class DataProcessor {
                 int pain = jsonObject.getInt("pain");
                 String timestamp = jsonObject.getString("time_stamp");
 
-                entries.add(new QualEntry(timestamp, nausea, fatigue, pain));
+                // Convert timestamp to local time
+                String localTimestamp = convertToLocale(timestamp);
+
+                entries.add(new QualEntry(localTimestamp, nausea, fatigue, pain));
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
         return entries;
     }
+
     private static List<QuanEntry> parseJsonQuanData(String jsonData) {
         List<QuanEntry> entries = new ArrayList<>();
         try {
@@ -108,12 +129,32 @@ public class DataProcessor {
                 int sensorID = jsonObject.getInt("sensor_id");
                 String timestamp = jsonObject.getString("time_stamp");
 
-                entries.add(new QuanEntry(timestamp, data, sensorID));
+                // Convert timestamp to local time
+                String localTimestamp = convertToLocale(timestamp);
+
+                entries.add(new QuanEntry(localTimestamp, data, sensorID));
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
         return entries;
+    }
+
+    private static String convertToLocale(String timestamp) {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault());
+
+            // Parse the timestamp using England time zone (UTC/GMT)
+            sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+            Date date = sdf.parse(timestamp);
+
+            // Convert to local time zone
+            sdf.setTimeZone(TimeZone.getDefault()); // Get the local time zone of the device
+            return sdf.format(date); // Return the formatted local timestamp
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     private static Map<String, List<QualEntry>> aggregateDataByDay(List<QualEntry> entries) {

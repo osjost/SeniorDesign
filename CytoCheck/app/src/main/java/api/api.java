@@ -12,6 +12,8 @@ import org.json.JSONObject;
 import java.io.OutputStream;
 
 
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 
 
@@ -183,8 +185,9 @@ public class api {
                             response.append(responseLine.trim());
                         }
                         responseMessage = response.toString();
-                    }
 
+                    }
+                    Log.d("post response", responseMessage);
                     // Invoke the handler
                     if (handler != null) {
                         handler.handleResponse(responseMessage);
@@ -192,6 +195,7 @@ public class api {
 
                 } catch (Exception e) {
                     //e.printStackTrace();
+                    Log.d("post response", e.toString());
                     if (handler != null) {
                         handler.handleResponse("failure");
                     }
@@ -200,6 +204,8 @@ public class api {
         });
         thread.start();
     }
+
+
 
     public void sendPostRequestWithHandlerWithToken(String httpsAddress, JSONObject jsonInput, String token, HandlerResponse handler) {
         Thread thread = new Thread(new Runnable() {

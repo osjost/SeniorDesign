@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Looper;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -37,6 +38,7 @@ public class LoginActivity extends AppCompatActivity {
     private String linkString = "https://ec2-54-193-162-215.us-west-1.compute.amazonaws.com:443/"; //This is the link to the server holding the database
     private String usernameResponse = "";
     private String token = "";
+    private String notificationToken = "";
     private String userID = "";
 
     private final ActivityResultLauncher<String> requestPermissionLauncher =
@@ -91,72 +93,79 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 //Log.d("Login Sent", loginSend.toString());
                 String loginString = linkString + "login";
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
                 global.sendPostRequestWithHandler(loginString, loginSend, new HandlerResponse() {
+
                     @Override
                     public void handleResponse(String response) {
                         //Log.d("response", response);
                         // Run response handling on a UI thread to make toasts
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                try {
-                                    JSONObject jsonObject = new JSONObject(response);
-                                    token = jsonObject.getString("jwt");
-                                    userID = jsonObject.getString("user_id");
-                                    String httpsAddress = linkString + "users/" + userID;
-                                    global.sendGetRequestWithHandlerWithToken(httpsAddress, token, new HandlerResponse() {
 
-                                        @Override
-                                        public void handleResponse(String response) {
-                                            // Run response handling on a UI thread to make toasts
-                                            runOnUiThread(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    String firstName = "";
-                                                    String role = "";
-                                                    //Log.d("login result", response);
-                                                    try {
-                                                        JSONObject userProfile = new JSONObject(response);
-                                                        firstName = userProfile.getString("first_name");
-                                                        role = userProfile.getString("role");
-                                                        if (role.equals("patient")) { //user is a patient so they can be taken to their respective interface
-                                                            Intent intent = new Intent(LoginActivity.this, PatientActivity.class);
-                                                            intent.putExtra("token", token);
-                                                            intent.putExtra("userID", userID);
-                                                            intent.putExtra("firstName", firstName);
-                                                            intent.putExtra("linkString", linkString); //globalize linkString between activities
-
-                                                            startActivity(intent);
-                                                            finish();
-                                                        }
-                                                        else if (role.equals("provider")) { //if the user is a provider, take them to the provider interface
-                                                            Intent intent = new Intent(LoginActivity.this, ProviderActivity.class);
-                                                            intent.putExtra("token", token);
-                                                            intent.putExtra("userID", userID);
-                                                            intent.putExtra("linkString", linkString); //globalize linkString between activities
-
-                                                            startActivity(intent);
-                                                            finish();
-                                                        }
-                                                    }
-                                                    catch (JSONException e) {
-                                                        Toast.makeText(LoginActivity.this, "Login failed", Toast.LENGTH_SHORT).show();
-                                                    }
-                                                }
-                                            });
-
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            token = jsonObject.getString("jwt");
+                            userID = jsonObject.getString("user_id");
+                            String httpsAddress = linkString + "users/" + userID;
+                            global.sendGetRequestWithHandlerWithToken(httpsAddress, token, new HandlerResponse() {
+                                @Override
+                                public void handleResponse(String response) {
+                                    // Run response handling on a UI thread to make toasts
+                                    String firstName = "";
+                                    String role = "";
+                                    //Log.d("login result", response);
+                                    try {
+                                        JSONObject userProfile = new JSONObject(response);
+                                        firstName = userProfile.getString("first_name");
+                                        role = userProfile.getString("role");
+                                        if (role.equals("patient")) { //user is a patient so they can be taken to their respective interface
+                                            Intent intent = new Intent(LoginActivity.this, PatientActivity.class);
+                                            intent.putExtra("token", token);
+                                            intent.putExtra("userID", userID);
+                                            intent.putExtra("firstName", firstName);
+                                            intent.putExtra("linkString", linkString); //globalize linkString between activities
+                                            intent.putExtra("notificationToken", notificationToken);
+                                            startActivity(intent);
+                                            finish();
                                         }
-                                    });
+                                        else if (role.equals("provider")) { //if the user is a provider, take them to the provider interface
+                                            Intent intent = new Intent(LoginActivity.this, ProviderActivity.class);
+                                            intent.putExtra("token", token);
+                                            intent.putExtra("userID", userID);
+                                            intent.putExtra("linkString", linkString); //globalize linkString between activities
+                                            intent.putExtra("notificationToken", notificationToken);
+
+                                            startActivity(intent);
+                                            finish();
+                                        }
+                                    }
+                                    catch (JSONException e) {
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                Toast.makeText(LoginActivity.this, "Login failed", Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+
+                                    }
                                 }
-                                catch (JSONException e) {
+                            });
+
+                        }
+                        catch (JSONException e) {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
                                     Toast.makeText(LoginActivity.this, "Login failed", Toast.LENGTH_SHORT).show();
                                 }
-                            }
-                        });
-
+                            });
+                        }
                     }
                 });
             }
+        });
+        }
         });
 
         Button submitButton = findViewById(R.id.signUp); //Signup functionality
@@ -193,10 +202,9 @@ public class LoginActivity extends AppCompatActivity {
                             }
 
                             // Get new FCM registration token
-                            String token = task.getResult();
 
-                            // Log and toast
-                            Log.d("messaging", token);
+                            notificationToken = task.getResult();
+
                             // Send the token to your server to keep it updated
                         }
                     });

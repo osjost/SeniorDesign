@@ -1,9 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+
+    <queries>
+        <package android:name="com.dsi.ant.plugins.antplus" />
+    </queries>
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADVERTISE" />
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+    <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
+    <uses-permission android:name="android.permission.BLUETOOTH_PRIVILEGED" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
     <uses-permission android:name="android.permission.INTERNET" />
     <application
         android:allowBackup="true"
+        android:enableOnBackInvokedCallback="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
@@ -15,7 +31,9 @@
         tools:targetApi="31">
         <activity
             android:name=".LoginActivity"
-            android:exported="true">
+            android:exported="true"
+            >
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -32,14 +50,27 @@
         <activity android:name=".ProviderActivity">
         </activity>
 
-        <activity android:name=".SensorActivity"/>
+        <activity
+            android:name=".Activity_BiometricViewer"
+            android:exported="false" />
+        <activity
+            android:name=".Activity_SensorConnecter"
+            android:exported="false" />
+        <activity
+            android:name=".Activity_UserManual"
+            android:exported="false"
+            android:label="@string/title_activity_user_manual"
+            android:theme="@style/Theme.CytoCheck.NoActionBar" />
+        <activity
+            android:name=".Activity_Launcher"
+            android:exported="true">
+        </activity>
 
-        <activity
-            android:name=".Activity_HeartRateDisplayBase"
+        <service
+            android:name=".BluetoothLeService"
+            android:enabled="true"
             android:exported="false" />
-        <activity
-            android:name=".Activity_AsyncScanHeartRateSampler"
-            android:exported="false" />
+
 
     </application>
 

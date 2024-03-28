@@ -6,4 +6,13 @@
     </style>
 
     <style name="Theme.CytoCheck" parent="Base.Theme.CytoCheck" />
+
+    <style name="Theme.CytoCheck.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.CytoCheck.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.CytoCheck.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>

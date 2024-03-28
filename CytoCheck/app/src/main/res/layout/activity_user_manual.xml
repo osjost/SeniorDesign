@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activity_UserManual">
+
+    <ScrollView
+        android:layout_width="409dp"
+        android:layout_height="729dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <ImageView
+
+                android:id="@+id/iv_BDlogo"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                app:srcCompat="@drawable/img_1" />
+
+            <TextView
+                android:id="@+id/tv_BD"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="This application makes use of third-party biometric sensors capable of ANT+ and Bluetooth Low Energy (BLE). To ensure functionality with ANT+ sensor, please make sure your device supports ANT+ connectivity either natively or via an external ANT+ stick. The following is a guide on how to connect the sensors."
+                android:textAlignment="center"
+                android:textSize="20sp" />
+            <ImageView
+                android:id="@+id/iv_BLE"
+                android:layout_width="match_parent"
+                android:layout_height="64dp"
+                app:srcCompat="@drawable/img_4" />
+            <ImageView
+                android:id="@+id/iv_ANT"
+                android:layout_width="match_parent"
+                android:layout_height="64dp"
+                app:srcCompat="@drawable/img_3" />
+
+            <TextView
+                android:id="@+id/tv_step1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Step 1.) Make sure both sensors are indicated to be on. It is essential this remains the case to continue."
+                android:textAlignment="center"
+                android:textSize="20sp" />
+
+            <ImageView
+                android:id="@+id/iv_strapexample"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                app:srcCompat="@drawable/img_8" />
+
+            <TextView
+                android:id="@+id/tv_step2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Step 2.) Strap the sensors as shown above. This will ensure you will be receiving accurate measurements as well as ensuring comfort."
+                android:textAlignment="center"
+                android:textSize="20sp" />
+
+            <ImageView
+                android:id="@+id/iv_connectexample"
+                android:layout_width="match_parent"
+                android:layout_height="600dp"
+                app:srcCompat="@drawable/img_5" />
+
+            <TextView
+                android:id="@+id/tv_step3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Step 3.) Once securely put on, press the Begin button on the sensor launch page."
+                android:textAlignment="center"
+                android:textSize="20sp" />
+
+            <ImageView
+                android:id="@+id/iv_sensorconnectexample"
+                android:layout_width="match_parent"
+                android:layout_height="600dp"
+                app:srcCompat="@drawable/img_6" />
+
+            <TextView
+                android:id="@+id/tv_step3cont"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="You will be brought to the sensor connection page. If the sensors are on, they will be displayed as above."
+                android:textAlignment="center"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/tv_step4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Step 4.) Press on one of each of the sensors. One BLE sensor + One ANT+ sensor. You will not be permitted to continue otherwise. "
+                android:textAlignment="center"
+                android:textSize="20sp" />
+
+
+            <TextView
+                android:id="@+id/tv_step5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Step 5.) Once the previous step in done, press the continue button on the top right corner."
+                android:textAlignment="center"
+                android:textSize="20sp" />
+
+            <ImageView
+                android:id="@+id/iv_readingsexample"
+                android:layout_width="match_parent"
+                android:layout_height="600dp"
+                app:srcCompat="@drawable/img_7" />
+
+            <TextView
+                android:id="@+id/tv_step6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Step 6.) After 15 seconds, your biometric readings will appear. Enjoy."
+                android:textAlignment="center"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/tv_extra"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="*Note: NaN is an invalid reading from the sensor. The heartrate and core temperature are measured in Beats Per Minute (BPM) and Fahrenheit (F), respectively."
+                android:textAlignment="center"
+                android:textSize="20sp" />
+
+
+        </LinearLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>
