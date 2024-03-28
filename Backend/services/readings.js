@@ -22,43 +22,43 @@ async function create(reading){
 
     // perform threshold check if it already exists in the threshold cache
     
-    if (threshold_cache.existsInCache(reading.user_id, reading.sensor_id)) {
-      threshold = threshold_cache.getThresh(reading.user_id, reading.sensor_id)
-      lowerBound = threshold[0]
-      upperBound = threshold[1]
-      if (reading.reading > upperBound || reading.reading < lowerBound) {
-        // figure out what doctor we need to alert
-        const rows = await db.query(
-          `SELECT * FROM provider_patient_associations WHERE patient_id = ?;`,
-          [reading.user_id]
-      );
+    // if (threshold_cache.existsInCache(reading.user_id, reading.sensor_id)) {
+    //   threshold = threshold_cache.getThresh(reading.user_id, reading.sensor_id)
+    //   lowerBound = threshold[0]
+    //   upperBound = threshold[1]
+    //   if (reading.reading > upperBound || reading.reading < lowerBound) {
+    //     // figure out what doctor we need to alert
+    //     const rows = await db.query(
+    //       `SELECT * FROM provider_patient_associations WHERE patient_id = ?;`,
+    //       [reading.user_id]
+    //   );
 
-      for (const provider of rows) {
-        // get fcc of entry
-        let fccRows = await fcc.get(provider.provider_id)
+    //   for (const provider of rows) {
+    //     // get fcc of entry
+    //     let fccRows = await fcc.get(provider.provider_id)
 
-        // add notification to inbox
-        const result = await db.query(
-          `INSERT INTO provider_inbox 
-          (provider_id, message, message_type, sender_id) 
-          VALUES 
-          (?, ?, ?,?)`,
-          [provider.provider_id,
-            "Threshold breach detected from sensor type " + reading.sensor_id,
-            "breach",
-            reading.user_id
-        ]
-        );
+    //     // add notification to inbox
+    //     const result = await db.query(
+    //       `INSERT INTO provider_inbox 
+    //       (provider_id, message, message_type, sender_id) 
+    //       VALUES 
+    //       (?, ?, ?,?)`,
+    //       [provider.provider_id,
+    //         "Threshold breach detected from sensor type " + reading.sensor_id,
+    //         "breach",
+    //         reading.user_id
+    //     ]
+    //     );
   
-        for (const fcc of fccRows) {
-          smsService.sendFirebaseNotification(fcc.fcc, "Emergency with user " + reading.user_id, "Threshold breach detected") 
-        }
+    //     for (const fcc of fccRows) {
+    //       smsService.sendFirebaseNotification(fcc.fcc, "Emergency with user " + reading.user_id, "Threshold breach detected") 
+    //     }
 
-        console.log("triggered")
-      }
+    //     console.log("triggered")
+    //   }
 
-      }
-    }
+    //   }
+    // }
     
 
     return {message};
