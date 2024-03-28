@@ -85,6 +85,10 @@ public abstract class Activity_BiometricViewer extends Activity {
     private String linkString;
     private String userID;
     private String token;
+    private String hrLower;
+    private String hrUpper;
+    private String tempLower;
+    private String tempUpper;
     private int HRdataCount = 0;
     private double HRavgData = 0;
     private int HRdataSum = 0;
@@ -151,10 +155,14 @@ public abstract class Activity_BiometricViewer extends Activity {
         handleReset();
     }
 
-    protected void setIntentStrings(String serverAddress, String userId, String atoken) {
+    protected void setIntentStrings(String serverAddress, String userId, String atoken, String HRLower, String HRUpper, String TempLower, String TempUpper) {
         linkString = serverAddress;
         userID = userId;
         token = atoken;
+        hrLower = HRLower;
+        hrUpper = HRUpper;
+        tempLower = TempLower;
+        tempUpper = TempUpper;
     }
 
     private void initBLEConnection() {
