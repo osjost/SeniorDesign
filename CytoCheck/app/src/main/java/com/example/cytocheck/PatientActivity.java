@@ -152,24 +152,33 @@ public class PatientActivity extends AppCompatActivity {
                 global.sendGetRequestWithHandlerWithToken(patientAddress, token, new HandlerResponse() {
                     @Override
                     public void handleResponse(String response) {
-                        Log.d("userData", response);
                         userQualResponse = response;
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                processData(response, userData, "Daily");
+                            }
+                        });
                         String patientHR = linkString + "readings/" + userID + "/1";
                         global.sendGetRequestWithHandlerWithToken(patientHR, token, new HandlerResponse() {
                             @Override
                             public void handleResponse(String response) {
                                 userHRResponse = response;
-                                Log.d("patientHRVals", response);
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        processQuanData(response, userHRLine, userHRData, 1, "Daily");
+                                    }
+                                });
                                 String patientTemp = linkString + "readings/" + userID + "/2";
                                 global.sendGetRequestWithHandlerWithToken(patientTemp, token, new HandlerResponse() {
                                     @Override
                                     public void handleResponse(String response) {
-                                        Log.d("patientTempVals", response);
                                         userTempResponse = response;
                                         runOnUiThread(new Runnable() {
                                             @Override
                                             public void run() {
-                                                updateAllGraphs("Daily");
+                                                processQuanData(response, userTempLine, userTempData, 2, "Daily");
                                             }
                                         });
                                     }

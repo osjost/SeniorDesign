@@ -19,7 +19,25 @@ public class RequestAdapter extends ArrayAdapter<RequestInfo> {
             @Override
             public int compare(RequestInfo request1, RequestInfo request2) {
                 // Compare the messageType field
-                return request1.getMessageType().equals("emergency") ? -1 : 1;
+                String messageType1 = request1.getMessageType();
+                String messageType2 = request2.getMessageType();
+
+                if (messageType1.equals("emergency")) {
+                    // If request1 is emergency, it should come before request2
+                    return -1;
+                } else if (messageType2.equals("emergency")) {
+                    // If request2 is emergency, it should come before request1
+                    return 1;
+                } else if (messageType1.equals("breach")) {
+                    // If request1 is breach, it should come before request2
+                    return -1;
+                } else if (messageType2.equals("breach")) {
+                    // If request2 is breach, it should come before request1
+                    return 1;
+                } else {
+                    // For all other cases, use natural ordering
+                    return 0;
+                }
             }
         });
     }
@@ -39,6 +57,15 @@ public class RequestAdapter extends ArrayAdapter<RequestInfo> {
 
         // Populate the data into the template view using the data object
         textViewRequestName.setText("Message id: " + requestInfo.getId());
+        if (requestInfo.getMessageType().equals("breach")) {
+            textViewRequestName.setText("Threshold Breach for Patient id: " + requestInfo.getSenderID());
+        }
+        else if (requestInfo.getMessageType().equals("emergency")) {
+            textViewRequestName.setText("Emergency with Patient id: " + requestInfo.getSenderID());
+        }
+        else {
+            textViewRequestName.setText("Association Request for Patient id: " + requestInfo.getSenderID());
+        }
 
         // Return the completed view to render on screen
         return convertView;

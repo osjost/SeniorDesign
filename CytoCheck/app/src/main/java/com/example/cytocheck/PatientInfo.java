@@ -3,42 +3,48 @@ package com.example.cytocheck;
 public class PatientInfo {
     private int id;
     private String name;
+    private String phone;
+    private String email;
+    private String dob;
     private String qualData;
     private String hrData;
     private String tempData;
 
-    public PatientInfo(int id, String name) {
+    public PatientInfo(int id, String name, String phone, String email, String dob) {
         this.id = id;
         this.name = name;
+        this.phone = phone;
+        this.email = email;
+        this.dob = dob;
         this.qualData = "";
         this.hrData = "";
         this.tempData = "";
     }
 
-    public int getId() {
+    protected int getId() {
         return id;
     }
 
-    public String getName() {
+    protected String getName() {
         return name;
     }
 
-    public void setQualData(String qData) {
+    protected void setQualData(String qData) {
         this.qualData = qData;
     }
-    public void setHRData(String hData) {
+    protected void setHRData(String hData) {
         this.hrData = hData;
     }
-    public void setTempData(String tData) {
+    protected void setTempData(String tData) {
         this.tempData = tData;
     }
-    public String getQualData() {
+    protected String getQualData() {
         return this.qualData;
     }
-    public String getHRData() {
+    protected String getHRData() {
         return this.hrData;
     }
-    public String getTempData() {
+    protected String getTempData() {
         return this.tempData;
     }
 }

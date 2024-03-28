@@ -185,8 +185,9 @@ public class ProviderActivity extends AppCompatActivity {
                 public void handleResponse(String response) {
                     try {
                         JSONObject userProfile = new JSONObject(response);
+                        Log.d("patient info", response);
                         patientNames.add(userProfile.getString("first_name"));
-                        patientList.add(new PatientInfo(userProfile.getInt("user_id"), userProfile.getString("first_name")));
+                        patientList.add(new PatientInfo(userProfile.getInt("user_id"), userProfile.getString("first_name") + " " + userProfile.getString("last_name"), userProfile.getString("phone_number"), userProfile.getString("email"), userProfile.getString("date_of_birth")));
                         // Check if all responses have been received
                         if (patientNames.size() == patientIds.size()) {
                             // All responses received, set up the UI
@@ -244,7 +245,6 @@ public class ProviderActivity extends AppCompatActivity {
                         global.sendGetRequestWithHandlerWithToken(patientAddress, token, new HandlerResponse() {
                             @Override
                             public void handleResponse(String response) {
-                                Log.d("userData", response);
                                 selectedPatient.setQualData(response);
                                 runOnUiThread(new Runnable() {
                                     @Override
@@ -263,12 +263,10 @@ public class ProviderActivity extends AppCompatActivity {
                                                 processQuanData(response, userHRLine, userHRData, 1, "Daily");
                                             }
                                         });
-                                        Log.d("patientHRVals", response);
                                         String patientTemp = linkString + "readings/" + selectedPatientId + "/2";
                                         global.sendGetRequestWithHandlerWithToken(patientTemp, token, new HandlerResponse() {
                                             @Override
                                             public void handleResponse(String response) {
-                                                Log.d("patientTempVals", response);
                                                 selectedPatient.setTempData(response);
                                                 runOnUiThread(new Runnable() {
                                                     @Override
@@ -302,7 +300,7 @@ public class ProviderActivity extends AppCompatActivity {
                                         String otherString = "Other: " + patientObtained.getString("other") + "\n";
 
                                         // Combine the information for the current patient
-                                        qualitativeDetails += timeStamp + rashString + otherString;
+                                        qualitativeDetails += timeStamp + rashString + otherString + "\n";
 
                                     }
                                     // Update UI with the information for the current patient
@@ -440,6 +438,18 @@ public class ProviderActivity extends AppCompatActivity {
 
                         requestTitle.setText(selectedRequestMessage);
                         requestBody.setText(selectedMessageType + " for id: " + selectedSenderId);
+                        if (selectedMessageType.equals("breach")) {
+                            requestTitle.setText("Threshold Breach");
+                            requestBody.setText(selectedRequestMessage);
+                        }
+                        else if (selectedMessageType.equals("emergency")) {
+                            requestTitle.setText("Emergency Patient Notification");
+                            requestBody.setText("Emergency with Patient id: " + selectedSenderId);
+                        }
+                        else {
+                            requestTitle.setText("New Patient Association");
+                            requestBody.setText("Association Request for Patient id: " + selectedSenderId);
+                        }
 
                         providerReturn.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -456,7 +466,7 @@ public class ProviderActivity extends AppCompatActivity {
                         });
 
                         // Check messageType and adjust button visibility and text
-                        if (selectedMessageType.equals("emergency")) {
+                        if (selectedMessageType.equals("emergency") || selectedMessageType.equals("breach")) {
                             // For emergency requests, hide the approve button
                             approveRequest.setVisibility(View.GONE);
                             // Change the text of the deny button to "Dismiss"

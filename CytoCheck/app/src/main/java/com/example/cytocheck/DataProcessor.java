@@ -40,7 +40,7 @@ public class DataProcessor {
     public static void processData(String jsonData, BarChart barChart, String timeFrame) {
 
         if (jsonData == "[]" || jsonData == null || jsonData == "") {
-            Log.d("numm qual data", jsonData);
+
             barChart.setVisibility(View.GONE);
         }
         else {
@@ -66,7 +66,7 @@ public class DataProcessor {
     public static void processQuanData(String jsonData, LineChart userDaily, BarChart userBar, int sensorID, String timeframe) {
 
         if (jsonData == "[]" || jsonData == null || jsonData == "") {
-            Log.d("numm quan data", jsonData);
+
             userDaily.setVisibility(View.GONE);
             userBar.setVisibility(View.GONE);
         }
