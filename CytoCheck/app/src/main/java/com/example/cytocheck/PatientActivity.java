@@ -147,39 +147,41 @@ public class PatientActivity extends AppCompatActivity {
                     }
                 });
 
+
                 String patientAddress = linkString + "qualitative/" + userID;
                 global.sendGetRequestWithHandlerWithToken(patientAddress, token, new HandlerResponse() {
                     @Override
                     public void handleResponse(String response) {
                         Log.d("userData", response);
                         userQualResponse = response;
-
-                    }
-                });
-
-                String patientHR = linkString + "readings/" + userID + "/1";
-                global.sendGetRequestWithHandlerWithToken(patientHR, token, new HandlerResponse() {
-                    @Override
-                    public void handleResponse(String response) {
-                        userHRResponse = response;
-                        Log.d("patientHRVals", response);
-                    }
-                });
-
-                String patientTemp = linkString + "readings/" + userID + "/2";
-                global.sendGetRequestWithHandlerWithToken(patientTemp, token, new HandlerResponse() {
-                    @Override
-                    public void handleResponse(String response) {
-                        Log.d("patientTempVals", response);
-                        userTempResponse = response;
-                        runOnUiThread(new Runnable() {
+                        String patientHR = linkString + "readings/" + userID + "/1";
+                        global.sendGetRequestWithHandlerWithToken(patientHR, token, new HandlerResponse() {
                             @Override
-                            public void run() {
-                                updateAllGraphs("Daily");
+                            public void handleResponse(String response) {
+                                userHRResponse = response;
+                                Log.d("patientHRVals", response);
+                                String patientTemp = linkString + "readings/" + userID + "/2";
+                                global.sendGetRequestWithHandlerWithToken(patientTemp, token, new HandlerResponse() {
+                                    @Override
+                                    public void handleResponse(String response) {
+                                        Log.d("patientTempVals", response);
+                                        userTempResponse = response;
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                updateAllGraphs("Daily");
+                                            }
+                                        });
+                                    }
+                                });
                             }
                         });
                     }
                 });
+
+
+
+
 
 
 
@@ -394,6 +396,7 @@ public class PatientActivity extends AppCompatActivity {
                         try {
                             requestHolder.put("provider_id",String.valueOf(newProviderID.getText()));
                             requestHolder.put("message",userID);
+                            requestHolder.put("patient_name", firstName);
                             requestHolder.put("message_type","association_request");
                             requestHolder.put("sender_id",userID);
                         }
@@ -439,12 +442,37 @@ public class PatientActivity extends AppCompatActivity {
 
 
         //MVP2 Warning
-//        Button sendWarning = findViewById(R.id.warningButton);
-//        sendWarning.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {}
-//
-//        });
+        Button sendWarning = findViewById(R.id.emergencyButton);
+        sendWarning.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                api global = api.getInstance();
+                JSONObject requestHolder = new JSONObject();
+                try {
+                    requestHolder.put("user_id", userID);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                String emergencyString = linkString + "emergency";
+                global.sendPostRequestWithHandlerWithToken(emergencyString, requestHolder, token, new HandlerResponse() {
+                    @Override
+                    public void handleResponse(String response) {
+                        Log.d("emergencyResponse", response);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(PatientActivity.this, "Emergency Notification Sent", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                });
+
+
+
+            }
+
+        });
         Button sensorButton = findViewById(R.id.sensorButton);
         sensorButton.setOnClickListener(new View.OnClickListener() {
             @Override

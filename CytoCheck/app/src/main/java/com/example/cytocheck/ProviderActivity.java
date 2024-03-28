@@ -74,12 +74,12 @@ public class ProviderActivity extends AppCompatActivity {
         } catch (JSONException e) {
 
         }
-//        global.sendPostRequestWithHandlerWithToken(notifAddress, userObject, token, new HandlerResponse() {
-//            @Override
-//            public void handleResponse(String response) {
-//
-//            }
-//        });
+        global.sendPostRequestWithHandlerWithToken(notifAddress, userObject, token, new HandlerResponse() {
+            @Override
+            public void handleResponse(String response) {
+
+            }
+        });
 
 
         String associationAddress = linkString + "associations/" + userID;
@@ -110,7 +110,7 @@ public class ProviderActivity extends AppCompatActivity {
         global.sendGetRequestWithHandlerWithToken(inboxAddress, token, new HandlerResponse() {
             @Override
             public void handleResponse(String response) {
-                Log.d("response", response);
+                Log.d("inbox items", response);
 
                 try {
                     JSONArray jsonArray = new JSONArray(response);
@@ -246,11 +246,23 @@ public class ProviderActivity extends AppCompatActivity {
                             public void handleResponse(String response) {
                                 Log.d("userData", response);
                                 selectedPatient.setQualData(response);
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        processData(response, userData, "Daily");
+                                    }
+                                });
                                 String patientHR = linkString + "readings/" + selectedPatientId + "/1";
                                 global.sendGetRequestWithHandlerWithToken(patientHR, token, new HandlerResponse() {
                                     @Override
                                     public void handleResponse(String response) {
                                         selectedPatient.setHRData(response);
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                processQuanData(response, userHRLine, userHRData, 1, "Daily");
+                                            }
+                                        });
                                         Log.d("patientHRVals", response);
                                         String patientTemp = linkString + "readings/" + selectedPatientId + "/2";
                                         global.sendGetRequestWithHandlerWithToken(patientTemp, token, new HandlerResponse() {
@@ -261,7 +273,7 @@ public class ProviderActivity extends AppCompatActivity {
                                                 runOnUiThread(new Runnable() {
                                                     @Override
                                                     public void run() {
-                                                        updateAllGraphs("Daily", selectedPatient.getQualData(), selectedPatient.getHRData(), selectedPatient.getTempData());
+                                                        processQuanData(response, userTempLine, userTempData, 2, "Daily");
                                                     }
                                                 });
                                             }
@@ -409,11 +421,10 @@ public class ProviderActivity extends AppCompatActivity {
                 ListView listViewRequests = findViewById(R.id.inboxListView);
                 listViewRequests.setAdapter(adapter);
 
-                // Set item click listener for each patient
+                // Set item click listener for each request
                 listViewRequests.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
                         RequestInfo selectedRequest = (RequestInfo) parent.getItemAtPosition(position);
                         int selectedRequestId = selectedRequest.getId();
                         String selectedRequestMessage = selectedRequest.getMessage();
@@ -424,7 +435,6 @@ public class ProviderActivity extends AppCompatActivity {
                         Button providerReturn = findViewById(R.id.providerRequestReturn);
                         Button approveRequest = findViewById(R.id.approveRequest);
                         Button denyRequest = findViewById(R.id.denyRequest);
-
                         TextView requestTitle = findViewById(R.id.requestLabel);
                         TextView requestBody = findViewById(R.id.requestMessage);
 
@@ -434,75 +444,113 @@ public class ProviderActivity extends AppCompatActivity {
                         providerReturn.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
+                                // Handle provider return button click
                                 Intent providerIntent = new Intent(ProviderActivity.this, ProviderActivity.class);
                                 providerIntent.putExtra("linkString", linkString);
                                 providerIntent.putExtra("token", token);
                                 providerIntent.putExtra("userID", userID);
 
                                 startActivity(providerIntent);
+                                finish();
                             }
                         });
 
-                        approveRequest.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                String associationConfirm = linkString + "associations";
-                                api global = api.getInstance();
-                                JSONObject patientProviderConnect = new JSONObject();
-                                try {
-                                    patientProviderConnect.put("patient_id", selectedSenderId);
-                                    patientProviderConnect.put("provider_id", userID);
+                        // Check messageType and adjust button visibility and text
+                        if (selectedMessageType.equals("emergency")) {
+                            // For emergency requests, hide the approve button
+                            approveRequest.setVisibility(View.GONE);
+                            // Change the text of the deny button to "Dismiss"
+                            denyRequest.setText("Dismiss");
+
+                            denyRequest.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    // Handle dismiss button click for emergency messages
+                                    String emergencyDeleteUrl = linkString + "inbox/" + selectedRequestId;
+                                    api global = api.getInstance();
+                                    global.sendDeleteRequestWithTokenWithHandler(emergencyDeleteUrl, token, new HandlerResponse() {
+                                        @Override
+                                        public void handleResponse(String response) {
+                                            Intent providerIntent = new Intent(ProviderActivity.this, ProviderActivity.class);
+                                            providerIntent.putExtra("linkString", linkString);
+                                            providerIntent.putExtra("token", token);
+                                            providerIntent.putExtra("userID", userID);
+
+                                            startActivity(providerIntent);
+                                            finish();
+                                        }
+                                    });
                                 }
-                                catch (JSONException e) {
-                                    e.printStackTrace();
+                            });
+                        } else {
+                            // For non-emergency requests, show the approve button
+                            approveRequest.setVisibility(View.VISIBLE);
+                            // Change the text of the deny button back to "Deny"
+                            denyRequest.setText("Deny");
+
+                            denyRequest.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    // Handle deny button click for non-emergency messages
+                                    String nonEmergencyDeleteUrl = linkString + "inbox/" + selectedRequestId;
+                                    api global = api.getInstance();
+                                    global.sendDeleteRequestWithTokenWithHandler(nonEmergencyDeleteUrl, token, new HandlerResponse() {
+                                        @Override
+                                        public void handleResponse(String response) {
+                                            Intent providerIntent = new Intent(ProviderActivity.this, ProviderActivity.class);
+                                            providerIntent.putExtra("linkString", linkString);
+                                            providerIntent.putExtra("token", token);
+                                            providerIntent.putExtra("userID", userID);
+
+                                            startActivity(providerIntent);
+                                            finish();
+                                        }
+                                    });
                                 }
-                                global.sendPostRequestWithHandlerWithToken(associationConfirm, patientProviderConnect, token, new HandlerResponse() {
-                                    @Override
-                                    public void handleResponse(String response) {
-                                        //TODO DELETE REQUEST and SEND BACK TO PROVIDER ACTIVITY
-                                        String inboxDelete = linkString + "inbox/" + selectedRequestId;
-                                        global.sendDeleteRequestWithTokenWithHandler(inboxDelete, token, new HandlerResponse() {
+                            });
 
-                                            @Override
-                                            public void handleResponse(String response) {
-                                                Intent providerIntent = new Intent(ProviderActivity.this, ProviderActivity.class);
-                                                providerIntent.putExtra("linkString", linkString);
-                                                providerIntent.putExtra("token", token);
-                                                providerIntent.putExtra("userID", userID);
-
-                                                startActivity(providerIntent);
-                                            }
-                                        });
-
+                            approveRequest.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    String associationConfirm = linkString + "associations";
+                                    api global = api.getInstance();
+                                    JSONObject patientProviderConnect = new JSONObject();
+                                    try {
+                                        patientProviderConnect.put("patient_id", selectedSenderId);
+                                        patientProviderConnect.put("provider_id", userID);
                                     }
-                                });
-                            }
-                        });
-                        denyRequest.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                //TODO DELETE REQUEST and SEND BACK TO PROVIDER ACTIVITY
-                                String inboxDelete = linkString + "inbox/" + selectedRequestId;
-                                api global = api.getInstance();
-                                global.sendDeleteRequestWithTokenWithHandler(inboxDelete, token, new HandlerResponse() {
-
-                                    @Override
-                                    public void handleResponse(String response) {
-                                        Intent providerIntent = new Intent(ProviderActivity.this, ProviderActivity.class);
-                                        providerIntent.putExtra("linkString", linkString);
-                                        providerIntent.putExtra("token", token);
-                                        providerIntent.putExtra("userID", userID);
-
-                                        startActivity(providerIntent);
+                                    catch (JSONException e) {
+                                        e.printStackTrace();
                                     }
-                                });
-                            }
-                        });
+                                    global.sendPostRequestWithHandlerWithToken(associationConfirm, patientProviderConnect, token, new HandlerResponse() {
+                                        @Override
+                                        public void handleResponse(String response) {
+                                            String inboxDelete = linkString + "inbox/" + selectedRequestId;
+                                            global.sendDeleteRequestWithTokenWithHandler(inboxDelete, token, new HandlerResponse() {
+
+                                                @Override
+                                                public void handleResponse(String response) {
+                                                    Intent providerIntent = new Intent(ProviderActivity.this, ProviderActivity.class);
+                                                    providerIntent.putExtra("linkString", linkString);
+                                                    providerIntent.putExtra("token", token);
+                                                    providerIntent.putExtra("userID", userID);
+
+                                                    startActivity(providerIntent);
+                                                    finish();
+                                                }
+                                            });
+
+                                        }
+                                    });
+                                }
+                            });
+                        }
                     }
                 });
             }
         });
     }
+
 
 
 
