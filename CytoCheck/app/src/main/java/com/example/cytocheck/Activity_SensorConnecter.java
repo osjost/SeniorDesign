@@ -64,6 +64,14 @@ public class Activity_SensorConnecter extends Activity_BiometricViewer {
         String tempLower = intent.getStringExtra("tempLower");
         String tempUpper = intent.getStringExtra("tempUpper");
         setIntentStrings(linkString, userID, token, hrLower, hrUpper, tempLower, tempUpper);
+
+        final double mtempUpper = Double.parseDouble(tempUpper);
+        final double mtempLower = Double.parseDouble(tempLower);
+
+        final int mhrUpper = Integer.parseInt(hrUpper);
+        final int mhrLower = Integer.parseInt(hrLower);
+
+        setThresholds(mhrUpper, mhrLower, mtempUpper, mtempLower);
     }
 
     private void initDisplay() {
@@ -250,7 +258,4 @@ public class Activity_SensorConnecter extends Activity_BiometricViewer {
         }
 
     }
-
-
-
 }
