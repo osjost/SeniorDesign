@@ -187,7 +187,7 @@ public class api {
                         responseMessage = response.toString();
 
                     }
-                    Log.d("post response", responseMessage);
+                    //Log.d("post response", responseMessage);
                     // Invoke the handler
                     if (handler != null) {
                         handler.handleResponse(responseMessage);
