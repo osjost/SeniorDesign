@@ -59,7 +59,11 @@ public class Activity_SensorConnecter extends Activity_BiometricViewer {
         String linkString = intent.getStringExtra("linkString");
         String token = intent.getStringExtra("token");
         String userID = intent.getStringExtra("userID");
-        setIntentStrings(linkString, userID, token);
+        String hrLower = intent.getStringExtra("hrLower");
+        String hrUpper = intent.getStringExtra("hrUpper");
+        String tempLower = intent.getStringExtra("tempLower");
+        String tempUpper = intent.getStringExtra("tempUpper");
+        setIntentStrings(linkString, userID, token, hrLower, hrUpper, tempLower, tempUpper);
     }
 
     private void initDisplay() {
