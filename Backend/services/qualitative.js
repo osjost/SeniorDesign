@@ -1,4 +1,6 @@
 const db = require('./db');
+const fcc = require("./fcc")
+const smsService = require("./messaging")
 
 async function create(qualitative){
 
@@ -39,23 +41,19 @@ async function create(qualitative){
       const conditionsMet = 
         Math.abs(entry.nausea - qualitative.nausea) > 3 ||
         Math.abs(entry.fatigue - qualitative.fatigue) > 3 ||
-        Math.abs(entry.pain - qualitative.pain) > 3 ||
-        Math.abs(entry.rash - qualitative.rash) > 3;
+        Math.abs(entry.pain - qualitative.pain) > 3;
 
       if (conditionsMet) {
           const rows = await db.query(
             `SELECT * FROM provider_patient_associations WHERE patient_id = ?;`,
-            [reading.user_id]
+            [qualitative.user_id]
         );
 
         for (const provider of rows) {
           // get fcc of entry
           let fccRows = await fcc.get(provider.provider_id)
-
-
-
           for (const fcc of fccRows) {
-            smsService.sendFirebaseNotification(fcc, "Emergency with user " + reading.user_id, "Threshold breach detected") 
+            smsService.sendFirebaseNotification(fcc.fcc, "Emergency with user " + qualitative.user_id, "Threshold breach detected") 
           }
         }
 

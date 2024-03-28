@@ -26,7 +26,7 @@ async function create(reading){
       threshold = threshold_cache.getThresh(reading.user_id, reading.sensor_id)
       lowerBound = threshold[0]
       upperBound = threshold[1]
-      if (!( upperBound < reading.reading < lowerBound)) {
+      if (reading.reading > upperBound || reading.reading < lowerBound) {
         // figure out what doctor we need to alert
         const rows = await db.query(
           `SELECT * FROM provider_patient_associations WHERE patient_id = ?;`,
