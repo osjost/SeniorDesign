@@ -102,7 +102,7 @@ curl -k -X POST https://ec2-54-193-162-215.us-west-1.compute.amazonaws.com:443/r
 11/1
 
 testing requesting a reading:
-curl -k -H "Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6Ik11ZWhlaGUiLCJ1c2VySWQiOjE3fQ.kCV-U-8gywVEApgrLOVu8oep7bX7uab4ALEmT3HmvaU" https://ec2-54-193-162-215.us-west-1.compute.amazonaws.com:443/users/17
+curl -k -H "Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6Ik11ZWhlaGUiLCJ1c2VySWQiOjE3fQ.kCV-U-8gywVEApgrLOVu8oep7bX7uab4ALEmT3HmvaU" https://ec2-54-193-162-215.us-west-1.compute.amazonaws.com:443/users/7
 
 
 curl -k -X POST -H "Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InVzZXJ0ZXN0MTIiLCJ1c2VySWQiOjExfQ.PhPb5tGRFmDwLwIx3X8e6y5-zu7n5tEX3l7CWDqod_c" https://ec2-54-193-162-215.us-west-1.compute.amazonaws.com:443/associations/ -H "Content-Type: application/json" -d "{\"patient_id\":\"11\", \"provider_id\":\"1\"}"
