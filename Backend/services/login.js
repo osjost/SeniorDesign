@@ -1,13 +1,10 @@
 const db = require('./db');
 const bcrypt = require('bcrypt');
 const jwt = require("jwt-simple");
+const secret = "1z98AJf901JZAa";
 const saltRounds = 10;
 
-const secret = "1z98AJf901JZAa"
-
-
 async function authenticate(username, password) {
-    // Get password hash and user_id from the database
     const result = await db.query(
         `SELECT password_hash, user_id FROM login WHERE username = ?;`,
         [username]
@@ -23,7 +20,12 @@ async function authenticate(username, password) {
                     reject(err);
                 } else if (compareResult) {
                     // Passwords match, create JWT
-                    const jwtString = jwt.encode({ username: username, userId: user.user_id }, secret);
+                    const payload = {
+                        username: username,
+                        userId: user.user_id,
+                        exp: Math.floor(Date.now() / 1000) + (60 * 60) // Expires in 1 hour
+                    };
+                    const jwtString = jwt.encode(payload, secret);
                     resolve({ jwt: jwtString, user_id: user.user_id }); // Return the JWT and the user object
                 } else {
                     // Passwords do not match
@@ -36,7 +38,6 @@ async function authenticate(username, password) {
     }
 }
 
-
 module.exports = {
     authenticate
-  }
+};
