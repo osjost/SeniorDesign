@@ -253,13 +253,26 @@ public abstract class Activity_BiometricViewer extends Activity {
                         bpmStartTime = -1;
                         bpmThresholdflag = false;
                     }
-
+                    api global = api.getInstance();
                     if(bpmStartTime != -1) {
                         if(passedThirtySec(System.currentTimeMillis(), bpmStartTime))   {
                             // Alert if average passed the threshold
                             bpmAverage = bpmAverage / bpmSampleCount;
                             if(passedThreshold(bpmAverage)) {
                                 // Alert Here <----------------------------------------------------------
+                                try {
+                                    JSONObject breachObject = new JSONObject();
+                                    breachObject.put("user_id",userID);
+                                    breachObject.put("sensor_id", 1);
+                                    global.sendPostRequestWithHandlerWithToken(linkString + "thresholdbreach", breachObject, token, new HandlerResponse() {
+                                        @Override
+                                        public void handleResponse(String response) {
+
+                                        }
+                                    });
+                                } catch (JSONException e){
+
+                                }
                             }
                             // Reset
                             bpmAverage = 0;
@@ -271,7 +284,7 @@ public abstract class Activity_BiometricViewer extends Activity {
                         }
                     }
 
-                    api global = api.getInstance();
+
                     HRdataCount += 1; //increment data count to say that our app has received one more data point
                     HRdataSum += computedHeartRate;
                     HRavgData = HRdataSum / HRdataCount;
@@ -445,13 +458,26 @@ public abstract class Activity_BiometricViewer extends Activity {
                 tempStartTime = -1;
                 tempThresholdFlag = false;
             }
-
+            api global = api.getInstance();
             if(tempStartTime != -1) {
                 if(passedThirtySec(System.currentTimeMillis(), tempStartTime))   {
                     // Alert if average passed the threshold
                     tempAverage = tempAverage / tempSampleCount;
                     if(passedThreshold(tempAverage)) {
                         // Alert Here <----------------------------------------------------------
+                        try {
+                            JSONObject breachObject = new JSONObject();
+                            breachObject.put("user_id",userID);
+                            breachObject.put("sensor_id", 2);
+                            global.sendPostRequestWithHandlerWithToken(linkString + "thresholdbreach", breachObject, token, new HandlerResponse() {
+                                @Override
+                                public void handleResponse(String response) {
+
+                                }
+                            });
+                        } catch (JSONException e){
+
+                        }
                     }
                     // Reset
                     tempAverage = 0;
@@ -464,7 +490,7 @@ public abstract class Activity_BiometricViewer extends Activity {
             }
 
 
-            api global = api.getInstance();
+
             JSONObject sensorData = new JSONObject();
             try {
                 sensorData.put("reading", String.format("%.5f",TemperatureReading.celsiusToFahrenheit(mTemperature)));
