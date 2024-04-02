@@ -275,7 +275,7 @@ public abstract class Activity_BiometricViewer extends Activity {
                     HRdataCount += 1; //increment data count to say that our app has received one more data point
                     HRdataSum += computedHeartRate;
                     HRavgData = HRdataSum / HRdataCount;
-                    if (HRdataCount >= 20) { //userDefined number of how many cycles to send data after
+                    if (HRdataCount >= 20) { // User-Defined number of how many cycles to send data after (20 gives 1 per 5 seconds about)
                         HRdataCount = 0;
                         HRdataSum = 0;
                         //Send post with average data
