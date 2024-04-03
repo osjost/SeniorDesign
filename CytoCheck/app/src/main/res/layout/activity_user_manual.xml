@@ -98,16 +98,31 @@
                 android:id="@+id/tv_step4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Step 4.) Press on one of each of the sensors. One BLE sensor + One ANT+ sensor. You will not be permitted to continue otherwise. "
+                android:text="Step 4.) Press on one of each of the sensors. One BLE sensor + One ANT+ sensor. You will not be permitted to continue otherwise."
                 android:textAlignment="center"
                 android:textSize="20sp" />
 
+            <TextView
+                android:id="@+id/tv_step4_cont"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="If you try to continue without selecting a sensor or only selecting one sensor, you will be notified that you must select another sensor as shwon above."
+                android:textAlignment="center"
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/tv_step5"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Step 5.) Once the previous step in done, press the continue button on the top right corner."
+                android:textAlignment="center"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/tv_step5_cont"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="If a connection fails, you will be notified and no data will appear in the homescreen. "
                 android:textAlignment="center"
                 android:textSize="20sp" />
 
