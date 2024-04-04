@@ -1,6 +1,8 @@
 package com.example.cytocheck;
 
 import android.graphics.Color;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 
@@ -9,6 +11,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
@@ -36,69 +39,139 @@ import java.util.Map;
 import java.util.TimeZone;
 
 public class DataProcessor {
+    private static Map<String, List<QualEntry>> qualDailyData;
+    private static Map<String, List<QualEntry>> qualWeeklyData;
+    private static Map<String, List<QualEntry>> qualMonthlyData;
+    private static boolean qualInit = false;
+
+    private static Map<String, List<QuanEntry>> hrDailyData;
+    private static Map<String, List<QuanEntry>> hrWeeklyData;
+    private static Map<String, List<QuanEntry>> hrMonthlyData;
+    private static boolean hrInit = false;
+
+    private static Map<String, List<QuanEntry>> tempDailyData;
+    private static Map<String, List<QuanEntry>> tempWeeklyData;
+    private static Map<String, List<QuanEntry>> tempMonthlyData;
+    private static boolean tempInit = false;
 
     public static void processData(String jsonData, BarChart barChart, String timeFrame) {
 
-        if (jsonData == "[]" || jsonData == null || jsonData == "") {
-
-            barChart.setVisibility(View.GONE);
-        }
-        else {
-            List<QualEntry> entries = parseJsonData(jsonData);
-            Map<String, List<QualEntry>> data;
+            Log.d("qual status", String.valueOf(qualInit));
+        Log.d("hr status", String.valueOf(hrInit));
+        Log.d("temp status", String.valueOf(tempInit));
             barChart.setVisibility(View.VISIBLE);
-            switch (timeFrame) {
-                case "Weekly":
-                    data = aggregateDataByWeek(entries);
-                    break;
-                case "Monthly":
-                    data = aggregateDataByMonth(entries);
-                    break;
-                default:
-                    data = aggregateDataByDay(entries);
-                    break;
+            if (qualInit) {
+                switch (timeFrame) {
+                    case "Weekly":
+                        plotData(barChart, qualWeeklyData);
+                        break;
+                    case "Monthly":
+                        plotData(barChart, qualMonthlyData);
+                        break;
+                    default:
+                        plotData(barChart, qualDailyData);
+                        break;
+                }
             }
+            else {
 
-            plotData(barChart, data);
-        }
+                List<QualEntry> entries = parseJsonData(jsonData);
+                qualDailyData = aggregateDataByDay(entries);
+                //plotData(barChart, qualDailyData);
+                new Thread(new Runnable() {
+                    public void run() {
+                        qualWeeklyData = aggregateDataByDay(entries);
+                        qualMonthlyData = aggregateDataByMonth(entries);
+                    }
+                }).start();
 
+                qualInit = true;
+            }
     }
     public static void processQuanData(String jsonData, LineChart userDaily, BarChart userBar, int sensorID, String timeframe) {
 
-        if (jsonData == "[]" || jsonData == null || jsonData == "") {
 
-            userDaily.setVisibility(View.GONE);
-            userBar.setVisibility(View.GONE);
-        }
-        else {
-            List<QuanEntry> entries = parseJsonQuanData(jsonData);
-            Map<String, List<QuanEntry>> data;
+            if (sensorID == 1) {
+                if (hrInit) {
+                    switch (timeframe) {
+                        case "Weekly":
+                            userDaily.setVisibility(View.GONE);
+                            userBar.setVisibility(View.VISIBLE);
+                            plotQuanData(userBar, hrWeeklyData, sensorID);
+                            break;
+                        case "Monthly":
+                            userDaily.setVisibility(View.GONE);
+                            userBar.setVisibility(View.VISIBLE);
+                            plotQuanData(userBar, hrMonthlyData, sensorID);
+                            break;
+                        default:
+                            userDaily.setVisibility(View.VISIBLE);
+                            userBar.setVisibility(View.GONE);
+                            plotQuanLine(userDaily, hrDailyData, sensorID);
+                            break;
+                    }
+                }
+                else {
 
-            switch (timeframe) {
-                case "Weekly":
-                    userDaily.setVisibility(View.GONE);
-                    userBar.setVisibility(View.VISIBLE);
-                    data = aggregateQuanDataByWeek(entries, sensorID);
-                    plotQuanData(userBar, data, sensorID);
-                    break;
-                case "Monthly":
-                    userDaily.setVisibility(View.GONE);
-                    userBar.setVisibility(View.VISIBLE);
-                    data = aggregateQuanDataByMonth(entries, sensorID);
-                    plotQuanData(userBar, data, sensorID);
-                    break;
-                default:
+                    List<QuanEntry> entries = parseJsonQuanData(jsonData, sensorID);
+                    //userDaily.setVisibility(View.VISIBLE);
+                    //userBar.setVisibility(View.GONE);
+                    hrDailyData = aggregateQuanDataByDay(entries, sensorID);
+                    //plotQuanLine(userDaily, hrDailyData, sensorID);
+                    new Thread(new Runnable() {
+                        public void run() {
+                            hrWeeklyData = aggregateQuanDataByWeek(entries, sensorID);
+                            hrMonthlyData = aggregateQuanDataByMonth(entries, sensorID);
+                        }
+                    }).start();
+
+                    hrInit = true;
+                }
+            }
+            else {
+                if (tempInit) {
+                    switch (timeframe) {
+                        case "Weekly":
+                            userDaily.setVisibility(View.GONE);
+                            userBar.setVisibility(View.VISIBLE);
+                            plotQuanData(userBar, tempWeeklyData, sensorID);
+                            break;
+                        case "Monthly":
+                            userDaily.setVisibility(View.GONE);
+                            userBar.setVisibility(View.VISIBLE);
+                            plotQuanData(userBar, tempMonthlyData, sensorID);
+                            break;
+                        default:
+                            userDaily.setVisibility(View.VISIBLE);
+                            userBar.setVisibility(View.GONE);
+                            plotQuanLine(userDaily, tempDailyData, sensorID);
+                            break;
+                    }
+                }
+                else {
+
+                    List<QuanEntry> entries = parseJsonQuanData(jsonData, sensorID);
+                    tempDailyData = aggregateQuanDataByDay(entries, sensorID);
                     userDaily.setVisibility(View.VISIBLE);
                     userBar.setVisibility(View.GONE);
-                    data = aggregateQuanDataByDay(entries, sensorID);
-                    plotQuanLine(userDaily, data, sensorID);
-                    break;
+                    plotQuanLine(userDaily, tempDailyData, sensorID);
+                    new Thread(new Runnable() {
+                        public void run() {
+                            tempWeeklyData = aggregateQuanDataByWeek(entries, sensorID);
+                            tempMonthlyData = aggregateQuanDataByMonth(entries, sensorID);
+                        }
+                    }).start();
+
+                    tempInit = true;
+                }
             }
-        }
     }
 
     private static List<QualEntry> parseJsonData(String jsonData) {
         List<QualEntry> entries = new ArrayList<>();
+        if (jsonData == null || jsonData == "[]" || jsonData == "") {
+            return entries;
+        }
         try {
             JSONArray jsonArray = new JSONArray(jsonData);
             for (int i = 0; i < jsonArray.length(); i++) {
@@ -119,20 +192,26 @@ public class DataProcessor {
         return entries;
     }
 
-    private static List<QuanEntry> parseJsonQuanData(String jsonData) {
+    private static List<QuanEntry> parseJsonQuanData(String jsonData, int sensorID) {
         List<QuanEntry> entries = new ArrayList<>();
+        if (jsonData == null || jsonData == "[]" || jsonData == "") {
+            return entries;
+        }
         try {
             JSONArray jsonArray = new JSONArray(jsonData);
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
-                double data = jsonObject.getDouble("reading");
-                int sensorID = jsonObject.getInt("sensor_id");
-                String timestamp = jsonObject.getString("time_stamp");
-
-                // Convert timestamp to local time
-                String localTimestamp = convertToLocale(timestamp);
-
-                entries.add(new QuanEntry(localTimestamp, data, sensorID));
+                if (jsonObject.has("day")) {
+                    String day = jsonObject.getString("day");
+                    String timeStamp = convertToLocale(day);
+                    double averageReading = jsonObject.getDouble("average_reading");
+                    entries.add(new QuanEntry(timeStamp, averageReading, sensorID));
+                } else {
+                    double data = jsonObject.getDouble("reading");
+                    String timestamp = jsonObject.getString("time_stamp");
+                    String localTimestamp = convertToLocale(timestamp);
+                    entries.add(new QuanEntry(localTimestamp, data, sensorID));
+                }
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -396,6 +475,13 @@ public class DataProcessor {
         ArrayList<String> dates = new ArrayList<>();
 
         int index = 0;
+        if (data == null) {
+            barChart.setVisibility(View.GONE);
+            return;
+        }
+        else {
+            barChart.setVisibility(View.VISIBLE);
+        }
         for (Map.Entry<String, List<QualEntry>> entry : data.entrySet()) {
             List<QualEntry> entries = entry.getValue();
 
@@ -432,6 +518,10 @@ public class DataProcessor {
         
         barChart.setData(barData);
 
+        barChart.getDescription().setEnabled(false); // Disable description
+        barChart.setDrawGridBackground(false); // Disable grid background
+
+
         // Set the X-axis labels
         barChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(dates));
         barChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
@@ -449,7 +539,13 @@ public class DataProcessor {
         ArrayList<String> dates = new ArrayList<>();
 
         int index = 0;
-
+        if (data == null) {
+            barChart.setVisibility(View.GONE);
+            return;
+        }
+        else {
+            barChart.setVisibility(View.VISIBLE);
+        }
         for (Map.Entry<String, List<QuanEntry>> entry : data.entrySet()) {
             List<QuanEntry> entries = entry.getValue();
 
@@ -479,14 +575,16 @@ public class DataProcessor {
         ArrayList<IBarDataSet> dataSets = new ArrayList<>();
         dataSets.add(dataSet);
 
+
+
         // Create a BarData object with the combined dataset
         BarData barData = new BarData(dataSets);
 
         // Customize the BarChart appearance
         barChart.setData(barData);
+
         barChart.getDescription().setEnabled(false); // Disable description
         barChart.setDrawGridBackground(false); // Disable grid background
-        barChart.animateY(1000); // Add animation
 
         // Set the X-axis labels and other properties
         XAxis xAxis = barChart.getXAxis();
@@ -507,6 +605,14 @@ public class DataProcessor {
     private static void plotQuanLine(LineChart lineChart, Map<String, List<QuanEntry>> data, int sensorID) {
         ArrayList<Entry> lineEntries = new ArrayList<>();
         ArrayList<String> dates = new ArrayList<>();
+
+        if (data == null) {
+            lineChart.setVisibility(View.GONE);
+            return;
+        }
+        else {
+            lineChart.setVisibility(View.VISIBLE);
+        }
 
         for (Map.Entry<String, List<QuanEntry>> entry : data.entrySet()) {
             List<QuanEntry> entries = entry.getValue();
@@ -537,6 +643,7 @@ public class DataProcessor {
 
         // Set the data to the line chart
         lineChart.setData(lineData);
+        lineChart.getDescription().setEnabled(false);
 
         // Set the X-axis labels
         lineChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(dates));
