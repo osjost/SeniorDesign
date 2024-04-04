@@ -4,6 +4,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="10sp"
+        android:layout_marginRight="10sp"
+        android:orientation="vertical"
+        android:gravity="left">
+
+    <Button
+        android:id="@+id/patientReturn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="Return to Home"/>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -23,21 +39,19 @@
             android:id="@+id/titleAssociation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
             android:text="Link with your Provider"
-            android:textSize="34sp" />
+            android:textColor="#04589B"
+            android:textSize="34sp"
+            android:textStyle="bold" />
 
-        <Button
-        android:id="@+id/patientReturn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Return to Home"/>
-
-    <TextView
-        android:id="@+id/currentProvider"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Current Provider:"
-        android:textSize="24sp"/>
+        <TextView
+            android:id="@+id/currentProvider"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Current Provider:"
+            android:textColor="#04589B"
+            android:textSize="24sp" />
 
         <Button
             android:id="@+id/deleteCurrent"
@@ -46,11 +60,13 @@
             android:text="Remove Current Provider" />
 
         <TextView
-        android:id="@+id/newProvider"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Enter Your New Provider ID:"
-        android:textSize="24sp"/>
+            android:id="@+id/newProvider"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Enter Your New Provider ID:"
+            android:textColor="#04589B"
+            android:textSize="24sp" />
 
     <EditText
         android:id="@+id/newProviderID"
@@ -68,4 +84,5 @@
 
     </LinearLayout>
     </ScrollView>
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
