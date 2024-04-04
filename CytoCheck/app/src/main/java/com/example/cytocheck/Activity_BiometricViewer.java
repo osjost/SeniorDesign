@@ -127,7 +127,10 @@ public abstract class Activity_BiometricViewer extends Activity {
                 finish();
             }
             // Automatically connects to the device upon successful start-up initialization.
-            mBluetoothLeService.connect(btDevice.getAddress());
+            boolean success = mBluetoothLeService.connect(btDevice.getAddress());
+            if(!success) {
+                Toast.makeText(Activity_BiometricViewer.this, "Could not connect to BLE device", Toast.LENGTH_SHORT).show();
+            }
         }
 
         @Override
@@ -149,8 +152,8 @@ public abstract class Activity_BiometricViewer extends Activity {
                 break;
                 case BluetoothLeService.ACTION_GATT_DISCONNECTED: {
                     clearUI();
-                    setConnecting(true);
-                    displayTemperature();
+                    setConnecting(false);
+                    Toast.makeText(Activity_BiometricViewer.this, "Bluetooth Device Disconnected", Toast.LENGTH_SHORT).show();
                 }
                 break;
                 case BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED: {
@@ -189,6 +192,10 @@ public abstract class Activity_BiometricViewer extends Activity {
         hrUpper = HRUpper;
         tempLower = TempLower;
         tempUpper = TempUpper;
+        bpmUpperThreshold = Integer.parseInt(hrUpper);
+        bpmLowerThreshold = Integer.parseInt(hrLower);
+        tempUpperThreshold = Double.parseDouble(tempUpper);
+        tempLowerThreshold = Double.parseDouble(tempLower);
     }
 
     private void initBLEConnection() {
@@ -246,28 +253,38 @@ public abstract class Activity_BiometricViewer extends Activity {
                 if (!DataState.ZERO_DETECTED.equals(dataState)) {
                     tempHRText = String.valueOf(computedHeartRate);
 
-                    if(passedThreshold(computedHeartRate)) {
+                    if(passedThreshold(computedHeartRate) && bpmThresholdflag == false) {
                         bpmStartTime = System.currentTimeMillis();
                         bpmThresholdflag = true;
-                    } else {
-                        bpmStartTime = -1;
-                        bpmThresholdflag = false;
                     }
                     api global = api.getInstance();
-                    if(bpmStartTime != -1) {
+                    if(bpmStartTime != 0) {
                         if(passedThirtySec(System.currentTimeMillis(), bpmStartTime))   {
+
                             // Alert if average passed the threshold
                             bpmAverage = bpmAverage / bpmSampleCount;
                             if(passedThreshold(bpmAverage)) {
+
                                 // Alert Here <----------------------------------------------------------
                                 try {
                                     JSONObject breachObject = new JSONObject();
                                     breachObject.put("user_id",userID);
                                     breachObject.put("sensor_id", 1);
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Toast.makeText(Activity_BiometricViewer.this, breachObject.toString(), Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
                                     global.sendPostRequestWithHandlerWithToken(linkString + "thresholdbreach", breachObject, token, new HandlerResponse() {
                                         @Override
                                         public void handleResponse(String response) {
-
+                                            runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    Toast.makeText(Activity_BiometricViewer.this, response, Toast.LENGTH_SHORT).show();
+                                                }
+                                            });
                                         }
                                     });
                                 } catch (JSONException e){
@@ -277,6 +294,9 @@ public abstract class Activity_BiometricViewer extends Activity {
                             // Reset
                             bpmAverage = 0;
                             bpmSampleCount = 0;
+
+                            bpmStartTime = 0;
+                            bpmThresholdflag = false;
                         } else {
                             // Get the average
                             bpmAverage += computedHeartRate;
@@ -345,7 +365,7 @@ public abstract class Activity_BiometricViewer extends Activity {
                             finish();
                             break;
                         case DEPENDENCY_NOT_INSTALLED:
-                            tv_status.setText("Error. Do Menu->Reset.");
+                            tv_status.setText("Error");
                             AlertDialog.Builder adlgBldr = new AlertDialog.Builder(Activity_BiometricViewer.this);
                             adlgBldr.setTitle("Missing Dependency");
                             adlgBldr.setMessage("The required service\n\"" + AntPlusHeartRatePcc.getMissingDependencyName() + "\"\n was not found. You need to install the ANT+ Plugins service or you may need to update your existing version if you already have it. Do you want to launch the Play Store to get it?");
@@ -371,7 +391,7 @@ public abstract class Activity_BiometricViewer extends Activity {
                             waitDialog.show();
                             break;
                         case USER_CANCELLED:
-                            tv_status.setText("Cancelled. Do Menu->Reset.");
+                            tv_status.setText("Cancelled");
                             break;
                         case UNRECOGNIZED:
                             Toast.makeText(Activity_BiometricViewer.this,
@@ -380,7 +400,7 @@ public abstract class Activity_BiometricViewer extends Activity {
                             finish();
                             break;
                         default:
-                            Toast.makeText(Activity_BiometricViewer.this, "Unrecognized result: " + resultCode, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(Activity_BiometricViewer.this, "Could not connect to ANT+ device", Toast.LENGTH_SHORT).show();
                             finish();
                             break;
                     }
@@ -451,15 +471,12 @@ public abstract class Activity_BiometricViewer extends Activity {
             tv_degreesUnit.setText(unit);
 
 
-            if(passedThreshold(TemperatureReading.celsiusToFahrenheit(mTemperature))) {
+            if(passedThreshold(TemperatureReading.celsiusToFahrenheit(mTemperature)) && !tempThresholdFlag) {
                 tempStartTime = System.currentTimeMillis();
                 tempThresholdFlag = true;
-            } else {
-                tempStartTime = -1;
-                tempThresholdFlag = false;
             }
             api global = api.getInstance();
-            if(tempStartTime != -1) {
+            if(tempStartTime != 0) {
                 if(passedThirtySec(System.currentTimeMillis(), tempStartTime))   {
                     // Alert if average passed the threshold
                     tempAverage = tempAverage / tempSampleCount;
@@ -482,6 +499,9 @@ public abstract class Activity_BiometricViewer extends Activity {
                     // Reset
                     tempAverage = 0;
                     tempSampleCount = 0;
+
+                    tempThresholdFlag = false;
+                    tempStartTime = 0;
                 } else {
                     // Get the average
                     tempAverage += TemperatureReading.celsiusToFahrenheit(mTemperature);
@@ -616,6 +636,7 @@ public abstract class Activity_BiometricViewer extends Activity {
     }
 
     private boolean passedThirtySec(final long currentTime, final long startTime) {
+
         return currentTime - startTime > THIRTYSECBREACH;
     }
 

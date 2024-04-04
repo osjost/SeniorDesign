@@ -96,12 +96,12 @@ curl -k -X POST https://ec2-54-193-162-215.us-west-1.compute.amazonaws.com:443/l
 curl -k -X POST https://ec2-54-193-162-215.us-west-1.compute.amazonaws.com:443/fcc -H "Content-Type: application/json" -d "{\"user_id\":\"1\", \"fcc\":\"aaaaaaaa\"}"
 
 testing pushing in a reading:
-curl -k -X POST https://ec2-54-193-162-215.us-west-1.compute.amazonaws.com:443/readings -H "Content-Type: application/json" -H "Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InVzZXJ0ZXN0MTIiLCJ1c2VySWQiOjExfQ.PhPb5tGRFmDwLwIx3X8e6y5-zu7n5tEX3l7CWDqod_c" -d "{\"reading\":\"11.1\", \"sensor_id\":\"1\", \"user_id\":\"11\"}"
+curl -k -X POST https://ec2-54-193-162-215.us-west-1.compute.amazonaws.com:443/readings -H "Content-Type: application/json" -H "Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InVzZXJ0ZXN0MTIiLCJ1c2VySWQiOjExfQ.PhPb5tGRFmDwLwIx3X8e6y5-zu7n5tEX3l7CWDqod_c" -d "{\"reading\":\"65\", \"sensor_id\":\"1\", \"user_id\":\"7\"}"
 
 11/1
 
 testing requesting a reading:
-curl -k -H "Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6Ik11ZWhlaGUiLCJ1c2VySWQiOjE3fQ.kCV-U-8gywVEApgrLOVu8oep7bX7uab4ALEmT3HmvaU" https://ec2-54-193-162-215.us-west-1.compute.amazonaws.com:443/users/7
+curl -k -H "Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6Ik11ZWhlaGUiLCJ1c2VySWQiOjE3fQ.kCV-U-8gywVEApgrLOVu8oep7bX7uab4ALEmT3HmvaU" https://ec2-54-193-162-215.us-west-1.compute.amazonaws.com:443/readings/7/1/0
 
 
 curl -k -X POST -H "Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InVzZXJ0ZXN0MTIiLCJ1c2VySWQiOjExfQ.PhPb5tGRFmDwLwIx3X8e6y5-zu7n5tEX3l7CWDqod_c" https://ec2-54-193-162-215.us-west-1.compute.amazonaws.com:443/associations/ -H "Content-Type: application/json" -d "{\"patient_id\":\"11\", \"provider_id\":\"1\"}"

@@ -121,6 +121,9 @@ public class Activity_SensorConnecter extends Activity_BiometricViewer {
                                     base_IPluginAccessResultReceiver.onResultReceived(result, resultCode, initialDeviceState);
                                     hrScanCtrl = null;
                                 }
+                                else {
+                                    Toast.makeText(Activity_SensorConnecter.this, "Could not connect to ANT+ device", Toast.LENGTH_SHORT).show();
+                                }
                             }
                         }, base_IDeviceStateChangeReceiver);
             }
@@ -224,7 +227,6 @@ public class Activity_SensorConnecter extends Activity_BiometricViewer {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 BluetoothDevice[] btdeviceslist = new BluetoothDevice[pairedDevices.size()];
                 pairedDevices.toArray(btdeviceslist);
-                //intent.putExtra(DEVICE, btdeviceslist[i]);
 
                 bleDeviceFlag = true;
                 blePos = i;

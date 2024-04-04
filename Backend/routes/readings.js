@@ -17,7 +17,7 @@ router.post('/', async function(req, res, next) {
 /* GET data */
 router.get('/:user_id/:sensor_id', async function(req, res, next) {
   try {
-    res.json(await data.getAll(req.params.user_id, req.params.sensor_id));
+    res.json(await data.getAll(req.params.user_id, req.params.sensor_id, req.params.date));
   } catch (err) {
     console.error(`Error while getting reading`, err.message);
     next(err);

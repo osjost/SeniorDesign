@@ -19,14 +19,14 @@
         android:orientation="vertical"
         android:gravity="center">
 
-    <TextView
-        android:id="@+id/titleAssociation"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Link with your Provider"
-        android:textSize="34sp"/>
+        <TextView
+            android:id="@+id/titleAssociation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Link with your Provider"
+            android:textSize="34sp" />
 
-    <Button
+        <Button
         android:id="@+id/patientReturn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
