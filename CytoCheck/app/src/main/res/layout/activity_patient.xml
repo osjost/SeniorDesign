@@ -40,13 +40,15 @@
                     android:layout_marginTop="5sp"
                     android:text="Welcome, User"
                     android:textColor="#04589B"
-                    android:textSize="34sp" />
+                    android:textSize="24sp" />
 
                 <Button
                     android:id="@+id/logOut"
                     android:layout_width="119dp"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="right"
                     android:layout_marginLeft="20sp"
+                    android:backgroundTint="#04589B"
                     android:text="Log Out" />
 
             </LinearLayout>
@@ -56,6 +58,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20sp"
+                android:backgroundTint="#04589B"
                 android:text="Link New and View Providers" />
 
             <com.github.mikephil.charting.charts.BarChart
@@ -127,7 +130,8 @@
                     android:id="@+id/surveySubmit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="110sp"
+                    android:layout_marginLeft="90sp"
+                    android:backgroundTint="#04589B"
                     android:text="Submit" />
 
             </LinearLayout>
@@ -180,7 +184,8 @@
                     android:id="@+id/surveySubmit2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="140sp"
+                    android:layout_marginLeft="120sp"
+                    android:backgroundTint="#04589B"
                     android:text="Submit" />
             </LinearLayout>
 
@@ -234,7 +239,8 @@
                     android:id="@+id/surveySubmit3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="110sp"
+                    android:layout_marginLeft="90sp"
+                    android:backgroundTint="#04589B"
                     android:text="Submit" />
 
             </LinearLayout>
@@ -269,6 +275,7 @@
                     android:id="@+id/rashButton"
                     android:layout_width="159dp"
                     android:layout_height="wrap_content"
+                    android:backgroundTint="#04589B"
                     android:text="Rash Survey" />
 
                 <Button
@@ -276,6 +283,7 @@
                     android:layout_width="198dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10sp"
+                    android:backgroundTint="#04589B"
                     android:text="Additional Symptoms" />
 
             </LinearLayout>
@@ -294,6 +302,7 @@
                     android:id="@+id/sensorButton"
                     android:layout_width="180dp"
                     android:layout_height="wrap_content"
+                    android:backgroundTint="#04589B"
                     android:text="Connect Sensor" />
 
                 <Button
@@ -301,6 +310,7 @@
                     android:layout_width="180dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
+                    android:backgroundTint="#FF0000"
                     android:text="Emergency Alert" />
 
             </LinearLayout>
