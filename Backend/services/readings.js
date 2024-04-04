@@ -64,15 +64,39 @@ async function create(reading){
     return {message};
   }
 
-  async function getAll(userId, sensorId) {
-    const rows = await db.query(
-        `SELECT * FROM readings WHERE user_id = ? AND sensor_id = ?;`,
-        [userId, sensorId]
+  async function getAll(userId, sensorId, date) {
+    // Query to get average readings for the last 30 days
+    const averageReadingsRows = await db.query(
+      `SELECT
+        DATE(time_stamp) AS day,
+        AVG(reading) AS average_reading
+      FROM readings
+      WHERE user_id = ? AND sensor_id = ?
+        AND time_stamp >= CURDATE() - INTERVAL 30 DAY
+      GROUP BY DATE(time_stamp)
+      ORDER BY day;`,
+      [userId, sensorId]
     );
-
-    console.log(rows);
+  
+    // Query to get all readings from the most recent day in the table
+    const mostRecentDayRows = await db.query(
+      `SELECT *
+       FROM readings
+       WHERE user_id = ? AND sensor_id = ?
+         AND DATE(time_stamp) = (
+           SELECT MAX(DATE(time_stamp))
+           FROM readings
+           WHERE user_id = ? AND sensor_id = ?
+         );`,
+      [userId, sensorId, userId, sensorId] // Parameters are listed twice since they're used in both the main query and the subquery
+    );
+  
+    // Concatenate the results of the two queries
+    const rows = averageReadingsRows.concat(mostRecentDayRows);
+  
     return rows;
-}
+  }
+  
   
   module.exports = {
     getAll,
