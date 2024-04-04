@@ -126,6 +126,14 @@
                 android:textAlignment="center"
                 android:textSize="20sp" />
 
+            <TextView
+                android:id="@+id/tv_step5_cont_cont"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Otherwise, you will see the page that looks similar to the one below."
+                android:textAlignment="center"
+                android:textSize="20sp" />
+
             <ImageView
                 android:id="@+id/iv_readingsexample"
                 android:layout_width="match_parent"

@@ -127,7 +127,7 @@ public abstract class Activity_BiometricViewer extends Activity {
                 finish();
             }
             // Automatically connects to the device upon successful start-up initialization.
-            boolean success = mBluetoothLeService.connect(btDevice.getAddress())
+            boolean success = mBluetoothLeService.connect(btDevice.getAddress());
             if(!success) {
                 Toast.makeText(Activity_BiometricViewer.this, "Could not connect to BLE device", Toast.LENGTH_SHORT).show();
             }
