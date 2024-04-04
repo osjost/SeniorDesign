@@ -7,20 +7,23 @@
     tools:context=".Activity_UserManual">
 
     <ScrollView
-        android:layout_width="409dp"
-        android:layout_height="729dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical" >
 
-            <ImageView
 
+            <ImageView
                 android:id="@+id/iv_BDlogo"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
@@ -123,6 +126,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="If a connection fails, you will be notified and no data will appear in the homescreen. "
+                android:textAlignment="center"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/tv_step5_cont_cont"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Otherwise, you will see the page that looks similar to the one below."
                 android:textAlignment="center"
                 android:textSize="20sp" />
 

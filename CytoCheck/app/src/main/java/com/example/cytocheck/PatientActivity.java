@@ -227,8 +227,8 @@ public class PatientActivity extends AppCompatActivity {
             @Override
             public void onProgressChanged(SeekBar healthSlideBar, int progress, boolean fromUser) {
                 // 'progress' contains the new value of the SeekBar
-                userScore.setText((10-progress) + "/10");
-                fatigueFinal = String.valueOf(10-progress);
+                userScore.setText(progress + "/10");
+                fatigueFinal = String.valueOf(progress);
             }
             @Override
             public void onStartTrackingTouch(SeekBar healthSlideBar) { //Called when user Starts touch
@@ -242,8 +242,8 @@ public class PatientActivity extends AppCompatActivity {
             @Override
             public void onProgressChanged(SeekBar painSlideBar, int progress, boolean fromUser) {
                 // 'progress' contains the new value of the SeekBar
-                userPain.setText((10-progress) + "/10");
-                painFinal = String.valueOf(10-progress);
+                userPain.setText(progress + "/10");
+                painFinal = String.valueOf(progress);
             }
             @Override
             public void onStartTrackingTouch(SeekBar painSlideBar) { //Called when user Starts touch
@@ -257,8 +257,8 @@ public class PatientActivity extends AppCompatActivity {
             @Override
             public void onProgressChanged(SeekBar nauseaSlideBar, int progress, boolean fromUser) {
                 // 'progress' contains the new value of the SeekBar
-                userNausea.setText((10-progress) + "/10");
-                nauseaFinal = String.valueOf(10-progress);
+                userNausea.setText(progress + "/10");
+                nauseaFinal = String.valueOf(progress);
             }
             @Override
             public void onStartTrackingTouch(SeekBar nauseaSlideBar) { //Called when user Starts touch

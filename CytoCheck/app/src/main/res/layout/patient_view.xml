@@ -20,17 +20,23 @@
 
             <Button
                 android:id="@+id/providerPatientReturn"
-                android:layout_width="wrap_content"
+                android:layout_width="120dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20sp"
-                android:text="Back"/>
+                android:layout_gravity="left"
+                android:layout_marginStart="10sp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:text="Return" />
 
             <TextView
                 android:id="@+id/patientLabel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
                 android:text="Patient Name"
-                android:textSize="34sp"/>
+                android:textColor="#04589B"
+                android:textSize="34sp"
+                android:textStyle="bold" />
 
 
             <com.github.mikephil.charting.charts.BarChart
@@ -68,8 +74,11 @@
                 android:id="@+id/patientThreshold1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
                 android:text="Patient Heart Rate Threshold:"
-                android:textSize="24sp"/>
+                android:textColor="#04589B"
+                android:textSize="24sp"
+                android:textStyle="bold" />
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -102,8 +111,11 @@
                 android:id="@+id/patientThreshold2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
                 android:text="Patient Temperature Threshold:"
-                android:textSize="24sp"/>
+                android:textColor="#04589B"
+                android:textSize="24sp"
+                android:textStyle="bold" />
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
