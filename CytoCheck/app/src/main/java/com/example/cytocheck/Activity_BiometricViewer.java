@@ -189,6 +189,10 @@ public abstract class Activity_BiometricViewer extends Activity {
         hrUpper = HRUpper;
         tempLower = TempLower;
         tempUpper = TempUpper;
+        bpmUpperThreshold = Integer.parseInt(hrUpper);
+        bpmLowerThreshold = Integer.parseInt(hrLower);
+        tempUpperThreshold = Double.parseDouble(tempUpper);
+        tempLowerThreshold = Double.parseDouble(tempLower);
     }
 
     private void initBLEConnection() {
@@ -246,28 +250,38 @@ public abstract class Activity_BiometricViewer extends Activity {
                 if (!DataState.ZERO_DETECTED.equals(dataState)) {
                     tempHRText = String.valueOf(computedHeartRate);
 
-                    if(passedThreshold(computedHeartRate)) {
+                    if(passedThreshold(computedHeartRate) && bpmThresholdflag == false) {
                         bpmStartTime = System.currentTimeMillis();
                         bpmThresholdflag = true;
-                    } else {
-                        bpmStartTime = -1;
-                        bpmThresholdflag = false;
                     }
                     api global = api.getInstance();
-                    if(bpmStartTime != -1) {
+                    if(bpmStartTime != 0) {
                         if(passedThirtySec(System.currentTimeMillis(), bpmStartTime))   {
+
                             // Alert if average passed the threshold
                             bpmAverage = bpmAverage / bpmSampleCount;
                             if(passedThreshold(bpmAverage)) {
+
                                 // Alert Here <----------------------------------------------------------
                                 try {
                                     JSONObject breachObject = new JSONObject();
                                     breachObject.put("user_id",userID);
                                     breachObject.put("sensor_id", 1);
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Toast.makeText(Activity_BiometricViewer.this, breachObject.toString(), Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
                                     global.sendPostRequestWithHandlerWithToken(linkString + "thresholdbreach", breachObject, token, new HandlerResponse() {
                                         @Override
                                         public void handleResponse(String response) {
-
+                                            runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    Toast.makeText(Activity_BiometricViewer.this, response, Toast.LENGTH_SHORT).show();
+                                                }
+                                            });
                                         }
                                     });
                                 } catch (JSONException e){
@@ -277,6 +291,9 @@ public abstract class Activity_BiometricViewer extends Activity {
                             // Reset
                             bpmAverage = 0;
                             bpmSampleCount = 0;
+
+                            bpmStartTime = 0;
+                            bpmThresholdflag = false;
                         } else {
                             // Get the average
                             bpmAverage += computedHeartRate;
@@ -451,15 +468,12 @@ public abstract class Activity_BiometricViewer extends Activity {
             tv_degreesUnit.setText(unit);
 
 
-            if(passedThreshold(TemperatureReading.celsiusToFahrenheit(mTemperature))) {
+            if(passedThreshold(TemperatureReading.celsiusToFahrenheit(mTemperature)) && !tempThresholdFlag) {
                 tempStartTime = System.currentTimeMillis();
                 tempThresholdFlag = true;
-            } else {
-                tempStartTime = -1;
-                tempThresholdFlag = false;
             }
             api global = api.getInstance();
-            if(tempStartTime != -1) {
+            if(tempStartTime != 0) {
                 if(passedThirtySec(System.currentTimeMillis(), tempStartTime))   {
                     // Alert if average passed the threshold
                     tempAverage = tempAverage / tempSampleCount;
@@ -482,6 +496,9 @@ public abstract class Activity_BiometricViewer extends Activity {
                     // Reset
                     tempAverage = 0;
                     tempSampleCount = 0;
+
+                    tempThresholdFlag = false;
+                    tempStartTime = 0;
                 } else {
                     // Get the average
                     tempAverage += TemperatureReading.celsiusToFahrenheit(mTemperature);
@@ -616,6 +633,7 @@ public abstract class Activity_BiometricViewer extends Activity {
     }
 
     private boolean passedThirtySec(final long currentTime, final long startTime) {
+
         return currentTime - startTime > THIRTYSECBREACH;
     }
 
