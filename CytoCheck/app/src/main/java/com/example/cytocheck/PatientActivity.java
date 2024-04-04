@@ -136,65 +136,82 @@ public class PatientActivity extends AppCompatActivity {
             @Override
             public void handleResponse(String response) {
                 userQualResponse = response;
-                runOnUiThread(new Runnable() {
+                Log.d("qualResponse", response);
+                new Thread(new Runnable() {
                     @Override
                     public void run() {
                                 processData(response, userData, "Daily");
                             }
                 });
-                String patientHR = linkString + "readings/" + userID + "/1";
-                global.sendGetRequestWithHandlerWithToken(patientHR, token, new HandlerResponse() {
+
+            }
+        });
+        String patientHR = linkString + "readings/" + userID + "/1";
+        global.sendGetRequestWithHandlerWithToken(patientHR, token, new HandlerResponse() {
+            @Override
+            public void handleResponse(String response) {
+                userHRResponse = response;
+                Log.d("hrResponse", response);
+                new Thread(new Runnable() {
                     @Override
-                    public void handleResponse(String response) {
-                        userHRResponse = response;
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                processQuanData(response, userHRLine, userHRData, 1, "Daily");
-                            }
-                        });
-                        String patientTemp = linkString + "readings/" + userID + "/2";
-                        global.sendGetRequestWithHandlerWithToken(patientTemp, token, new HandlerResponse() {
-                            @Override
-                            public void handleResponse(String response) {
-                                userTempResponse = response;
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        processQuanData(response, userTempLine, userTempData, 2, "Daily");
-                                    }
-                                });
-                            }
-                        });
+                    public void run() {
+                        processQuanData(response, userHRLine, userHRData, 1, "Daily");
                     }
+                });
+
+            }
+        });
+        String patientTemp = linkString + "readings/" + userID + "/2";
+        global.sendGetRequestWithHandlerWithToken(patientTemp, token, new HandlerResponse() {
+            @Override
+            public void handleResponse(String response) {
+                userTempResponse = response;
+                Log.d("tempResponse", response);
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        processQuanData(response, userTempLine, userTempData, 2, "Daily");
+
+                    }
+
                 });
             }
         });
 
+        mSpinner.setVisibility(View.GONE);
+        userData.setVisibility(View.GONE);
+        userHRData.setVisibility(View.GONE);
+        userTempData.setVisibility(View.GONE);
+        userHRLine.setVisibility(View.GONE);
+        userTempLine.setVisibility(View.GONE);
+
+        Button displayGraphs = findViewById(R.id.graph_display);
+        displayGraphs.setVisibility(View.VISIBLE);
+        displayGraphs.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateAllGraphs("Daily");
+                mSpinner.setVisibility(View.VISIBLE);
+
+                displayGraphs.setVisibility(View.GONE);
+            }
+        });
 
 
         mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedTimeframe = (String) parent.getItemAtPosition(position);
+
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         processData(userQualResponse, userData, selectedTimeframe);
-                    }
-                });
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
                         processQuanData(userHRResponse, userHRLine, userHRData, 1, selectedTimeframe);
-                    }
-                });
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
                         processQuanData(userTempResponse, userTempLine, userTempData, 2, selectedTimeframe);
                     }
                 });
+
             }
 
             @Override
@@ -617,9 +634,14 @@ public class PatientActivity extends AppCompatActivity {
         builder.create().show();
     }
     private void updateAllGraphs(String selectedTimeframe) {
-        processData(userQualResponse, userData, selectedTimeframe);
-        processQuanData(userHRResponse, userHRLine, userHRData, 1, selectedTimeframe);
-        processQuanData(userTempResponse, userTempLine, userTempData, 2, selectedTimeframe);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                processData(userQualResponse, userData, selectedTimeframe);
+                processQuanData(userHRResponse, userHRLine, userHRData, 1, selectedTimeframe);
+                processQuanData(userTempResponse, userTempLine, userTempData, 2, selectedTimeframe);
+            }
+        });
     }
 
 }
