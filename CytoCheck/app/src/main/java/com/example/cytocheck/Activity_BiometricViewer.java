@@ -127,7 +127,10 @@ public abstract class Activity_BiometricViewer extends Activity {
                 finish();
             }
             // Automatically connects to the device upon successful start-up initialization.
-            mBluetoothLeService.connect(btDevice.getAddress());
+            boolean success = mBluetoothLeService.connect(btDevice.getAddress())
+            if(!success) {
+                Toast.makeText(Activity_BiometricViewer.this, "Could not connect to BLE device", Toast.LENGTH_SHORT).show();
+            }
         }
 
         @Override
@@ -149,8 +152,8 @@ public abstract class Activity_BiometricViewer extends Activity {
                 break;
                 case BluetoothLeService.ACTION_GATT_DISCONNECTED: {
                     clearUI();
-                    setConnecting(true);
-                    displayTemperature();
+                    setConnecting(false);
+                    Toast.makeText(Activity_BiometricViewer.this, "Bluetooth Device Disconnected", Toast.LENGTH_SHORT).show();
                 }
                 break;
                 case BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED: {
@@ -362,7 +365,7 @@ public abstract class Activity_BiometricViewer extends Activity {
                             finish();
                             break;
                         case DEPENDENCY_NOT_INSTALLED:
-                            tv_status.setText("Error. Do Menu->Reset.");
+                            tv_status.setText("Error");
                             AlertDialog.Builder adlgBldr = new AlertDialog.Builder(Activity_BiometricViewer.this);
                             adlgBldr.setTitle("Missing Dependency");
                             adlgBldr.setMessage("The required service\n\"" + AntPlusHeartRatePcc.getMissingDependencyName() + "\"\n was not found. You need to install the ANT+ Plugins service or you may need to update your existing version if you already have it. Do you want to launch the Play Store to get it?");
@@ -388,7 +391,7 @@ public abstract class Activity_BiometricViewer extends Activity {
                             waitDialog.show();
                             break;
                         case USER_CANCELLED:
-                            tv_status.setText("Cancelled. Do Menu->Reset.");
+                            tv_status.setText("Cancelled");
                             break;
                         case UNRECOGNIZED:
                             Toast.makeText(Activity_BiometricViewer.this,
@@ -397,7 +400,7 @@ public abstract class Activity_BiometricViewer extends Activity {
                             finish();
                             break;
                         default:
-                            Toast.makeText(Activity_BiometricViewer.this, "Unrecognized result: " + resultCode, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(Activity_BiometricViewer.this, "Could not connect to ANT+ device", Toast.LENGTH_SHORT).show();
                             finish();
                             break;
                     }
