@@ -22,7 +22,8 @@
             android:id="@+id/providerRequestReturn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Back"/>
+            android:backgroundTint="#04589B"
+            android:text="Back" />
 
         <TextView
             android:id="@+id/requestLabel"
@@ -39,16 +40,20 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-        <Button
-            android:id="@+id/approveRequest"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Approve"/>
-        <Button
-            android:id="@+id/denyRequest"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Deny"/>
+
+            <Button
+                android:id="@+id/approveRequest"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="#04589B"
+                android:text="Approve" />
+
+            <Button
+                android:id="@+id/denyRequest"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="#04589B"
+                android:text="Deny" />
         </LinearLayout>
 
 
