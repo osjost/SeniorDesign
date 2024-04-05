@@ -39,6 +39,13 @@
                 android:textSize="34sp"
                 android:textStyle="bold" />
 
+            <Button
+                android:id="@+id/patgraph_display"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20sp"
+                android:text="Display Graphs"/>
+
 
             <com.github.mikephil.charting.charts.BarChart
                 android:id="@+id/userData"

@@ -490,7 +490,7 @@ public class DataProcessor {
                 nauseaEntries.add(new BarEntry(index - 0.2f, e.getNausea()));
                 fatigueEntries.add(new BarEntry(index, e.getFatigue()));
                 painEntries.add(new BarEntry(index + 0.2f, e.getPain()));
-                dates.add(entry.getKey());
+                dates.add(entry.getKey().substring(5));
                 index++;
             }
         }
@@ -511,6 +511,7 @@ public class DataProcessor {
 
         // Create a BarData object and set the datasets
         BarData barData = new BarData(dataSets);
+        barData.setDrawValues(false);
 
         // Set the spacing between clusters
         barData.setBarWidth(0.2f);
@@ -557,7 +558,7 @@ public class DataProcessor {
             for (QuanEntry e : entries) {
                 float xPos = index;
                 dataEntries.add(new BarEntry(xPos, (float) e.getData()));
-                dates.add(entry.getKey());
+                dates.add(entry.getKey().substring(5));
                 index++;
             }
 
@@ -565,6 +566,7 @@ public class DataProcessor {
 
         // Create a BarData object and set the dataset
         BarDataSet dataSet = new BarDataSet(dataEntries, "Sensor Data");
+        dataSet.setDrawValues(false);
         if (sensorID == 1) {
             dataSet.setLabel("Heart Rate");
             dataSet.setColor(Color.rgb(242,105,32)); // Set the bar color
@@ -630,15 +632,22 @@ public class DataProcessor {
 
         // Create a dataset for the line chart
         LineDataSet dataSet = new LineDataSet(lineEntries, "Average Data");
+        dataSet.setDrawValues(false);
         dataSet.setColor(Color.BLUE); // Set the line color
         if (sensorID == 1) {
             dataSet.setLabel("Heart Rate");
             dataSet.setColor(Color.rgb(242,105,32)); // Set the line color
             dataSet.setCircleColor(Color.rgb(242,105,32));
+            //        Set the Y-axis interval
+            lineChart.getAxisLeft().setAxisMinimum(30);
+            lineChart.getAxisLeft().setAxisMaximum(200);
         } else {
             dataSet.setLabel("Temperature");
             dataSet.setColor(Color.rgb(4,88,155)); // Set the line color
             dataSet.setCircleColor(Color.rgb(4,88,155));
+            //        Set the Y-axis interval
+            lineChart.getAxisLeft().setAxisMinimum(90);
+            lineChart.getAxisLeft().setAxisMaximum(115);
         }
 
 
@@ -661,9 +670,7 @@ public class DataProcessor {
         lineChart.getXAxis().setLabelCount(dates.size());
         lineChart.getXAxis().setTextSize(10f);
 
-//        Set the Y-axis interval
-        lineChart.getAxisLeft().setAxisMinimum(150);
-        lineChart.getAxisLeft().setAxisMaximum(150);
+
 
 
 
