@@ -497,11 +497,11 @@ public class DataProcessor {
 
         // Create datasets for each type of data
         BarDataSet setNausea = new BarDataSet(nauseaEntries, "Nausea");
-        setNausea.setColor(Color.GREEN);
+        setNausea.setColor(Color.rgb(0,141,255));
         BarDataSet setFatigue = new BarDataSet(fatigueEntries, "Fatigue");
-        setFatigue.setColor(Color.YELLOW);
+        setFatigue.setColor(Color.rgb(4,88,155));
         BarDataSet setPain = new BarDataSet(painEntries, "Pain");
-        setPain.setColor(Color.RED);
+        setPain.setColor(Color.rgb(0,61,110));
 
         // Combine the datasets
         ArrayList<IBarDataSet> dataSets = new ArrayList<>();
@@ -529,6 +529,10 @@ public class DataProcessor {
         barChart.getXAxis().setLabelRotationAngle(45f);
         barChart.getXAxis().setLabelCount(dates.size());
         barChart.getXAxis().setTextSize(10f);
+
+        // Set the Y-axis
+        barChart.getAxisLeft().setAxisMaximum(10);
+        barChart.getAxisLeft().setAxisMinimum(0);
 
         // Refresh the chart
         barChart.invalidate();
@@ -563,11 +567,11 @@ public class DataProcessor {
         BarDataSet dataSet = new BarDataSet(dataEntries, "Sensor Data");
         if (sensorID == 1) {
             dataSet.setLabel("Heart Rate");
-            dataSet.setColor(Color.RED); // Set the bar color
+            dataSet.setColor(Color.rgb(242,105,32)); // Set the bar color
         }
         else {
             dataSet.setLabel("Temperature");
-            dataSet.setColor(Color.BLUE); // Set the bar color
+            dataSet.setColor(Color.rgb(4,88,155)); // Set the bar color
         }
 
 
@@ -626,13 +630,17 @@ public class DataProcessor {
 
         // Create a dataset for the line chart
         LineDataSet dataSet = new LineDataSet(lineEntries, "Average Data");
+        dataSet.setColor(Color.BLUE); // Set the line color
         if (sensorID == 1) {
             dataSet.setLabel("Heart Rate");
+            dataSet.setColor(Color.rgb(242,105,32)); // Set the line color
+            dataSet.setCircleColor(Color.rgb(242,105,32));
         } else {
             dataSet.setLabel("Temperature");
+            dataSet.setColor(Color.rgb(4,88,155)); // Set the line color
+            dataSet.setCircleColor(Color.rgb(4,88,155));
         }
-        dataSet.setColor(Color.BLUE); // Set the line color
-        dataSet.setCircleColor(Color.BLUE); // Set the circle color for data points
+
 
         // Combine the datasets
         ArrayList<ILineDataSet> dataSets = new ArrayList<>();
@@ -652,6 +660,12 @@ public class DataProcessor {
         lineChart.getXAxis().setLabelRotationAngle(45f);
         lineChart.getXAxis().setLabelCount(dates.size());
         lineChart.getXAxis().setTextSize(10f);
+
+//        Set the Y-axis interval
+        lineChart.getAxisLeft().setAxisMinimum(150);
+        lineChart.getAxisLeft().setAxisMaximum(150);
+
+
 
         // Refresh the chart
         lineChart.invalidate();
