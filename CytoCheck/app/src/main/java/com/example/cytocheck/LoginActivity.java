@@ -9,6 +9,7 @@ import android.os.Looper;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.util.Log;
 import androidx.activity.result.ActivityResultLauncher;
@@ -168,17 +169,15 @@ public class LoginActivity extends AppCompatActivity {
         }
         });
 
-        Button submitButton = findViewById(R.id.signUp); //Signup functionality
-        submitButton.setOnClickListener(new View.OnClickListener() {
+        TextView signupTextView = findViewById(R.id.signUpLabel);
+        signupTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 Intent intent = new Intent(LoginActivity.this, SignupActivity.class); //send user to signup activity
                 intent.putExtra("linkString", linkString); //globalize linkString between activities
-
                 startActivity(intent);
             }
-        }); //end of submit on click listener
+        });
     } //end of onCreate
 
     @Override

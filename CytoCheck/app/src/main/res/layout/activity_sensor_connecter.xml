@@ -34,6 +34,7 @@
         android:id="@+id/continue_button"
         android:layout_width="128dp"
         android:layout_height="52dp"
+        android:backgroundTint="#04589B"
         android:text="Continue"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

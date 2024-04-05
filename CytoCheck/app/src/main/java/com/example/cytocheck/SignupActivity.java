@@ -58,15 +58,6 @@ public class SignupActivity extends AppCompatActivity {
         setContentView(R.layout.activity_signup);
         api global = api.getInstance();
 
-        // Get current timestamp in milliseconds
-        long currentTimeMillis = System.currentTimeMillis();
-
-        // Convert the timestamp to a readable format (optional)
-        String timestampString = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS")
-                .format(new Date(currentTimeMillis));
-
-        // Display the timestamp in a Toast
-        Toast.makeText(this, "Timestamp: " + timestampString, Toast.LENGTH_SHORT).show();
         passText = findViewById(R.id.passwordCreate);
         passText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override

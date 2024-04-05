@@ -26,6 +26,7 @@
                 android:layout_marginStart="10sp"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
+                android:backgroundTint="#04589B"
                 android:text="Return" />
 
             <TextView
@@ -148,7 +149,8 @@
                 android:id="@+id/submitAllThresholds"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Update All Thresholds"/>
+                android:backgroundTint="#04589B"
+                android:text="Update All Thresholds" />
 
             <TextView
                 android:id="@+id/patientQualData"
