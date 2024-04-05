@@ -52,7 +52,7 @@
                     android:text="Log Out" />
 
             </LinearLayout>
-            
+
             <Button
                 android:id="@+id/association_view"
                 android:layout_width="wrap_content"
@@ -132,7 +132,7 @@
                     android:id="@+id/userScoreField"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="20sp"
+                    android:layout_marginLeft="10sp"
                     android:textColor="#04589B"
                     android:textSize="20sp"
                     android:textStyle="bold"
@@ -186,7 +186,7 @@
                     android:id="@+id/userScoreField2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="20sp"
+                    android:layout_marginLeft="10sp"
                     android:textColor="#04589B"
                     android:textSize="20sp"
                     android:textStyle="bold"
@@ -241,7 +241,7 @@
                     android:id="@+id/userScoreField3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="20sp"
+                    android:layout_marginLeft="10sp"
                     android:textColor="#04589B"
                     android:textSize="20sp"
                     android:textStyle="bold"

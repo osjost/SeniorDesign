@@ -50,6 +50,7 @@
                 android:id="@+id/homeButton"
                 android:layout_width="177dp"
                 android:layout_height="wrap_content"
+                android:backgroundTint="#04589B"
                 android:text="Log Out" />
 
             <Button
@@ -57,6 +58,7 @@
                 android:layout_width="163dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20sp"
+                android:backgroundTint="#04589B"
                 android:text="Refresh" />
 
         </LinearLayout>
