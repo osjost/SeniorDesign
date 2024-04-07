@@ -54,12 +54,18 @@ public class DataProcessor {
     private static Map<String, List<QuanEntry>> tempMonthlyData;
     private static boolean tempInit = false;
 
+    public static void setAllToFalse() {
+        qualInit = false;
+        hrInit = false;
+        tempInit = false;
+    }
+
     public static void processData(String jsonData, BarChart barChart, String timeFrame) {
 
             Log.d("qual status", String.valueOf(qualInit));
         Log.d("hr status", String.valueOf(hrInit));
         Log.d("temp status", String.valueOf(tempInit));
-            barChart.setVisibility(View.VISIBLE);
+
             if (qualInit) {
                 switch (timeFrame) {
                     case "Weekly":
@@ -152,9 +158,9 @@ public class DataProcessor {
 
                     List<QuanEntry> entries = parseJsonQuanData(jsonData, sensorID);
                     tempDailyData = aggregateQuanDataByDay(entries, sensorID);
-                    userDaily.setVisibility(View.VISIBLE);
-                    userBar.setVisibility(View.GONE);
-                    plotQuanLine(userDaily, tempDailyData, sensorID);
+                    //userDaily.setVisibility(View.VISIBLE);
+                    //userBar.setVisibility(View.GONE);
+                    //plotQuanLine(userDaily, tempDailyData, sensorID);
                     new Thread(new Runnable() {
                         public void run() {
                             tempWeeklyData = aggregateQuanDataByWeek(entries, sensorID);

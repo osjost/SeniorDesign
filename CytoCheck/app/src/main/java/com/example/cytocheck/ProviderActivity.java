@@ -2,6 +2,7 @@ package com.example.cytocheck;
 
 import static com.example.cytocheck.DataProcessor.processData;
 import static com.example.cytocheck.DataProcessor.processQuanData;
+import static com.example.cytocheck.DataProcessor.setAllToFalse;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -225,10 +226,12 @@ public class ProviderActivity extends AppCompatActivity {
                         Button submitThresholds = findViewById(R.id.submitAllThresholds);
 
                         TextView patientName = findViewById(R.id.patientLabel);
+                        TextView patientContact = findViewById(R.id.patientContact);
                         TextView patientQualData = findViewById(R.id.patientQualData);
 
 
                         patientName.setText(selectedPatientName);
+                        patientContact.setText("Phone:" + selectedPatient.getPhone() + "\n" + "Email:" + selectedPatient.getEmail());
 
                         // Charting Elements
                         userData = findViewById(R.id.userData); // Qualitative data bar chart
@@ -246,12 +249,13 @@ public class ProviderActivity extends AppCompatActivity {
                             @Override
                             public void handleResponse(String response) {
                                 selectedPatient.setQualData(response);
-                                runOnUiThread(new Runnable() {
+                                new Thread(new Runnable() {
                                     @Override
                                     public void run() {
                                         processData(response, userData, "Daily");
+                                        Log.d("qual done", "patient qual done");
                                     }
-                                });
+                                }).start();
 
                             }
                         });
@@ -264,8 +268,9 @@ public class ProviderActivity extends AppCompatActivity {
                                     @Override
                                     public void run() {
                                         processQuanData(response, userHRLine, userHRData, 1, "Daily");
+                                        Log.d("hr done", "patient hr done");
                                     }
-                                });
+                                }).start();
 
                             }
                         });
@@ -278,8 +283,9 @@ public class ProviderActivity extends AppCompatActivity {
                                     @Override
                                     public void run() {
                                         processQuanData(response, userTempLine, userTempData, 2, "Daily");
+                                        Log.d("temp done", "patient temp done");
                                     }
-                                });
+                                }).start();
                             }
                         });
                         mSpinner.setVisibility(View.GONE);
@@ -294,7 +300,7 @@ public class ProviderActivity extends AppCompatActivity {
                         displayGraphs.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                updateAllGraphs(selectedPatient.getQualData(), selectedPatient.getHRData(), selectedPatient.getTempData(), "Daily");
+                                updateAllGraphs("Daily",selectedPatient.getQualData(), selectedPatient.getHRData(), selectedPatient.getTempData());
                                 mSpinner.setVisibility(View.VISIBLE);
 
                                 displayGraphs.setVisibility(View.GONE);
@@ -406,6 +412,7 @@ public class ProviderActivity extends AppCompatActivity {
                         returnProvider.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
+                                setAllToFalse();
                                 Intent providerIntent = new Intent(ProviderActivity.this, ProviderActivity.class);
                                 providerIntent.putExtra("linkString", linkString);
                                 providerIntent.putExtra("token", token);
@@ -434,7 +441,16 @@ public class ProviderActivity extends AppCompatActivity {
 
                                 //TODO if they are doubles and not null, do next, else toast
                                 
-                                String.valueOf(hrLowerThreshBox.getText());
+                                Log.d("lowerhr",String.valueOf(hrLowerThreshBox.getText()));
+                                if (String.valueOf(hrLowerThreshBox.getText()) == "") {
+                                    if (String.valueOf(hrUpperThreshBox.getText()) == "") {
+                                        //Lower and upper unchanged no need to send
+                                    }
+                                    else {
+                                        //upper changed check conditions
+                                        
+                                    }
+                                }
 
                                 String thresholdString = linkString + "threshold";
                                 JSONObject thresholdData = new JSONObject();
@@ -444,13 +460,13 @@ public class ProviderActivity extends AppCompatActivity {
                                     thresholdData.put("lower", String.valueOf(hrLowerThreshBox.getText()));
                                     thresholdData.put("upper", String.valueOf(hrUpperThreshBox.getText()));
                                     Log.d("preHR", thresholdData.toString());
-                                    global.sendPostRequestWithHandlerWithToken(thresholdString, thresholdData, token, new HandlerResponse() {
-                                        @Override
-                                        public void handleResponse(String response) {
-                                            //TODO Toast to say submitted
-                                            Log.d("hrsubmit", response);
-                                        }
-                                    });
+//                                    global.sendPostRequestWithHandlerWithToken(thresholdString, thresholdData, token, new HandlerResponse() {
+//                                        @Override
+//                                        public void handleResponse(String response) {
+//                                            //TODO Toast to say submitted
+//                                            Log.d("hrsubmit", response);
+//                                        }
+//                                    });
                                 }
                                 catch (JSONException e) {
                                     e.printStackTrace();
@@ -464,13 +480,13 @@ public class ProviderActivity extends AppCompatActivity {
                                     tempThresholdData.put("upper", String.valueOf(tempUpperThreshBox.getText()));
 
                                     Log.d("tempdata", tempThresholdData.toString());
-                                    global.sendPostRequestWithHandlerWithToken(thresholdString, tempThresholdData, token, new HandlerResponse() {
-                                        @Override
-                                        public void handleResponse(String response) {
-                                            //TODO Toast to say submitted
-                                            Log.d("tempsubmit", response);
-                                        }
-                                    });
+//                                    global.sendPostRequestWithHandlerWithToken(thresholdString, tempThresholdData, token, new HandlerResponse() {
+//                                        @Override
+//                                        public void handleResponse(String response) {
+//                                            //TODO Toast to say submitted
+//                                            Log.d("tempsubmit", response);
+//                                        }
+//                                    });
                                 }
                                 catch (JSONException e) {
                                     e.printStackTrace();

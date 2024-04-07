@@ -1,5 +1,7 @@
 package com.example.cytocheck;
 
+import static com.example.cytocheck.DataProcessor.setAllToFalse;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -73,7 +75,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
+        setAllToFalse();
         Button loginButton = findViewById(R.id.loginSubmit); //Login Functionality
         userTextField = findViewById(R.id.userTextField);
         passTextField = findViewById(R.id.passTextField);

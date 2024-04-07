@@ -29,6 +29,13 @@ public class PatientInfo {
         return name;
     }
 
+    protected String getEmail() {
+        return email;
+    }
+    protected String getPhone() {
+        return phone;
+    }
+
     protected void setQualData(String qData) {
         this.qualData = qData;
     }
