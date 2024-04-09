@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.Color;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.os.Bundle;
@@ -427,35 +428,40 @@ public class PatientActivity extends AppCompatActivity {
                 createAssociation.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
-                        api global = api.getInstance();
-                        JSONObject requestHolder = new JSONObject();
-                        try {
-                            requestHolder.put("provider_id",String.valueOf(newProviderID.getText()));
-                            requestHolder.put("message",userID);
-                            requestHolder.put("patient_name", firstName);
-                            requestHolder.put("message_type","association_request");
-                            requestHolder.put("sender_id",userID);
-                        }
-                        catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                        String associationString = linkString + "inbox/associations";
-                        global.sendPostRequestWithHandlerWithToken(associationString, requestHolder, token, new HandlerResponse() {
-                            @Override
-                            public void handleResponse(String response) {
-                                Intent homeIntent = new Intent(PatientActivity.this, PatientActivity.class);
-                                homeIntent.putExtra("linkString", linkString);
-                                homeIntent.putExtra("token", token);
-                                homeIntent.putExtra("userID", userID);
-                                homeIntent.putExtra("firstName", firstName);
-                                homeIntent.putExtra("notificationToken", notifToken);
-
-                                // Start the PatientActivity
-                                startActivity(homeIntent);
+                        if (!TextUtils.isEmpty(newProviderID.getText())) {
+                            api global = api.getInstance();
+                            JSONObject requestHolder = new JSONObject();
+                            try {
+                                requestHolder.put("provider_id",String.valueOf(newProviderID.getText()));
+                                requestHolder.put("message",userID);
+                                requestHolder.put("patient_name", firstName);
+                                requestHolder.put("message_type","association_request");
+                                requestHolder.put("sender_id",userID);
                             }
-                        });
-                        Toast.makeText(PatientActivity.this, "Request Sent", Toast.LENGTH_SHORT).show();
+                            catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            String associationString = linkString + "inbox/associations";
+                            global.sendPostRequestWithHandlerWithToken(associationString, requestHolder, token, new HandlerResponse() {
+                                @Override
+                                public void handleResponse(String response) {
+                                    Intent homeIntent = new Intent(PatientActivity.this, PatientActivity.class);
+                                    homeIntent.putExtra("linkString", linkString);
+                                    homeIntent.putExtra("token", token);
+                                    homeIntent.putExtra("userID", userID);
+                                    homeIntent.putExtra("firstName", firstName);
+                                    homeIntent.putExtra("notificationToken", notifToken);
+
+                                    // Start the PatientActivity
+                                    startActivity(homeIntent);
+                                }
+                            });
+                            Toast.makeText(PatientActivity.this, "Request Sent", Toast.LENGTH_SHORT).show();
+                        }
+                        else {
+                            Toast.makeText(PatientActivity.this, "Please enter a Provider ID", Toast.LENGTH_SHORT).show();
+                        }
+
                     }
                 });
 

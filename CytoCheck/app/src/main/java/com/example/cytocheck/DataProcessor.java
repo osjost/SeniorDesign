@@ -43,7 +43,6 @@ public class DataProcessor {
     private static Map<String, List<QualEntry>> qualWeeklyData;
     private static Map<String, List<QualEntry>> qualMonthlyData;
     private static boolean qualInit = false;
-
     private static Map<String, List<QuanEntry>> hrDailyData;
     private static Map<String, List<QuanEntry>> hrWeeklyData;
     private static Map<String, List<QuanEntry>> hrMonthlyData;
@@ -834,8 +833,6 @@ public class DataProcessor {
             else {
                 return "Timestamp: " + timestamp + ", Temperature: " + data;
             }
-
         }
     }
-
 }

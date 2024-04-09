@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -440,58 +441,177 @@ public class ProviderActivity extends AppCompatActivity {
 
 
                                 //TODO if they are doubles and not null, do next, else toast
-                                
-                                Log.d("lowerhr",String.valueOf(hrLowerThreshBox.getText()));
-                                if (String.valueOf(hrLowerThreshBox.getText()) == "") {
-                                    if (String.valueOf(hrUpperThreshBox.getText()) == "") {
-                                        //Lower and upper unchanged no need to send
+                                float hrLower = 0;
+                                float hrUpper = 0;
+                                boolean hrValid = false;
+                                if (!TextUtils.isEmpty(hrLowerThreshBox.getText()) && !TextUtils.isEmpty(hrUpperThreshBox.getText())) {
+                                    try {
+                                        // Parse the text as floats
+                                        hrLower = Float.parseFloat(hrLowerThreshBox.getText().toString());
+                                        hrUpper = Float.parseFloat(hrUpperThreshBox.getText().toString());
+
+                                        // Check if lower threshold is lower than upper threshold
+                                        if ((hrLower < hrUpper) && hrLower >= 30 && hrUpper <= 200) {
+                                            // Lower and upper are valid
+                                            hrValid = true;
+                                        } else {
+                                            // Show a toast indicating the error
+                                            Toast.makeText(ProviderActivity.this, "Format Lower < Upper and Range: (30-200)bpm", Toast.LENGTH_SHORT).show();
+                                        }
+                                    } catch (NumberFormatException e) {
+                                        // Show a toast indicating that the input is not a valid float
+                                        Toast.makeText(ProviderActivity.this, "Thresholds must be numeric values", Toast.LENGTH_SHORT).show();
                                     }
-                                    else {
-                                        //upper changed check conditions
-                                        
+                                } else if (TextUtils.isEmpty(hrLowerThreshBox.getText()) && !TextUtils.isEmpty(hrUpperThreshBox.getText())) {
+                                    // If lower threshold box is empty and upper isn't so use hint to send
+                                    try {
+                                        // Parse the text as floats
+                                        hrLower = Float.parseFloat(hrLowerThreshBox.getHint().toString());
+                                        hrUpper = Float.parseFloat(hrUpperThreshBox.getText().toString());
+
+                                        // Check if lower threshold is lower than upper threshold
+                                        if ((hrLower < hrUpper) && hrLower >= 30 && hrUpper <= 200) {
+                                            // Lower and upper are valid
+                                            hrValid = true;
+                                        } else {
+                                            // Show a toast indicating the error
+                                            Toast.makeText(ProviderActivity.this, "Format Lower < Upper and Range: (30-200)bpm", Toast.LENGTH_SHORT).show();
+                                        }
+                                    } catch (NumberFormatException e) {
+                                        // Show a toast indicating that the input is not a valid float
+                                        Toast.makeText(ProviderActivity.this, "Thresholds must be numeric values", Toast.LENGTH_SHORT).show();
+                                    }
+                                } else if (TextUtils.isEmpty(hrUpperThreshBox.getText()) && !TextUtils.isEmpty(hrLowerThreshBox.getText())) {
+                                    // If upper threshold box is empty, fill it with the hint from lower threshold box
+                                    try {
+                                        // Parse the text as floats
+                                        hrLower = Float.parseFloat(hrLowerThreshBox.getText().toString());
+                                        hrUpper = Float.parseFloat(hrUpperThreshBox.getHint().toString());
+
+                                        // Check if lower threshold is lower than upper threshold
+                                        if ((hrLower < hrUpper) && hrLower >= 30 && hrUpper <= 200) {
+                                            // Lower and upper are valid
+                                            hrValid = true;
+                                        } else {
+                                            // Show a toast indicating the error
+                                            Toast.makeText(ProviderActivity.this, "Format Lower < Upper and Range: (30-200)bpm", Toast.LENGTH_SHORT).show();
+                                        }
+                                    } catch (NumberFormatException e) {
+                                        // Show a toast indicating that the input is not a valid float
+                                        Toast.makeText(ProviderActivity.this, "Thresholds must be numeric values", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                                float tempLower = 0;
+                                float tempUpper = 0;
+                                boolean tempValid = false;
+
+
+// Check if the text in the boxes is not empty
+                                if (!TextUtils.isEmpty(tempLowerThreshBox.getText()) && !TextUtils.isEmpty(tempUpperThreshBox.getText())) {
+                                    try {
+                                        // Parse the text as floats
+                                        tempLower = Float.parseFloat(tempLowerThreshBox.getText().toString());
+                                        tempUpper = Float.parseFloat(tempUpperThreshBox.getText().toString());
+
+                                        // Check if lower threshold is lower than upper threshold
+                                        if ((tempLower < tempUpper) && tempLower >= 90 && tempUpper <= 115) {
+                                            // Lower and upper are valid
+                                            tempValid = true;
+                                        } else {
+                                            // Show a toast indicating the error
+                                            Toast.makeText(ProviderActivity.this, "Format Lower < Upper and Range: (90-115)F", Toast.LENGTH_SHORT).show();
+                                        }
+                                    } catch (NumberFormatException e) {
+                                        // Show a toast indicating that the input is not a valid float
+                                        Toast.makeText(ProviderActivity.this, "Thresholds must be numeric values", Toast.LENGTH_SHORT).show();
+                                    }
+                                } else if (TextUtils.isEmpty(tempLowerThreshBox.getText()) && !TextUtils.isEmpty(tempUpperThreshBox.getText())) {
+                                    // If lower threshold box is empty and upper isn't, use hint to fill lower threshold
+                                    try {
+                                        // Parse the text as floats
+                                        tempLower = Float.parseFloat(tempLowerThreshBox.getHint().toString());
+                                        tempUpper = Float.parseFloat(tempUpperThreshBox.getText().toString());
+
+                                        // Check if lower threshold is lower than upper threshold
+                                        if ((tempLower < tempUpper) && tempLower >= 90 && tempUpper <= 115) {
+                                            // Lower and upper are valid
+                                            tempValid = true;
+                                        } else {
+                                            // Show a toast indicating the error
+                                            Toast.makeText(ProviderActivity.this, "Format Lower < Upper and Range: (90-115)F", Toast.LENGTH_SHORT).show();
+                                        }
+                                    } catch (NumberFormatException e) {
+                                        // Show a toast indicating that the input is not a valid float
+                                        Toast.makeText(ProviderActivity.this, "Thresholds must be numeric values", Toast.LENGTH_SHORT).show();
+                                    }
+                                } else if (TextUtils.isEmpty(tempUpperThreshBox.getText()) && !TextUtils.isEmpty(tempLowerThreshBox.getText())) {
+                                    // If upper threshold box is empty, fill it with the hint from lower threshold box
+                                    try {
+                                        // Parse the text as floats
+                                        tempLower = Float.parseFloat(tempLowerThreshBox.getText().toString());
+                                        tempUpper = Float.parseFloat(tempUpperThreshBox.getHint().toString());
+
+                                        // Check if lower threshold is lower than upper threshold
+                                        if ((tempLower < tempUpper) && tempLower >= 90 && tempUpper <= 115) {
+                                            // Lower and upper are valid
+                                            tempValid = true;
+                                        } else {
+                                            // Show a toast indicating the error
+                                            Toast.makeText(ProviderActivity.this, "Format Lower < Upper and Range: (90-115)F", Toast.LENGTH_SHORT).show();
+                                        }
+                                    } catch (NumberFormatException e) {
+                                        // Show a toast indicating that the input is not a valid float
+                                        Toast.makeText(ProviderActivity.this, "Thresholds must be numeric values", Toast.LENGTH_SHORT).show();
                                     }
                                 }
 
                                 String thresholdString = linkString + "threshold";
-                                JSONObject thresholdData = new JSONObject();
-                                try {
-                                    thresholdData.put("patient_id", selectedPatientId);
-                                    thresholdData.put("sensor_id", "1");
-                                    thresholdData.put("lower", String.valueOf(hrLowerThreshBox.getText()));
-                                    thresholdData.put("upper", String.valueOf(hrUpperThreshBox.getText()));
-                                    Log.d("preHR", thresholdData.toString());
-                                    global.sendPostRequestWithHandlerWithToken(thresholdString, thresholdData, token, new HandlerResponse() {
-                                        @Override
-                                        public void handleResponse(String response) {
-                                            //TODO Toast to say submitted
-                                            Log.d("hrsubmit", response);
-                                        }
-                                    });
+
+                                if (hrValid) {
+                                    JSONObject thresholdData = new JSONObject();
+                                    try {
+                                        thresholdData.put("patient_id", selectedPatientId);
+                                        thresholdData.put("sensor_id", "1");
+                                        thresholdData.put("lower", hrLower);
+                                        thresholdData.put("upper", hrUpper);
+                                        Log.d("preHR", thresholdData.toString());
+                                        global.sendPostRequestWithHandlerWithToken(thresholdString, thresholdData, token, new HandlerResponse() {
+                                            @Override
+                                            public void handleResponse(String response) {
+
+                                                Log.d("hrsubmit", response);
+                                            }
+                                        });
+                                    }
+                                    catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
                                 }
-                                catch (JSONException e) {
-                                    e.printStackTrace();
+                                if (tempValid) {
+                                    JSONObject tempThresholdData = new JSONObject();
+                                    try {
+                                        tempThresholdData.put("patient_id", selectedPatientId);
+                                        tempThresholdData.put("sensor_id", "2");
+                                        tempThresholdData.put("lower", String.valueOf(tempLowerThreshBox.getText()));
+                                        tempThresholdData.put("upper", String.valueOf(tempUpperThreshBox.getText()));
+
+                                        Log.d("tempdata", tempThresholdData.toString());
+                                        global.sendPostRequestWithHandlerWithToken(thresholdString, tempThresholdData, token, new HandlerResponse() {
+                                            @Override
+                                            public void handleResponse(String response) {
+
+                                                Log.d("tempsubmit", response);
+                                            }
+                                        });
+                                    }
+                                    catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                                if (hrValid || tempValid) {
+                                    Toast.makeText(ProviderActivity.this, "Thresholds Submitted", Toast.LENGTH_SHORT).show();
                                 }
 
-                                JSONObject tempThresholdData = new JSONObject();
-                                try {
-                                    tempThresholdData.put("patient_id", selectedPatientId);
-                                    tempThresholdData.put("sensor_id", "2");
-                                    tempThresholdData.put("lower", String.valueOf(tempLowerThreshBox.getText()));
-                                    tempThresholdData.put("upper", String.valueOf(tempUpperThreshBox.getText()));
-
-                                    Log.d("tempdata", tempThresholdData.toString());
-                                    global.sendPostRequestWithHandlerWithToken(thresholdString, tempThresholdData, token, new HandlerResponse() {
-                                        @Override
-                                        public void handleResponse(String response) {
-                                            //TODO Toast to say submitted
-                                            Log.d("tempsubmit", response);
-                                        }
-                                    });
-                                }
-                                catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                                Toast.makeText(ProviderActivity.this, "Thresholds Submitted", Toast.LENGTH_SHORT).show();
                             }
                         });
 
