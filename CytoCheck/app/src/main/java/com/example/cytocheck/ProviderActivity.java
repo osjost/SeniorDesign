@@ -460,13 +460,13 @@ public class ProviderActivity extends AppCompatActivity {
                                     thresholdData.put("lower", String.valueOf(hrLowerThreshBox.getText()));
                                     thresholdData.put("upper", String.valueOf(hrUpperThreshBox.getText()));
                                     Log.d("preHR", thresholdData.toString());
-//                                    global.sendPostRequestWithHandlerWithToken(thresholdString, thresholdData, token, new HandlerResponse() {
-//                                        @Override
-//                                        public void handleResponse(String response) {
-//                                            //TODO Toast to say submitted
-//                                            Log.d("hrsubmit", response);
-//                                        }
-//                                    });
+                                    global.sendPostRequestWithHandlerWithToken(thresholdString, thresholdData, token, new HandlerResponse() {
+                                        @Override
+                                        public void handleResponse(String response) {
+                                            //TODO Toast to say submitted
+                                            Log.d("hrsubmit", response);
+                                        }
+                                    });
                                 }
                                 catch (JSONException e) {
                                     e.printStackTrace();
@@ -480,13 +480,13 @@ public class ProviderActivity extends AppCompatActivity {
                                     tempThresholdData.put("upper", String.valueOf(tempUpperThreshBox.getText()));
 
                                     Log.d("tempdata", tempThresholdData.toString());
-//                                    global.sendPostRequestWithHandlerWithToken(thresholdString, tempThresholdData, token, new HandlerResponse() {
-//                                        @Override
-//                                        public void handleResponse(String response) {
-//                                            //TODO Toast to say submitted
-//                                            Log.d("tempsubmit", response);
-//                                        }
-//                                    });
+                                    global.sendPostRequestWithHandlerWithToken(thresholdString, tempThresholdData, token, new HandlerResponse() {
+                                        @Override
+                                        public void handleResponse(String response) {
+                                            //TODO Toast to say submitted
+                                            Log.d("tempsubmit", response);
+                                        }
+                                    });
                                 }
                                 catch (JSONException e) {
                                     e.printStackTrace();
@@ -549,6 +549,7 @@ public class ProviderActivity extends AppCompatActivity {
                                 providerIntent.putExtra("linkString", linkString);
                                 providerIntent.putExtra("token", token);
                                 providerIntent.putExtra("userID", userID);
+                                providerIntent.putExtra("notificationToken", notifToken);
 
                                 startActivity(providerIntent);
                                 finish();
@@ -575,6 +576,7 @@ public class ProviderActivity extends AppCompatActivity {
                                             providerIntent.putExtra("linkString", linkString);
                                             providerIntent.putExtra("token", token);
                                             providerIntent.putExtra("userID", userID);
+                                            providerIntent.putExtra("notificationToken", notifToken);
 
                                             startActivity(providerIntent);
                                             finish();
@@ -601,6 +603,7 @@ public class ProviderActivity extends AppCompatActivity {
                                             providerIntent.putExtra("linkString", linkString);
                                             providerIntent.putExtra("token", token);
                                             providerIntent.putExtra("userID", userID);
+                                            providerIntent.putExtra("notificationToken", notifToken);
 
                                             startActivity(providerIntent);
                                             finish();
@@ -634,6 +637,7 @@ public class ProviderActivity extends AppCompatActivity {
                                                     providerIntent.putExtra("linkString", linkString);
                                                     providerIntent.putExtra("token", token);
                                                     providerIntent.putExtra("userID", userID);
+                                                    providerIntent.putExtra("notificationToken", notifToken);
 
                                                     startActivity(providerIntent);
                                                     finish();

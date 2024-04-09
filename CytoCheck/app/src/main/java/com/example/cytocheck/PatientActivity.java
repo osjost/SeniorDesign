@@ -468,6 +468,7 @@ public class PatientActivity extends AppCompatActivity {
                         homeIntent.putExtra("token", token);
                         homeIntent.putExtra("userID", userID);
                         homeIntent.putExtra("firstName", firstName);
+                        homeIntent.putExtra("notificationToken", notifToken);
 
                         // Start the PatientActivity
                         startActivity(homeIntent);
