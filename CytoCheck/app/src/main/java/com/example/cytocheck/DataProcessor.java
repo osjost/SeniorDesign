@@ -1,6 +1,7 @@
 package com.example.cytocheck;
 
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
@@ -61,20 +62,17 @@ public class DataProcessor {
 
     public static void processData(String jsonData, BarChart barChart, String timeFrame) {
         // This function is called to process the Qualitative data and update the charts
-        Log.d("qual status", String.valueOf(qualInit));
-        Log.d("hr status", String.valueOf(hrInit));
-        Log.d("temp status", String.valueOf(tempInit));
 
         if (qualInit) {
             switch (timeFrame) {
                 case "Weekly":
-                    plotData(barChart, qualWeeklyData);
+                    plotData(barChart, qualWeeklyData, timeFrame);
                     break;
                 case "Monthly":
-                    plotData(barChart, qualMonthlyData);
+                    plotData(barChart, qualMonthlyData, timeFrame);
                     break;
                 default:
-                    plotData(barChart, qualDailyData);
+                    plotData(barChart, qualDailyData, timeFrame);
                     break;
             }
         }
@@ -102,17 +100,17 @@ public class DataProcessor {
                     case "Weekly":
                         userDaily.setVisibility(View.GONE);
                         userBar.setVisibility(View.VISIBLE);
-                        plotQuanData(userBar, hrWeeklyData, sensorID);
+                        plotQuanData(userBar, hrWeeklyData, sensorID, timeframe);
                         break;
                     case "Monthly":
                         userDaily.setVisibility(View.GONE);
                         userBar.setVisibility(View.VISIBLE);
-                        plotQuanData(userBar, hrMonthlyData, sensorID);
+                        plotQuanData(userBar, hrMonthlyData, sensorID, timeframe);
                         break;
                     default:
                         userDaily.setVisibility(View.VISIBLE);
                         userBar.setVisibility(View.GONE);
-                        plotQuanLine(userDaily, hrDailyData, sensorID);
+                        plotQuanLine(userDaily, hrDailyData, sensorID, timeframe);
                         break;
                 }
             }
@@ -139,17 +137,17 @@ public class DataProcessor {
                     case "Weekly":
                         userDaily.setVisibility(View.GONE);
                         userBar.setVisibility(View.VISIBLE);
-                        plotQuanData(userBar, tempWeeklyData, sensorID);
+                        plotQuanData(userBar, tempWeeklyData, sensorID, timeframe);
                         break;
                     case "Monthly":
                         userDaily.setVisibility(View.GONE);
                         userBar.setVisibility(View.VISIBLE);
-                        plotQuanData(userBar, tempMonthlyData, sensorID);
+                        plotQuanData(userBar, tempMonthlyData, sensorID, timeframe);
                         break;
                     default:
                         userDaily.setVisibility(View.VISIBLE);
                         userBar.setVisibility(View.GONE);
-                        plotQuanLine(userDaily, tempDailyData, sensorID);
+                        plotQuanLine(userDaily, tempDailyData, sensorID, timeframe);
                         break;
                 }
             }
@@ -484,7 +482,7 @@ public class DataProcessor {
         return sdf.format(date);
     }
 
-    private static void plotData(BarChart barChart, Map<String, List<QualEntry>> data) {
+    private static void plotData(BarChart barChart, Map<String, List<QualEntry>> data, String timeScale) {
         // This plots Qualitative data to a given bar chart for all daily weekly and monthly views
         ArrayList<BarEntry> nauseaEntries = new ArrayList<>();
         ArrayList<BarEntry> fatigueEntries = new ArrayList<>();
@@ -493,6 +491,10 @@ public class DataProcessor {
 
         int index = 0;
         if (data == null) {
+            barChart.setVisibility(View.GONE);
+            return;
+        }
+        else if (data.size() == 0) {
             barChart.setVisibility(View.GONE);
             return;
         }
@@ -508,7 +510,7 @@ public class DataProcessor {
                 nauseaEntries.add(new BarEntry(index - 0.2f, e.getNausea()));
                 fatigueEntries.add(new BarEntry(index, e.getFatigue()));
                 painEntries.add(new BarEntry(index + 0.2f, e.getPain()));
-                dates.add(entry.getKey().substring(5));
+                dates.add(entry.getKey());
                 index++;
             }
         }
@@ -516,8 +518,10 @@ public class DataProcessor {
         // Create datasets for each type of data
         BarDataSet setNausea = new BarDataSet(nauseaEntries, "Nausea");
         setNausea.setColor(Color.rgb(0,141,255));
+
         BarDataSet setFatigue = new BarDataSet(fatigueEntries, "Fatigue");
         setFatigue.setColor(Color.rgb(4,88,155));
+
         BarDataSet setPain = new BarDataSet(painEntries, "Pain");
         setPain.setColor(Color.rgb(0,61,110));
 
@@ -532,12 +536,20 @@ public class DataProcessor {
         barData.setDrawValues(false);
 
         // Set the spacing between clusters
+
         barData.setBarWidth(0.2f);
-        barData.groupBars(0, 0.1f, 0.02f); // Adjust the second parameter for cluster spacing
+        //barData.groupBars(0, 0.1f, 0); // Adjust the second parameter for cluster spacing
         
         barChart.setData(barData);
 
-        barChart.getDescription().setEnabled(false); // Disable description
+        //barChart.getDescription().setEnabled(false); // Disable description
+        barChart.getDescription().setText(timeScale + " Qualitative Data");
+        barChart.getDescription().setTextSize(12f);
+        barChart.getDescription().setTextColor(Color.BLACK); // Adjust text color as needed
+
+        // Position the description at the top center of the chart
+
+
         barChart.setDrawGridBackground(false); // Disable grid background
 
 
@@ -545,25 +557,33 @@ public class DataProcessor {
         barChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(dates));
         barChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
         barChart.getXAxis().setGranularity(1f);
-        barChart.getXAxis().setLabelRotationAngle(45f);
-        barChart.getXAxis().setLabelCount(dates.size());
-        barChart.getXAxis().setTextSize(10f);
+        barChart.getXAxis().setLabelRotationAngle(20f);
+        barChart.setExtraBottomOffset(10f);
+        //barChart.getXAxis().setTextSize(10f);
 
         // Set the Y-axis
         barChart.getAxisLeft().setAxisMaximum(10);
         barChart.getAxisLeft().setAxisMinimum(0);
+        barChart.getAxisRight().setEnabled(false);
+
+        barChart.getDescription().setPosition(barChart.getWidth() / 2f, 40f);
+        barChart.getDescription().setTextAlign(Paint.Align.CENTER);
 
         // Refresh the chart
         barChart.invalidate();
     }
 
-    private static void plotQuanData(BarChart barChart, Map<String, List<QuanEntry>> data, int sensorID) {
+    private static void plotQuanData(BarChart barChart, Map<String, List<QuanEntry>> data, int sensorID, String timeScale) {
         //This function plots quantitative data to a given bar chart for monthly and weekly views
         ArrayList<BarEntry> dataEntries = new ArrayList<>();
         ArrayList<String> dates = new ArrayList<>();
 
         int index = 0;
         if (data == null) {
+            barChart.setVisibility(View.GONE);
+            return;
+        }
+        else if (data.size() == 0) {
             barChart.setVisibility(View.GONE);
             return;
         }
@@ -577,7 +597,7 @@ public class DataProcessor {
             for (QuanEntry e : entries) {
                 float xPos = index;
                 dataEntries.add(new BarEntry(xPos, (float) e.getData()));
-                dates.add(entry.getKey().substring(5));
+                dates.add(entry.getKey());
                 index++;
             }
 
@@ -587,11 +607,13 @@ public class DataProcessor {
         BarDataSet dataSet = new BarDataSet(dataEntries, "Sensor Data");
         dataSet.setDrawValues(false);
         if (sensorID == 1) {
-            dataSet.setLabel("Heart Rate");
+            dataSet.setLabel("Heart Rate (BPM)");
+            barChart.getDescription().setText(timeScale + " Heart Rate Data");
             dataSet.setColor(Color.rgb(242,105,32)); // Set the bar color
         }
         else {
-            dataSet.setLabel("Temperature");
+            dataSet.setLabel("Temperature (F)");
+            barChart.getDescription().setText(timeScale + " Temperature Data");
             dataSet.setColor(Color.rgb(4,88,155)); // Set the bar color
         }
 
@@ -608,7 +630,12 @@ public class DataProcessor {
         // Customize the BarChart appearance
         barChart.setData(barData);
 
-        barChart.getDescription().setEnabled(false); // Disable description
+        //barChart.getDescription().setEnabled(false); // Disable description
+
+        barChart.getDescription().setTextSize(12f);
+        barChart.getDescription().setTextColor(Color.BLACK); // Adjust text color as needed
+
+
         barChart.setDrawGridBackground(false); // Disable grid background
 
         // Set the X-axis labels and other properties
@@ -616,9 +643,16 @@ public class DataProcessor {
         xAxis.setValueFormatter(new IndexAxisValueFormatter(dates)); // Set the date labels
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM); // Position the labels at the bottom
         xAxis.setGranularity(1f); // Set the label granularity
-        xAxis.setLabelRotationAngle(45f); // Rotate the labels for better readability
-        xAxis.setLabelCount(dates.size()); // Set the label count
-        xAxis.setTextSize(10f); // Set the label text size
+        xAxis.setLabelRotationAngle(20f); // Rotate the labels for better readability
+        //xAxis.setLabelCount(dates.size()); // Set the label count
+        barChart.setExtraBottomOffset(10f);
+        //xAxis.setTextSize(10f); // Set the label text size
+
+        barChart.getAxisRight().setEnabled(false);
+
+        // Position the description at the top center of the chart
+        barChart.getDescription().setPosition(barChart.getWidth() / 2f, 40f);
+        barChart.getDescription().setTextAlign(Paint.Align.CENTER);
 
         // Refresh the chart
         barChart.invalidate();
@@ -627,12 +661,16 @@ public class DataProcessor {
 
 
 
-    private static void plotQuanLine(LineChart lineChart, Map<String, List<QuanEntry>> data, int sensorID) {
+    private static void plotQuanLine(LineChart lineChart, Map<String, List<QuanEntry>> data, int sensorID, String timeScale) {
         // This function Plots quantitative data to a given linechart for the daily data
         ArrayList<Entry> lineEntries = new ArrayList<>();
         ArrayList<String> dates = new ArrayList<>();
 
         if (data == null) {
+            lineChart.setVisibility(View.GONE);
+            return;
+        }
+        else if (data.size() == 0) {
             lineChart.setVisibility(View.GONE);
             return;
         }
@@ -655,14 +693,16 @@ public class DataProcessor {
         dataSet.setDrawValues(false);
         dataSet.setColor(Color.BLUE); // Set the line color
         if (sensorID == 1) {
-            dataSet.setLabel("Heart Rate");
+            dataSet.setLabel("Heart Rate (BPM)");
+            lineChart.getDescription().setText(timeScale + " Temperature Data");
             dataSet.setColor(Color.rgb(242,105,32)); // Set the line color
             dataSet.setCircleColor(Color.rgb(242,105,32));
             //        Set the Y-axis interval
             lineChart.getAxisLeft().setAxisMinimum(30);
             lineChart.getAxisLeft().setAxisMaximum(200);
         } else {
-            dataSet.setLabel("Temperature");
+            dataSet.setLabel("Temperature (F)");
+            lineChart.getDescription().setText(timeScale + " Temperature Data");
             dataSet.setColor(Color.rgb(4,88,155)); // Set the line color
             dataSet.setCircleColor(Color.rgb(4,88,155));
             //        Set the Y-axis interval
@@ -680,19 +720,26 @@ public class DataProcessor {
 
         // Set the data to the line chart
         lineChart.setData(lineData);
-        lineChart.getDescription().setEnabled(false);
+        //lineChart.getDescription().setEnabled(false);
+        lineChart.getDescription().setTextSize(12f);
+        lineChart.getDescription().setTextColor(Color.BLACK); // Adjust text color as needed
+
+
 
         // Set the X-axis labels
         lineChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(dates));
         lineChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
         lineChart.getXAxis().setGranularity(1f);
-        lineChart.getXAxis().setLabelRotationAngle(45f);
-        lineChart.getXAxis().setLabelCount(dates.size());
-        lineChart.getXAxis().setTextSize(10f);
+        lineChart.getXAxis().setLabelRotationAngle(20f);
+        //lineChart.getXAxis().setLabelCount(dates.size());
+        //lineChart.getXAxis().setTextSize(10f);
+        lineChart.setExtraBottomOffset(10f);
 
+        lineChart.getAxisRight().setEnabled(false);
 
-
-
+        // Position the description at the top center of the chart
+        lineChart.getDescription().setPosition(lineChart.getWidth() / 2f, 40f);
+        lineChart.getDescription().setTextAlign(Paint.Align.CENTER);
 
         // Refresh the chart
         lineChart.invalidate();
