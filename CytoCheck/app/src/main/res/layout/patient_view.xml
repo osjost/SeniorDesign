@@ -57,6 +57,13 @@
                 android:layout_marginTop="20sp"
                 android:text="Display Graphs"/>
 
+            <TextView
+                android:id="@+id/blankGraph"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                />
+
 
             <com.github.mikephil.charting.charts.BarChart
                 android:id="@+id/userData"

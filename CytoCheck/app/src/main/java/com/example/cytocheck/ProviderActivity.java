@@ -48,6 +48,7 @@ public class ProviderActivity extends AppCompatActivity {
     private  LineChart userTempLine;
 
     private Spinner mSpinner;
+    private TextView blankGraphs;
     private String linkString;
     private Handler inactivityHandler;
     private Runnable inactivityRunnable;
@@ -229,7 +230,7 @@ public class ProviderActivity extends AppCompatActivity {
                         String selectedPatientName = selectedPatient.getName();
 
                         setContentView(R.layout.patient_view);
-
+                        blankGraphs = findViewById(R.id.blankGraph);
                         Button returnProvider = findViewById(R.id.providerPatientReturn);
                         Button submitThresholds = findViewById(R.id.submitAllThresholds);
 
@@ -823,6 +824,16 @@ public class ProviderActivity extends AppCompatActivity {
                 processData(userQualResponse, userData, selectedTimeframe);
                 processQuanData(userHRResponse, userHRLine, userHRData, 1, selectedTimeframe);
                 processQuanData(userTempResponse, userTempLine, userTempData, 2, selectedTimeframe);
+                blankGraphs.setText("");
+                if (userData.getVisibility() == View.GONE) {
+                    blankGraphs.setText(blankGraphs.getText() + "No Qualitative data for the selected timeframe.\n");
+                }
+                if (userHRLine.getVisibility() == userHRData.getVisibility()) {
+                    blankGraphs.setText(blankGraphs.getText() + "No Heart Rate data for the selected timeframe.\n");
+                }
+                if (userTempLine.getVisibility() == userTempData.getVisibility()) {
+                    blankGraphs.setText(blankGraphs.getText() + "No Temperature data for the selected timeframe.\n");
+                }
             }
         });
     }

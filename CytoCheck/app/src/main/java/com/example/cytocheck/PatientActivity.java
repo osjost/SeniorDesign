@@ -51,6 +51,7 @@ public class PatientActivity extends AppCompatActivity {
     private LineChart userHRLine;
     private  LineChart userTempLine;
     private Spinner mSpinner;
+    private TextView blankGraphs;
     private String linkString;
     private SeekBar healthSlideBar;
     private ImageView likertImage;
@@ -117,6 +118,7 @@ public class PatientActivity extends AppCompatActivity {
         userTempData = findViewById(R.id.userTempData); // Quantitative Temperature bar chart
         userHRLine = findViewById(R.id.userHRLine); // Quantitative heart rate line chart
         userTempLine = findViewById(R.id.userTempLine); // Quantitative temperature line chart
+        blankGraphs = findViewById(R.id.blankGraph);
         mSpinner = findViewById(R.id.selectorSpinner);
 
 
@@ -654,6 +656,16 @@ public class PatientActivity extends AppCompatActivity {
                 processData(userQualResponse, userData, selectedTimeframe);
                 processQuanData(userHRResponse, userHRLine, userHRData, 1, selectedTimeframe);
                 processQuanData(userTempResponse, userTempLine, userTempData, 2, selectedTimeframe);
+                blankGraphs.setText("");
+                if (userData.getVisibility() == View.GONE) {
+                    blankGraphs.setText(blankGraphs.getText() + "No Qualitative data for the selected timeframe.\n");
+                }
+                if (userHRLine.getVisibility() == userHRData.getVisibility()) {
+                    blankGraphs.setText(blankGraphs.getText() + "No Heart Rate data for the selected timeframe.\n");
+                }
+                if (userTempLine.getVisibility() == userTempData.getVisibility()) {
+                    blankGraphs.setText(blankGraphs.getText() + "No Temperature data for the selected timeframe.\n");
+                }
             }
         });
     }

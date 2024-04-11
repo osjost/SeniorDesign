@@ -610,11 +610,15 @@ public class DataProcessor {
             dataSet.setLabel("Heart Rate (BPM)");
             barChart.getDescription().setText(timeScale + " Heart Rate Data");
             dataSet.setColor(Color.rgb(242,105,32)); // Set the bar color
+            barChart.getAxisLeft().setAxisMinimum(30);
+            barChart.getAxisLeft().setAxisMaximum(200);
         }
         else {
             dataSet.setLabel("Temperature (F)");
             barChart.getDescription().setText(timeScale + " Temperature Data");
             dataSet.setColor(Color.rgb(4,88,155)); // Set the bar color
+            barChart.getAxisLeft().setAxisMinimum(90);
+            barChart.getAxisLeft().setAxisMaximum(115);
         }
 
 
@@ -658,9 +662,6 @@ public class DataProcessor {
         barChart.invalidate();
     }
 
-
-
-
     private static void plotQuanLine(LineChart lineChart, Map<String, List<QuanEntry>> data, int sensorID, String timeScale) {
         // This function Plots quantitative data to a given linechart for the daily data
         ArrayList<Entry> lineEntries = new ArrayList<>();
@@ -683,9 +684,6 @@ public class DataProcessor {
             for (QuanEntry e : entries) {
                 lineEntries.add(new Entry( lineEntries.size(), (float) e.getData()));
             }
-
-
-
         }
 
         // Create a dataset for the line chart
@@ -724,8 +722,6 @@ public class DataProcessor {
         lineChart.getDescription().setTextSize(12f);
         lineChart.getDescription().setTextColor(Color.BLACK); // Adjust text color as needed
 
-
-
         // Set the X-axis labels
         lineChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(dates));
         lineChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
@@ -744,10 +740,6 @@ public class DataProcessor {
         // Refresh the chart
         lineChart.invalidate();
     }
-
-
-
-
 
     private static class QualEntry {
         private final String timestamp;

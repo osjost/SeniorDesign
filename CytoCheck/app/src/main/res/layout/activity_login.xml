@@ -49,23 +49,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.702" />
 
-    <TextView
-        android:id="@+id/appTitle"
-        android:layout_width="266dp"
-        android:layout_height="74dp"
-        android:fontFamily="sans-serif-light"
-        android:text="CytoCheck"
-        android:textAlignment="center"
-        android:textColor="#04589B"
-        android:textSize="48sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.348" />
-
     <EditText
         android:id="@+id/userTextField"
         android:layout_width="wrap_content"
@@ -121,6 +104,16 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.05"
         app:srcCompat="@drawable/img_1" />
+
+    <ImageView
+        android:layout_width="291dp"
+        android:layout_height="90dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.329"
+        app:srcCompat="@drawable/cytochecklogo" />
 
     <TextView
         android:id="@+id/textView"

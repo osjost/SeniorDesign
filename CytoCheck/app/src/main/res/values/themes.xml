@@ -3,12 +3,15 @@
     <style name="Base.Theme.CytoCheck" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorPrimary">@color/cyto</item>
+
     </style>
 
     <style name="Theme.CytoCheck" parent="Base.Theme.CytoCheck" />
 
     <style name="Theme.CytoCheck.NoActionBar">
         <item name="windowActionBar">false</item>
+
         <item name="windowNoTitle">true</item>
     </style>
 
