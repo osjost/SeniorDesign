@@ -38,6 +38,13 @@ import org.json.JSONObject;
 import api.*;
 
 public class PatientActivity extends AppCompatActivity {
+    /* This activity includes many ways of receiving and displaying data for a patient. Some features
+    *  include the qualitative data sliders and surveys. An association view where a patient can remove
+    *  their current provider or link a new provider with a referral code. Next there is an emergency
+    *  button that sends an alert directly to their provider if they are linked to one. There is a
+    *  button to go to the sensor screen, where a patient can connect 2 biosensors and send
+    *  quantitative data to our server. Finally, there is a graph view to display daily, weekly and
+    *  monthly data for quantitative and qualitative data. */
     private BarChart userData;
     private BarChart userHRData;
     private BarChart userTempData;

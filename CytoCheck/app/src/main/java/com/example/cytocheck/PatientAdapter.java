@@ -9,7 +9,7 @@ import android.widget.TextView;
 import java.util.List;
 
 public class PatientAdapter extends ArrayAdapter<PatientInfo> {
-
+    // This works with the Provider Activity and the Patient info class to adapt a provider's patients to a list view.
     public PatientAdapter(Context context, List<PatientInfo> patientList) {
         super(context, 0, patientList);
     }

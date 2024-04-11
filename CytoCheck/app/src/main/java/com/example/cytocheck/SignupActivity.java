@@ -31,6 +31,9 @@ import fragments.DatePickerFragment;
 
 
 public class SignupActivity extends AppCompatActivity {
+    /* This activity is navigated to through the login screen so that the user can create an account
+    *  The functions in this activity include updating the display based on if the user is a patient
+    *  or provider as well as checking user inputs and sending signup requests to the server */
     private String linkString;
     private EditText phoneField;
     private EditText dobField;

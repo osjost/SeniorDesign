@@ -24,13 +24,13 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
 
-
-
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -60,119 +60,120 @@ public class DataProcessor {
     }
 
     public static void processData(String jsonData, BarChart barChart, String timeFrame) {
-
-            Log.d("qual status", String.valueOf(qualInit));
+        // This function is called to process the Qualitative data and update the charts
+        Log.d("qual status", String.valueOf(qualInit));
         Log.d("hr status", String.valueOf(hrInit));
         Log.d("temp status", String.valueOf(tempInit));
 
-            if (qualInit) {
-                switch (timeFrame) {
+        if (qualInit) {
+            switch (timeFrame) {
+                case "Weekly":
+                    plotData(barChart, qualWeeklyData);
+                    break;
+                case "Monthly":
+                    plotData(barChart, qualMonthlyData);
+                    break;
+                default:
+                    plotData(barChart, qualDailyData);
+                    break;
+            }
+        }
+        else {
+
+            List<QualEntry> entries = parseJsonData(jsonData);
+            qualDailyData = aggregateDataByDay(entries);
+            //plotData(barChart, qualDailyData);
+            new Thread(new Runnable() {
+                public void run() {
+                    qualWeeklyData = aggregateDataByWeek(entries);
+                    qualMonthlyData = aggregateDataByMonth(entries);
+                }
+            }).start();
+
+            qualInit = true;
+        }
+    }
+    public static void processQuanData(String jsonData, LineChart userDaily, BarChart userBar, int sensorID, String timeframe) {
+        // This function is called from the patient and provider guis to update the Charts for a specific reading
+
+        if (sensorID == 1) {
+            if (hrInit) {
+                switch (timeframe) {
                     case "Weekly":
-                        plotData(barChart, qualWeeklyData);
+                        userDaily.setVisibility(View.GONE);
+                        userBar.setVisibility(View.VISIBLE);
+                        plotQuanData(userBar, hrWeeklyData, sensorID);
                         break;
                     case "Monthly":
-                        plotData(barChart, qualMonthlyData);
+                        userDaily.setVisibility(View.GONE);
+                        userBar.setVisibility(View.VISIBLE);
+                        plotQuanData(userBar, hrMonthlyData, sensorID);
                         break;
                     default:
-                        plotData(barChart, qualDailyData);
+                        userDaily.setVisibility(View.VISIBLE);
+                        userBar.setVisibility(View.GONE);
+                        plotQuanLine(userDaily, hrDailyData, sensorID);
                         break;
                 }
             }
             else {
 
-                List<QualEntry> entries = parseJsonData(jsonData);
-                qualDailyData = aggregateDataByDay(entries);
-                //plotData(barChart, qualDailyData);
+                List<QuanEntry> entries = parseJsonQuanData(jsonData, sensorID);
+                //userDaily.setVisibility(View.VISIBLE);
+                //userBar.setVisibility(View.GONE);
+                hrDailyData = aggregateQuanDataByDay(entries, sensorID);
+                //plotQuanLine(userDaily, hrDailyData, sensorID);
                 new Thread(new Runnable() {
                     public void run() {
-                        qualWeeklyData = aggregateDataByDay(entries);
-                        qualMonthlyData = aggregateDataByMonth(entries);
+                        hrWeeklyData = aggregateQuanDataByWeek(entries, sensorID);
+                        hrMonthlyData = aggregateQuanDataByMonth(entries, sensorID);
                     }
                 }).start();
 
-                qualInit = true;
+                hrInit = true;
             }
-    }
-    public static void processQuanData(String jsonData, LineChart userDaily, BarChart userBar, int sensorID, String timeframe) {
-
-
-            if (sensorID == 1) {
-                if (hrInit) {
-                    switch (timeframe) {
-                        case "Weekly":
-                            userDaily.setVisibility(View.GONE);
-                            userBar.setVisibility(View.VISIBLE);
-                            plotQuanData(userBar, hrWeeklyData, sensorID);
-                            break;
-                        case "Monthly":
-                            userDaily.setVisibility(View.GONE);
-                            userBar.setVisibility(View.VISIBLE);
-                            plotQuanData(userBar, hrMonthlyData, sensorID);
-                            break;
-                        default:
-                            userDaily.setVisibility(View.VISIBLE);
-                            userBar.setVisibility(View.GONE);
-                            plotQuanLine(userDaily, hrDailyData, sensorID);
-                            break;
-                    }
-                }
-                else {
-
-                    List<QuanEntry> entries = parseJsonQuanData(jsonData, sensorID);
-                    //userDaily.setVisibility(View.VISIBLE);
-                    //userBar.setVisibility(View.GONE);
-                    hrDailyData = aggregateQuanDataByDay(entries, sensorID);
-                    //plotQuanLine(userDaily, hrDailyData, sensorID);
-                    new Thread(new Runnable() {
-                        public void run() {
-                            hrWeeklyData = aggregateQuanDataByWeek(entries, sensorID);
-                            hrMonthlyData = aggregateQuanDataByMonth(entries, sensorID);
-                        }
-                    }).start();
-
-                    hrInit = true;
+        }
+        else {
+            if (tempInit) {
+                switch (timeframe) {
+                    case "Weekly":
+                        userDaily.setVisibility(View.GONE);
+                        userBar.setVisibility(View.VISIBLE);
+                        plotQuanData(userBar, tempWeeklyData, sensorID);
+                        break;
+                    case "Monthly":
+                        userDaily.setVisibility(View.GONE);
+                        userBar.setVisibility(View.VISIBLE);
+                        plotQuanData(userBar, tempMonthlyData, sensorID);
+                        break;
+                    default:
+                        userDaily.setVisibility(View.VISIBLE);
+                        userBar.setVisibility(View.GONE);
+                        plotQuanLine(userDaily, tempDailyData, sensorID);
+                        break;
                 }
             }
             else {
-                if (tempInit) {
-                    switch (timeframe) {
-                        case "Weekly":
-                            userDaily.setVisibility(View.GONE);
-                            userBar.setVisibility(View.VISIBLE);
-                            plotQuanData(userBar, tempWeeklyData, sensorID);
-                            break;
-                        case "Monthly":
-                            userDaily.setVisibility(View.GONE);
-                            userBar.setVisibility(View.VISIBLE);
-                            plotQuanData(userBar, tempMonthlyData, sensorID);
-                            break;
-                        default:
-                            userDaily.setVisibility(View.VISIBLE);
-                            userBar.setVisibility(View.GONE);
-                            plotQuanLine(userDaily, tempDailyData, sensorID);
-                            break;
+
+                List<QuanEntry> entries = parseJsonQuanData(jsonData, sensorID);
+                tempDailyData = aggregateQuanDataByDay(entries, sensorID);
+                //userDaily.setVisibility(View.VISIBLE);
+                //userBar.setVisibility(View.GONE);
+                //plotQuanLine(userDaily, tempDailyData, sensorID);
+                new Thread(new Runnable() {
+                    public void run() {
+                        tempWeeklyData = aggregateQuanDataByWeek(entries, sensorID);
+                        tempMonthlyData = aggregateQuanDataByMonth(entries, sensorID);
                     }
-                }
-                else {
+                }).start();
 
-                    List<QuanEntry> entries = parseJsonQuanData(jsonData, sensorID);
-                    tempDailyData = aggregateQuanDataByDay(entries, sensorID);
-                    //userDaily.setVisibility(View.VISIBLE);
-                    //userBar.setVisibility(View.GONE);
-                    //plotQuanLine(userDaily, tempDailyData, sensorID);
-                    new Thread(new Runnable() {
-                        public void run() {
-                            tempWeeklyData = aggregateQuanDataByWeek(entries, sensorID);
-                            tempMonthlyData = aggregateQuanDataByMonth(entries, sensorID);
-                        }
-                    }).start();
-
-                    tempInit = true;
-                }
+                tempInit = true;
             }
+        }
     }
 
     private static List<QualEntry> parseJsonData(String jsonData) {
+        // This parses the Qualitative data into a list for further use
         List<QualEntry> entries = new ArrayList<>();
         if (jsonData == null || jsonData == "[]" || jsonData == "") {
             return entries;
@@ -198,6 +199,7 @@ public class DataProcessor {
     }
 
     private static List<QuanEntry> parseJsonQuanData(String jsonData, int sensorID) {
+        // This function goes through the server response and parses the data into a list
         List<QuanEntry> entries = new ArrayList<>();
         if (jsonData == null || jsonData == "[]" || jsonData == "") {
             return entries;
@@ -225,6 +227,7 @@ public class DataProcessor {
     }
 
     private static String convertToLocale(String timestamp) {
+        // This function is used to convert the server time to a phone's local time zone to ensure the correct data is obtained
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault());
 
@@ -241,6 +244,11 @@ public class DataProcessor {
         }
     }
 
+
+    /*  The following are data aggregation functions. There are 3 functions for the quantitative
+    * data and 3 functions for the qualitative data. These are used to process the list entries
+    * of data into the correct data sets that we use for graphing. This takes a long time combined
+    * with parsing the json objects so we try to do it in the background */
     private static Map<String, List<QualEntry>> aggregateDataByDay(List<QualEntry> entries) {
         Map<String, List<QualEntry>> dailyData = new HashMap<>();
         Calendar calendar = Calendar.getInstance();
@@ -251,6 +259,7 @@ public class DataProcessor {
             String date = entry.getFormattedDate("yyyy-MM-dd");
             if (date.equals(currentDate)) {
                 // Check if the date already exists in the map
+                date = entry.getFormattedDate("MM-dd");
                 if (!dailyData.containsKey(date)) {
                     dailyData.put(date, new ArrayList<>());
                 }
@@ -274,6 +283,7 @@ public class DataProcessor {
             String date = entry.getFormattedDate("yyyy-MM-dd");
             if (date.equals(currentDate)) {
                 // Check if the date already exists in the map
+                date = entry.getFormattedDate("MM-dd");
                 if (!dailyData.containsKey(date)) {
                     List<QuanEntry> entryList = new ArrayList<>();
                     entryList.add(new QuanEntry(entry.getTimestamp(), entry.getData(), sensorID));
@@ -327,7 +337,7 @@ public class DataProcessor {
                 float avgNausea = sumNausea / dailyEntries.size();
                 float avgFatigue = sumFatigue / dailyEntries.size();
                 float avgPain = sumPain / dailyEntries.size();
-
+                dateString = formatDate(calendar.getTime(), "MM-dd");
                 weeklyData.put(dateString, new ArrayList<>(Collections.singletonList(new QualEntry(dateString, (int) avgNausea, (int) avgFatigue, (int) avgPain))));
             }
 
@@ -353,7 +363,7 @@ public class DataProcessor {
 
         // Iterate over the entries and aggregate data for each day
         while (!endDate.before(startDate)) {
-            String dateString = formatDate(calendar.getTime(), "yyyy-MM-dd");
+            String dateString = formatDate(calendar.getTime(), "MM-dd");
             List<QuanEntry> dailyEntries = new ArrayList<>();
 
             // Collect entries for the current day and sensor ID
@@ -400,7 +410,7 @@ public class DataProcessor {
         // Iterate over the past 5 weeks before the current date
         for (int i = 0; i < 5; i++) {
             // i is equal to the week number -1
-            String endDateString = formatDate(calendar.getTime(), "yyyy-MM-dd");
+            String endDateString = formatDate(calendar.getTime(), "MM-dd");
             Calendar endDate = calendar;
             List weeklyEntries = new ArrayList<>();
             float sumNausea = 0;
@@ -419,7 +429,7 @@ public class DataProcessor {
 
                 calendar.add(Calendar.DAY_OF_YEAR, -1);
             }
-            String startDateString = formatDate(calendar.getTime(), "yyyy-MM-dd");
+            String startDateString = formatDate(calendar.getTime(), "MM-dd");
             if (!weeklyEntries.isEmpty()) {
                 float avgNausea = sumNausea / weeklyEntries.size();
                 float avgFatigue = sumFatigue / weeklyEntries.size();
@@ -438,7 +448,7 @@ public class DataProcessor {
 
         for (int i = 0; i < 5; i++) {
             // i is equal to the week number -1
-            String endDateString = formatDate(calendar.getTime(), "yyyy-MM-dd");
+            String endDateString = formatDate(calendar.getTime(), "MM-dd");
             Calendar endDate = calendar;
             List weeklyEntries = new ArrayList<>();
             float sumData = 0;
@@ -453,7 +463,7 @@ public class DataProcessor {
 
                 calendar.add(Calendar.DAY_OF_YEAR, -1);
             }
-            String startDateString = formatDate(calendar.getTime(), "yyyy-MM-dd");
+            String startDateString = formatDate(calendar.getTime(), "MM-dd");
             if (!weeklyEntries.isEmpty()) {
                 float avgData = sumData /weeklyEntries.size();
                 if (!monthlyData.containsKey(startDateString + " to " + endDateString)) {
@@ -469,11 +479,13 @@ public class DataProcessor {
 
 
     private static String formatDate(Date date, String pattern) {
+        // This is used when formatting dates for objects that aren't entries
         SimpleDateFormat sdf = new SimpleDateFormat(pattern, Locale.getDefault());
         return sdf.format(date);
     }
 
     private static void plotData(BarChart barChart, Map<String, List<QualEntry>> data) {
+        // This plots Qualitative data to a given bar chart for all daily weekly and monthly views
         ArrayList<BarEntry> nauseaEntries = new ArrayList<>();
         ArrayList<BarEntry> fatigueEntries = new ArrayList<>();
         ArrayList<BarEntry> painEntries = new ArrayList<>();
@@ -487,6 +499,7 @@ public class DataProcessor {
         else {
             barChart.setVisibility(View.VISIBLE);
         }
+
         for (Map.Entry<String, List<QualEntry>> entry : data.entrySet()) {
             List<QualEntry> entries = entry.getValue();
 
@@ -545,6 +558,7 @@ public class DataProcessor {
     }
 
     private static void plotQuanData(BarChart barChart, Map<String, List<QuanEntry>> data, int sensorID) {
+        //This function plots quantitative data to a given bar chart for monthly and weekly views
         ArrayList<BarEntry> dataEntries = new ArrayList<>();
         ArrayList<String> dates = new ArrayList<>();
 
@@ -614,6 +628,7 @@ public class DataProcessor {
 
 
     private static void plotQuanLine(LineChart lineChart, Map<String, List<QuanEntry>> data, int sensorID) {
+        // This function Plots quantitative data to a given linechart for the daily data
         ArrayList<Entry> lineEntries = new ArrayList<>();
         ArrayList<String> dates = new ArrayList<>();
 
@@ -693,6 +708,7 @@ public class DataProcessor {
         private final int fatigue;
         private final int pain;
 
+        //Constructor for the Qualitative entry object for pain, fatigue and nausea
         public QualEntry(String timestamp, int nausea, int fatigue, int pain) {
             this.timestamp = timestamp;
             this.nausea = nausea;
@@ -700,6 +716,7 @@ public class DataProcessor {
             this.pain = pain;
         }
 
+        //Getter Methods
         public String getTimestamp() {
             return timestamp;
         }
@@ -717,6 +734,7 @@ public class DataProcessor {
         }
 
         public String getFormattedDate(String pattern) {
+            // Formats the timestamp of an entry based on a pattern
             try {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault());
                 Date date = sdf.parse(timestamp);
@@ -729,6 +747,7 @@ public class DataProcessor {
         }
 
         public boolean isWithinDateRange(Date startDate) {
+            // Checks if the timestamp for an entry is within the given date
             try {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault());
                 Date entryDate = sdf.parse(timestamp);
@@ -744,19 +763,10 @@ public class DataProcessor {
                 return false;
             }
         }
-        public boolean isWithinWeek(Date startDate, Date endDate) {
-            try {
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault());
-                Date entryDate = sdf.parse(timestamp);
-                return entryDate.after(startDate) && entryDate.before(endDate);
-            } catch (ParseException e) {
-                e.printStackTrace();
-                return false;
-            }
-        }
 
         @Override
         public String toString() {
+            // Used for debugging and logging Qualitative data
             return "Timestamp: " + timestamp + ", Nausea: " + nausea + ", Fatigue: " + fatigue + ", Pain: " + pain;
         }
     }
@@ -766,12 +776,14 @@ public class DataProcessor {
         private final int sensorID;
         private final double data;
 
+        // Constructor for the Quantitative entry for HeartRate and Temperature
         public QuanEntry(String timestamp, double data, int sensorID) {
             this.timestamp = timestamp;
             this.sensorID = sensorID;
             this.data = data;
         }
 
+        // Getter Methods
         public String getTimestamp() {
             return timestamp;
         }
@@ -786,6 +798,7 @@ public class DataProcessor {
 
 
         public String getFormattedDate(String pattern) {
+            // Formats an Entry's date based off of the timestamp and a pattern
             try {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault());
                 Date date = sdf.parse(timestamp);
@@ -798,6 +811,7 @@ public class DataProcessor {
         }
 
         public boolean isWithinDateRange(Date startDate) {
+            // Uses an Entry's timestamp to see if it is within the given day
             try {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault());
                 Date entryDate = sdf.parse(timestamp);
@@ -813,20 +827,10 @@ public class DataProcessor {
                 return false;
             }
         }
-        public boolean isWithinWeek(Date startDate, Date endDate) {
-            try {
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault());
-                Date entryDate = sdf.parse(timestamp);
-                return entryDate.after(startDate) && entryDate.before(endDate);
-            } catch (ParseException e) {
-                e.printStackTrace();
-                return false;
-            }
-        }
-
 
             @Override
         public String toString() {
+            // Used for Logging and Debugging
             if (sensorID == 1) {
                 return "Timestamp: " + timestamp + ", HR: " + data;
             }

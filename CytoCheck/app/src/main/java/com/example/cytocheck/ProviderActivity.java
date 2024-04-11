@@ -34,6 +34,13 @@ import org.json.JSONObject;
 import api.*;
 
 public class ProviderActivity extends AppCompatActivity {
+    /* This activity showcases a bulk of the functionality of the app where a provider can log in and
+    *  view all of their patients, as well as emergency notifications, threshold breach notifications,
+    *  and association requests. When any of these elements are selected, a new view is used to display
+    *  detailed information on the request and patient. The patient view utilizes the Patient info and
+    *  Patient Adapter classes to show a patient's data, graphs, and configurable thresholds. The request
+    *  view utilizes the Request info and Request Adapter classes to show the above notifications and
+    *  requests and allows for dismissal of all requests and approval of association requests */
     private BarChart userData;
     private BarChart userHRData;
     private BarChart userTempData;

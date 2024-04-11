@@ -37,6 +37,9 @@ import api.*;
 
 
 public class LoginActivity extends AppCompatActivity {
+    /* This is the activity that the app launches to show and includes user name and password fields,
+    *  a link to the signup screen, and a request to allow notifications for our app to send daily reminders
+    *  or emergency notifications. */
     private EditText userTextField, passTextField;
     private String linkString = "https://ec2-54-193-162-215.us-west-1.compute.amazonaws.com:443/"; //This is the link to the server holding the database
     private String usernameResponse = "";
@@ -49,7 +52,7 @@ public class LoginActivity extends AppCompatActivity {
                 if (isGranted) {
                     // FCM SDK (and your app) can post notifications.
                 } else {
-                    // TODO: Inform user that that your app will not show notifications.
+                    // Next Steps: Inform user that that your app will not show notifications.
                 }
             });
 
@@ -60,7 +63,7 @@ public class LoginActivity extends AppCompatActivity {
                     PackageManager.PERMISSION_GRANTED) {
                 // FCM SDK (and your app) can post notifications.
             } else if (shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)) {
-                // TODO: display an educational UI explaining to the user the features that will be enabled
+                // Next Steps: display an educational UI explaining to the user the features that will be enabled
                 //       by them granting the POST_NOTIFICATION permission. This UI should provide the user
                 //       "OK" and "No thanks" buttons. If the user selects "OK," directly request the permission.
                 //       If the user selects "No thanks," allow the user to continue without notifications.

@@ -12,6 +12,8 @@ import java.util.Comparator;
 import java.util.List;
 
 public class RequestAdapter extends ArrayAdapter<RequestInfo> {
+    /* This class is used in conjunction with the Provider Activity and the Request Info class
+    *  to adapt each inbox request to a scroll view on the provider's GUI */
     public RequestAdapter(Context context, List<RequestInfo> requestList) {
         super(context, 0, requestList);
         // Sort the requestList based on messageType

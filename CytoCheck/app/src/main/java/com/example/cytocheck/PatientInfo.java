@@ -1,6 +1,7 @@
 package com.example.cytocheck;
 
 public class PatientInfo {
+    // This class is a patient object that holds all data for a patient linked to a provider
     private int id;
     private String name;
     private String phone;
