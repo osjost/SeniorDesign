@@ -80,6 +80,10 @@ public class PatientActivity extends AppCompatActivity {
     private String userHRResponse;
     private String userTempResponse;
 
+    private boolean hasProvider = false;
+
+    private boolean hasThresholds = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,9 +125,6 @@ public class PatientActivity extends AppCompatActivity {
         blankGraphs = findViewById(R.id.blankGraph);
         mSpinner = findViewById(R.id.selectorSpinner);
 
-
-
-
         api global = api.getInstance();
 
         String notifAddress = linkString + "fcc";
@@ -140,6 +141,8 @@ public class PatientActivity extends AppCompatActivity {
             }
         });
 
+        Button sensorButton = findViewById(R.id.sensorButton);
+        Button sendWarning = findViewById(R.id.emergencyButton);
 
         String patientAddress = linkString + "qualitative/" + userID;
         global.sendGetRequestWithHandlerWithToken(patientAddress, token, new HandlerResponse() {
@@ -386,10 +389,12 @@ public class PatientActivity extends AppCompatActivity {
                                             currentLabel.setText(currentLabel.getText() + " " + providerInfo.getString("provider_id"));
                                             currentLabel.setVisibility(View.VISIBLE);
                                             deleteAssociation.setVisibility(View.VISIBLE);
+                                            hasProvider = true;
                                         } else {
                                             createAssociation.setVisibility(View.VISIBLE);
                                             newLabel.setVisibility(View.VISIBLE);
                                             newProviderID.setVisibility(View.VISIBLE);
+                                            hasProvider = false;
                                         }
                                     } catch (JSONException e) {
                                         e.printStackTrace();
@@ -403,6 +408,7 @@ public class PatientActivity extends AppCompatActivity {
                                     createAssociation.setVisibility(View.VISIBLE);
                                     newLabel.setVisibility(View.VISIBLE);
                                     newProviderID.setVisibility(View.VISIBLE);
+                                    hasProvider = false;
                                 }
                             });
                         }
@@ -424,6 +430,7 @@ public class PatientActivity extends AppCompatActivity {
                                 homeIntent.putExtra("firstName", firstName);
                                 homeIntent.putExtra("notificationToken", notifToken);
 
+                                hasProvider = false;
                                 // Start the PatientActivity
                                 startActivity(homeIntent);
                                 finish();
@@ -463,6 +470,7 @@ public class PatientActivity extends AppCompatActivity {
 
                                     // Start the PatientActivity
                                     startActivity(homeIntent);
+                                    hasProvider = true;
                                 }
                             });
                             Toast.makeText(PatientActivity.this, "Request Sent", Toast.LENGTH_SHORT).show();
@@ -493,9 +501,36 @@ public class PatientActivity extends AppCompatActivity {
             }
         });
 
-
+        String providerEndpoint = linkString + "associations/" + userID;
+        global.sendGetRequestWithHandlerWithToken(providerEndpoint, token, new HandlerResponse() {
+            @Override
+            public void handleResponse(String response) {
+                try {
+                    JSONArray responseInfo = new JSONArray(response);
+                    JSONObject providerInfo = responseInfo.getJSONObject(0);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (providerInfo.has("provider_id")) {
+                                Log.d("hasprovider", "Has provider, Set Visible");
+                                sensorButton.setVisibility(View.VISIBLE);
+                                sendWarning.setVisibility(View.VISIBLE);
+                            } else {
+                                Log.d("hasprovider","Does not have provider, Set InVisible");
+                                sensorButton.setVisibility(View.INVISIBLE);
+                                sendWarning.setVisibility(View.INVISIBLE);
+                            }
+                        }
+                    });
+                }
+                catch (JSONException e) {
+                    Log.d("error", "error in setting buttons");
+                    sensorButton.setVisibility(View.INVISIBLE);
+                    sendWarning.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
         //MVP2 Warning
-        Button sendWarning = findViewById(R.id.emergencyButton);
         sendWarning.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -520,13 +555,11 @@ public class PatientActivity extends AppCompatActivity {
                         });
                     }
                 });
-
-
-
             }
 
         });
-        Button sensorButton = findViewById(R.id.sensorButton);
+
+
         sensorButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
