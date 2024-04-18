@@ -8,7 +8,9 @@ import android.content.Intent;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.Color;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.os.Bundle;
@@ -45,6 +47,7 @@ public class PatientActivity extends AppCompatActivity {
     *  button to go to the sensor screen, where a patient can connect 2 biosensors and send
     *  quantitative data to our server. Finally, there is a graph view to display daily, weekly and
     *  monthly data for quantitative and qualitative data. */
+    private int maxWords = 50;
     private BarChart userData;
     private BarChart userHRData;
     private BarChart userTempData;
@@ -516,7 +519,7 @@ public class PatientActivity extends AppCompatActivity {
                                 sensorButton.setVisibility(View.VISIBLE);
                                 sendWarning.setVisibility(View.VISIBLE);
                             } else {
-                                Log.d("hasprovider","Does not have provider, Set InVisible");
+                                Log.d("hasprovider","Does not have provider, Set Invisible");
                                 sensorButton.setVisibility(View.INVISIBLE);
                                 sendWarning.setVisibility(View.INVISIBLE);
                             }
@@ -613,8 +616,46 @@ public class PatientActivity extends AppCompatActivity {
 
         // Get references to views in the custom dialog layout
         EditText editText = dialogView.findViewById(R.id.editText);
-        RadioGroup radioGroup = dialogView.findViewById(R.id.radioGroup);
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // Do nothing
+            }
 
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // Do nothing
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String[] words = s.toString().trim().split("\\s+");
+                if (words.length > maxWords) {
+                    // Remove excess words
+                    StringBuilder trimmedText = new StringBuilder();
+                    for (int i = 0; i < maxWords; i++) {
+                        trimmedText.append(words[i]).append(" ");
+                    }
+                    editText.setText(trimmedText.toString().trim());
+                    editText.setSelection(editText.getText().length()); // Move cursor to the end
+                }
+            }
+        });
+
+        RadioGroup radioGroup = dialogView.findViewById(R.id.radioGroup);
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                int selectedRadioButtonId = radioGroup.getCheckedRadioButtonId();
+                RadioButton selectedRadioButton = dialogView.findViewById(selectedRadioButtonId);
+                if (selectedRadioButton.getText().toString().equals("Yes")) {
+                    editText.setVisibility(View.VISIBLE);
+                }
+                else {
+                    editText.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
         // Create the AlertDialog
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setView(dialogView)
@@ -632,7 +673,7 @@ public class PatientActivity extends AppCompatActivity {
                             rashFinal = "Yes: " + userInput;
                         }
                         else {
-                            rashFinal = "No: " + userInput;
+                            rashFinal = "No";
                         }
                     }
                     checkAll();
@@ -651,8 +692,46 @@ public class PatientActivity extends AppCompatActivity {
 
         // Get references to views in the custom dialog layout
         EditText editText = dialogView.findViewById(R.id.editText);
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // Do nothing
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // Do nothing
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String[] words = s.toString().trim().split("\\s+");
+                if (words.length > maxWords) {
+                    // Remove excess words
+                    StringBuilder trimmedText = new StringBuilder();
+                    for (int i = 0; i < maxWords; i++) {
+                        trimmedText.append(words[i]).append(" ");
+                    }
+                    editText.setText(trimmedText.toString().trim());
+                    editText.setSelection(editText.getText().length()); // Move cursor to the end
+                }
+            }
+        });
+
         RadioGroup radioGroup = dialogView.findViewById(R.id.radioGroup);
-        //editText.setHint("Symptom Description");
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                int selectedRadioButtonId = radioGroup.getCheckedRadioButtonId();
+                RadioButton selectedRadioButton = dialogView.findViewById(selectedRadioButtonId);
+                if (selectedRadioButton.getText().toString().equals("Yes")) {
+                    editText.setVisibility(View.VISIBLE);
+                }
+                else {
+                    editText.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
         // Create the AlertDialog
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setView(dialogView)
@@ -670,7 +749,7 @@ public class PatientActivity extends AppCompatActivity {
                             extraFinal = "Yes: " + userInput;
                         }
                         else {
-                            extraFinal = "No: " + userInput;
+                            extraFinal = "No";
                         }
                     }
                     checkAll();

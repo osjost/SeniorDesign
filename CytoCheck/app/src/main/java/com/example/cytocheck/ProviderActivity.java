@@ -330,9 +330,29 @@ public class ProviderActivity extends AppCompatActivity {
                                         JSONObject patientObtained = patientsArray.getJSONObject(i);
 
                                         // Extract information for each patient
-                                        String timeStamp = "Date: " + patientObtained.getString("time_stamp") + "\n";
-                                        String rashString = "Rash: " + patientObtained.getString("rash") + "\n";
-                                        String otherString = "Other: " + patientObtained.getString("other") + "\n";
+                                        // TODO make it so that days without rash or other arent displayed
+                                        String timeStamp = "";
+                                        String rashString = "";
+                                        String otherString = "";
+                                        if (patientObtained.getString("rash").equals("No") && patientObtained.getString("other").equals("No")) {
+                                            // Both no so no need to display anything for that day
+                                        }
+                                        else if (patientObtained.getString("rash").equals("No")) {
+                                            // Rash is not present so don't display it
+                                            timeStamp = "Date: " + patientObtained.getString("time_stamp") + "\n";
+                                            otherString = "Other: " + patientObtained.getString("other") + "\n";
+                                        }
+                                        else if (patientObtained.getString("other").equals("No")) {
+                                            // Additional symptoms not present
+                                            timeStamp = "Date: " + patientObtained.getString("time_stamp") + "\n";
+                                            rashString = "Rash: " + patientObtained.getString("rash") + "\n";
+                                        }
+                                        else {
+                                            // All are present
+                                            timeStamp = "Date: " + patientObtained.getString("time_stamp") + "\n";
+                                            rashString = "Rash: " + patientObtained.getString("rash") + "\n";
+                                            otherString = "Other: " + patientObtained.getString("other") + "\n";
+                                        }
 
                                         // Combine the information for the current patient
                                         qualitativeDetails += timeStamp + rashString + otherString + "\n";
@@ -442,13 +462,9 @@ public class ProviderActivity extends AppCompatActivity {
                                 EditText hrLowerThreshBox = findViewById(R.id.lowerBound1);
                                 EditText hrUpperThreshBox = findViewById(R.id.upperBound1);
 
-
-
                                 EditText tempLowerThreshBox = findViewById(R.id.lowerBound2);
                                 EditText tempUpperThreshBox = findViewById(R.id.upperBound2);
 
-
-                                //TODO if they are doubles and not null, do next, else toast
                                 float hrLower = 0;
                                 float hrUpper = 0;
                                 boolean hrValid = false;
@@ -514,7 +530,7 @@ public class ProviderActivity extends AppCompatActivity {
                                 boolean tempValid = false;
 
 
-// Check if the text in the boxes is not empty
+                                // Check if the text in the boxes is not empty
                                 if (!TextUtils.isEmpty(tempLowerThreshBox.getText()) && !TextUtils.isEmpty(tempUpperThreshBox.getText())) {
                                     try {
                                         // Parse the text as floats

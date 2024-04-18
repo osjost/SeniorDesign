@@ -29,5 +29,5 @@
         android:id="@+id/editText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Description (if none, type N/A)" />
+        android:hint="Description (50 word max)" />
 </LinearLayout>
