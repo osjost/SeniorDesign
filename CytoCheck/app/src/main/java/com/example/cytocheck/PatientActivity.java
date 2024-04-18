@@ -49,7 +49,7 @@ public class PatientActivity extends AppCompatActivity {
     private BarChart userHRData;
     private BarChart userTempData;
     private LineChart userHRLine;
-    private  LineChart userTempLine;
+    private LineChart userTempLine;
     private Spinner mSpinner;
     private TextView blankGraphs;
     private String linkString;
