@@ -48,8 +48,9 @@ public class Activity_Launcher extends AppCompatActivity {
                     JSONObject patientHRThreshold = new JSONObject(response);
                     hrUpper = patientHRThreshold.getString("upper");
                     hrLower = patientHRThreshold.getString("lower");
+                    connectSensorsButton.setActivated(true);
                 } catch (JSONException e) {
-
+                    connectSensorsButton.setActivated(false);
                 }
             }
         });
@@ -63,8 +64,9 @@ public class Activity_Launcher extends AppCompatActivity {
                     JSONObject patientTempThreshold = new JSONObject(response);
                     tempUpper = patientTempThreshold.getString("upper");
                     tempLower = patientTempThreshold.getString("lower");
+                    connectSensorsButton.setActivated(true);
                 } catch (JSONException e) {
-
+                    connectSensorsButton.setActivated(false);
                 }
             }
         });
@@ -102,6 +104,11 @@ public class Activity_Launcher extends AppCompatActivity {
                 }
                 if(ActivityCompat.checkSelfPermission(Activity_Launcher.this, android.Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
                     ActivityCompat.requestPermissions(Activity_Launcher.this, new String[]{android.Manifest.permission.BLUETOOTH_CONNECT}, 100);
+                    return;
+                }
+
+                if(!connectSensorsButton.isActivated()) {
+                    Toast.makeText(Activity_Launcher.this, "Missing Thresholds", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 Intent intent = new Intent(Activity_Launcher.this, Activity_SensorConnecter.class);
