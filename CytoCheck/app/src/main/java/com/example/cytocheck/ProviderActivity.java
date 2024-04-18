@@ -19,8 +19,14 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -330,7 +336,24 @@ public class ProviderActivity extends AppCompatActivity {
                                         JSONObject patientObtained = patientsArray.getJSONObject(i);
 
                                         // Extract information for each patient
-                                        // TODO make it so that days without rash or other arent displayed
+                                        String convertedTimeString = "";
+                                        try {
+                                            SimpleDateFormat originalFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+                                            originalFormat.setTimeZone(TimeZone.getTimeZone("UTC")); // Original time zone (+0 hours)
+
+                                            Date originalDate = originalFormat.parse(patientObtained.getString("time_stamp"));
+
+                                            Calendar calendar = Calendar.getInstance();
+                                            calendar.setTime(originalDate);
+
+                                            SimpleDateFormat newFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                                            newFormat.setTimeZone(TimeZone.getDefault()); // Device's time zone
+
+                                            convertedTimeString = newFormat.format(calendar.getTime());
+                                        } catch (ParseException e) {
+                                            e.printStackTrace();
+                                        }
+
                                         String timeStamp = "";
                                         String rashString = "";
                                         String otherString = "";
@@ -339,17 +362,17 @@ public class ProviderActivity extends AppCompatActivity {
                                         }
                                         else if (patientObtained.getString("rash").equals("No")) {
                                             // Rash is not present so don't display it
-                                            timeStamp = "Date: " + patientObtained.getString("time_stamp") + "\n";
+                                            timeStamp = "Date: " + convertedTimeString + "\n";
                                             otherString = "Other: " + patientObtained.getString("other") + "\n";
                                         }
                                         else if (patientObtained.getString("other").equals("No")) {
                                             // Additional symptoms not present
-                                            timeStamp = "Date: " + patientObtained.getString("time_stamp") + "\n";
+                                            timeStamp = "Date: " + convertedTimeString + "\n";
                                             rashString = "Rash: " + patientObtained.getString("rash") + "\n";
                                         }
                                         else {
                                             // All are present
-                                            timeStamp = "Date: " + patientObtained.getString("time_stamp") + "\n";
+                                            timeStamp = "Date: " + convertedTimeString + "\n";
                                             rashString = "Rash: " + patientObtained.getString("rash") + "\n";
                                             otherString = "Other: " + patientObtained.getString("other") + "\n";
                                         }
