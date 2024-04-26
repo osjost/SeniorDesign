@@ -56,5 +56,5 @@ def run_in_parallel(num_requests):
         print("Durations and summary statistics have been written to 'request_durations.xlsx'.")
 
 if __name__ == "__main__":
-    num_requests = 10000  # Number of parallel requests
+    num_requests = 1000  # Number of parallel requests
     run_in_parallel(num_requests)

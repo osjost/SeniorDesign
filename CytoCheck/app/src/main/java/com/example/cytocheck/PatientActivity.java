@@ -70,9 +70,9 @@ public class PatientActivity extends AppCompatActivity {
     private String firstName;
     private String notifToken;
     private boolean fatigueReady = false;
-    private String fatigueFinal = "10";
-    private String painFinal = "10";
-    private String nauseaFinal = "10";
+    private String fatigueFinal = "0";
+    private String painFinal = "0";
+    private String nauseaFinal = "0";
     private String rashFinal = "N/A";
     private String extraFinal= "N/A";
     private boolean painReady = false;
@@ -225,6 +225,16 @@ public class PatientActivity extends AppCompatActivity {
                         processData(userQualResponse, userData, selectedTimeframe);
                         processQuanData(userHRResponse, userHRLine, userHRData, 1, selectedTimeframe);
                         processQuanData(userTempResponse, userTempLine, userTempData, 2, selectedTimeframe);
+                        blankGraphs.setText("");
+                        if (userData.getVisibility() == View.GONE) {
+                            blankGraphs.setText(blankGraphs.getText() + "No Qualitative data for the selected timeframe.\n");
+                        }
+                        if (userHRLine.getVisibility() == userHRData.getVisibility()) {
+                            blankGraphs.setText(blankGraphs.getText() + "No Heart Rate data for the selected timeframe.\n");
+                        }
+                        if (userTempLine.getVisibility() == userTempData.getVisibility()) {
+                            blankGraphs.setText(blankGraphs.getText() + "No Temperature data for the selected timeframe.\n");
+                        }
                     }
                 });
 
