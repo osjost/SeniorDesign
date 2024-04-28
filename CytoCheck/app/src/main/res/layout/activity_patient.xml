@@ -52,7 +52,13 @@
                     android:text="Log Out" />
 
             </LinearLayout>
-
+            <Button
+                android:id="@+id/patient_refresh"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20sp"
+                android:backgroundTint="#04589B"
+                android:text="Refresh" />
             <Button
                 android:id="@+id/association_view"
                 android:layout_width="wrap_content"

@@ -1,9 +1,11 @@
 package com.example.cytocheck;
 
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 
@@ -566,10 +568,12 @@ public class DataProcessor {
         barChart.getAxisLeft().setAxisMinimum(0);
         barChart.getAxisRight().setEnabled(false);
 
-        barChart.getDescription().setPosition(barChart.getWidth() / 2f, 40f);
-        barChart.getDescription().setTextAlign(Paint.Align.CENTER);
+        barChart.setExtraTopOffset(10f);
+
 
         // Refresh the chart
+        barChart.getDescription().setPosition(Resources.getSystem().getDisplayMetrics().widthPixels / 2f, 20f);
+        barChart.getDescription().setTextAlign(Paint.Align.CENTER);
         barChart.invalidate();
     }
 
@@ -653,9 +657,9 @@ public class DataProcessor {
         //xAxis.setTextSize(10f); // Set the label text size
 
         barChart.getAxisRight().setEnabled(false);
-
+        barChart.setExtraTopOffset(10f);
         // Position the description at the top center of the chart
-        barChart.getDescription().setPosition(barChart.getWidth() / 2f, 40f);
+        barChart.getDescription().setPosition(Resources.getSystem().getDisplayMetrics().widthPixels / 2f, 20f);
         barChart.getDescription().setTextAlign(Paint.Align.CENTER);
 
         // Refresh the chart
@@ -692,7 +696,7 @@ public class DataProcessor {
         dataSet.setColor(Color.BLUE); // Set the line color
         if (sensorID == 1) {
             dataSet.setLabel("Heart Rate (BPM)");
-            lineChart.getDescription().setText(timeScale + " Temperature Data");
+            lineChart.getDescription().setText(timeScale + " Heart Rate Data");
             dataSet.setColor(Color.rgb(242,105,32)); // Set the line color
             dataSet.setCircleColor(Color.rgb(242,105,32));
             //        Set the Y-axis interval
@@ -734,7 +738,9 @@ public class DataProcessor {
         lineChart.getAxisRight().setEnabled(false);
 
         // Position the description at the top center of the chart
-        lineChart.getDescription().setPosition(lineChart.getWidth() / 2f, 40f);
+        ;
+        lineChart.setExtraTopOffset(10f);
+        lineChart.getDescription().setPosition(Resources.getSystem().getDisplayMetrics().widthPixels / 2f, 20f);
         lineChart.getDescription().setTextAlign(Paint.Align.CENTER);
 
         // Refresh the chart

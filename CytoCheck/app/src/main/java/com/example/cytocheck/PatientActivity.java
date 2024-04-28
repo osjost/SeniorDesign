@@ -143,7 +143,23 @@ public class PatientActivity extends AppCompatActivity {
             public void handleResponse(String response) {
             }
         });
+        
+        Button patientRefresh = findViewById(R.id.patient_refresh);
+        patientRefresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent homeIntent = new Intent(PatientActivity.this, PatientActivity.class);
+                homeIntent.putExtra("linkString", linkString);
+                homeIntent.putExtra("token", token);
+                homeIntent.putExtra("userID", userID);
+                homeIntent.putExtra("firstName", firstName);
+                homeIntent.putExtra("notificationToken", notifToken);
 
+                // Start the PatientActivity
+                startActivity(homeIntent);
+                finish();
+            }
+        });
         Button sensorButton = findViewById(R.id.sensorButton);
         Button sendWarning = findViewById(R.id.emergencyButton);
 
