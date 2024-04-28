@@ -54,8 +54,9 @@ import api.*;
  * Base class to connects to Heart Rate Plugin and display all the event data.
  */
 public abstract class Activity_BiometricViewer extends Activity {
+
     // Needed to access the plug in API
-    protected abstract void requestAccessToPcc();
+    protected abstract void requestAccessToController();
 
     /* ANT+ needed members */
     AntPlusHeartRatePcc hrPcc = null;
@@ -67,7 +68,6 @@ public abstract class Activity_BiometricViewer extends Activity {
     /* BLE needed members */
     protected BluetoothDevice btDevice;
     TextView tv_tempData;
-
     private final String LIST_NAME = "NAME";
     private final String LIST_UUID = "UUID";
     final String DEVICE = "Device";
@@ -119,6 +119,7 @@ public abstract class Activity_BiometricViewer extends Activity {
 
     /* -------------------------------------------------------- */
 
+    /* Begin a service connection to a BLE service. */
     private final ServiceConnection mServiceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder service) {
@@ -139,6 +140,7 @@ public abstract class Activity_BiometricViewer extends Activity {
         }
     };
 
+    /* Make a receiver to recieve the BLE events when connected to device.*/
     private final BroadcastReceiver mGattUpdateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -184,6 +186,7 @@ public abstract class Activity_BiometricViewer extends Activity {
         clearOnStart();
     }
 
+    /* Set the intent strings that are passed from the previous intent. */
     protected void setIntentStrings(String serverAddress, String userId, String atoken, String HRLower, String HRUpper, String TempLower, String TempUpper) {
         linkString = serverAddress;
         userID = userId;
@@ -198,6 +201,7 @@ public abstract class Activity_BiometricViewer extends Activity {
         tempLowerThreshold = Double.parseDouble(tempLower);
     }
 
+    /* Intialize the BLE connection once connected. */
     private void initBLEConnection() {
         tv_tempData = findViewById(R.id.tv_tempData);
 
@@ -215,10 +219,12 @@ public abstract class Activity_BiometricViewer extends Activity {
     protected void handleReset() {
         //Release the old access if it exists
         if(releaseHandle != null) { releaseHandle.close(); }
-        requestAccessToPcc();
+        requestAccessToController();
     }
-
-    // Copyright to Garmin. Used this function to set up the data display
+    /**
+     * Credits: Garmin Canada ANT+ API
+     * Used this function to set up the data display
+     */
     protected void showDataDisplay(String status) {
         setContentView(R.layout.activity_biometric_viewer);
 
@@ -236,9 +242,8 @@ public abstract class Activity_BiometricViewer extends Activity {
         tv_degreesUnit.setText(FAHRENHEIT);
 
     }
-
     /**
-     * All Copyrights Rese: Garmin Canada
+     * Credits: Garmin Canada ANT+ API
      * Switches the active view to the data display and subscribes to all the data events
      */
     public void subscribeToHrEvents() {
@@ -345,10 +350,10 @@ public abstract class Activity_BiometricViewer extends Activity {
     }
 
     /**
-     * Credits: Garmin Canada
+     * Credits: Garmin Canada ANT+ API
      * Handles the state of the devices ANT+ connection
      */
-    protected IPluginAccessResultReceiver<AntPlusHeartRatePcc> base_IPluginAccessResultReceiver = new IPluginAccessResultReceiver<AntPlusHeartRatePcc>() {
+    protected IPluginAccessResultReceiver<AntPlusHeartRatePcc> AccessResultReceiver = new IPluginAccessResultReceiver<AntPlusHeartRatePcc>() {
                 //Handle the result, connecting to events on success or reporting failure to user.
                 @Override
                 public void onResultReceived(AntPlusHeartRatePcc result, RequestAccessResult resultCode, DeviceState initialDeviceState) {
@@ -408,7 +413,7 @@ public abstract class Activity_BiometricViewer extends Activity {
             };
 
     //Receives state changes and shows it on the status display line
-    protected  IDeviceStateChangeReceiver base_IDeviceStateChangeReceiver = new IDeviceStateChangeReceiver() {
+    protected  IDeviceStateChangeReceiver DeviceStateChangeReceiver = new IDeviceStateChangeReceiver() {
                 @Override
                 public void onDeviceStateChange(final DeviceState newDeviceState) {
                     runOnUiThread(new Runnable() {
@@ -440,10 +445,12 @@ public abstract class Activity_BiometricViewer extends Activity {
         }
     }
 
+    /* Setter for the global BT device */
     public void setBluetoothDevice(BluetoothDevice btDevice) {
         this.btDevice = btDevice;
     }
 
+    /* Setter for the tresholds (lower and upper) */
     public void setThresholds(int upperBOM, int lowerBPM, double upperTemp, double lowerTemp) {
         this.tempUpperThreshold = upperTemp;
         this.tempLowerThreshold = lowerTemp;
@@ -452,8 +459,10 @@ public abstract class Activity_BiometricViewer extends Activity {
         this.bpmLowerThreshold = lowerBPM;
     }
 
+    /* Getter for the Bluetooth Device */
     public BluetoothDevice getBluetoothDevice() { return this.btDevice; }
 
+    /* Update Temperature displayed data */
     private void displayTemperature() {
         mTemperature = AppPreferences.getLastCbtValue(this);
 
@@ -534,6 +543,7 @@ public abstract class Activity_BiometricViewer extends Activity {
         }
     }
 
+    /* Set the notification for temperature data from BLE */
     private void setTemperatureNotification(boolean enable) {
         if (mTemperatureCharacteristic != null) {
             mBluetoothLeService.setCharacteristicNotification(mTemperatureCharacteristic, enable);
@@ -542,6 +552,7 @@ public abstract class Activity_BiometricViewer extends Activity {
         }
     }
 
+    /* Update connecting string */
     private void setConnecting(boolean enabled) {
         if (enabled) {
             //keep screen during "connecting..." (it's annoying if the user cannot check whether the connection attempt was successful
@@ -551,6 +562,7 @@ public abstract class Activity_BiometricViewer extends Activity {
         }
     }
 
+    /* Retreieve all availble GATT services */
     private void listGattServices(List<BluetoothGattService> gattServices) {
         if (gattServices == null) return;
         String uuid = null;
@@ -600,10 +612,12 @@ public abstract class Activity_BiometricViewer extends Activity {
         }
     }
 
+    /* Clear the data on the UI */
     private void clearUI() {
         tv_tempData.setText("No Data");
     }
 
+    /* Filter only neccessary GATT intents */
     private static IntentFilter makeGattUpdateIntentFilter() {
         final IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(BluetoothLeService.ACTION_GATT_CONNECTED);
@@ -614,6 +628,7 @@ public abstract class Activity_BiometricViewer extends Activity {
         return intentFilter;
     }
 
+    /* Initialize and clear everything on start */
     private void clearOnStart() {
         tempThresholdFlag = false;
         bpmThresholdflag = false;
@@ -628,6 +643,7 @@ public abstract class Activity_BiometricViewer extends Activity {
         bpmStartTime = 0;
     }
 
+    /* Helper functions */
     private boolean passedThreshold(double temperature) {
         return temperature > tempUpperThreshold || temperature < tempLowerThreshold;
     }
