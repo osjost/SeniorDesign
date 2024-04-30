@@ -210,7 +210,7 @@ public class DataProcessor {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                 if (jsonObject.has("day")) {
                     String day = jsonObject.getString("day");
-                    String timeStamp = convertToLocale(day);
+                    String timeStamp = day;
                     double averageReading = jsonObject.getDouble("average_reading");
                     entries.add(new QuanEntry(timeStamp, averageReading, sensorID));
                 } else {
@@ -572,6 +572,7 @@ public class DataProcessor {
 
 
         // Refresh the chart
+        barChart.getDescription().setPosition(Resources.getSystem().getDisplayMetrics().widthPixels / 2f, 20f);
         barChart.getDescription().setPosition(Resources.getSystem().getDisplayMetrics().widthPixels / 2f, 20f);
         barChart.getDescription().setTextAlign(Paint.Align.CENTER);
         barChart.invalidate();

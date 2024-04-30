@@ -3,6 +3,7 @@ package com.example.cytocheck;
 
 import static com.example.cytocheck.DataProcessor.processData;
 import static com.example.cytocheck.DataProcessor.processQuanData;
+import static com.example.cytocheck.DataProcessor.setAllToFalse;
 
 import android.content.Intent;
 import android.app.AlertDialog;
@@ -98,7 +99,7 @@ public class PatientActivity extends AppCompatActivity {
         userID = intent.getStringExtra("userID");
         firstName = intent.getStringExtra("firstName");
         notifToken = intent.getStringExtra("notificationToken");
-
+        setAllToFalse();
         // Initialize Variables for view elements
         welcomeLabel = findViewById(R.id.welcomeLabel);
         welcomeLabel.setText("Welcome, " + firstName);
